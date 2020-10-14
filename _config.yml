@@ -196,3 +196,12 @@ sitemap_exclude:  # Sitemap will exclude the following items.
     - sitemap.xml
     - robots.txt
     - redirects.json
+
+plugins:
+  - jekyll-last-modified-at
+
+# Optional. The default date format, used if none is specified in the tag.
+# https://shopify.dev/docs/themes/liquid/reference/filters/additional-filters#date
+# https://ruby-doc.org/core-2.7.2/Time.html#method-i-strftime
+last-modified-at:
+  date-format: '%C-%m-%d %H:%M:%ST%z'
