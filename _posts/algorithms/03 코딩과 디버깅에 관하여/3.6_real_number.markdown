@@ -1,0 +1,6 @@
+---
+title: 실수 자료형의 이해
+date: YYYY-MM-DD HH:MM:SS +/-TTTT
+categories: [algorithms, 알고리즘 문제해결전략]
+tags: []
+---
