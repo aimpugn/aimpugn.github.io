@@ -1,6 +1,6 @@
 ---
 title: test
-date: {{ page.last_modified_at }}
+date: 2020-10-14 11:27:00-0900
 categories: []
 tags: [] 
 ---
