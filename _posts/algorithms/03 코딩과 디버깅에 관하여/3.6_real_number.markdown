@@ -1,5 +1,5 @@
 ---
-title: 실수 자료형의 이해
+title: test
 date: {{ page.last_modified_at }}
 categories: []
 tags: [] 
