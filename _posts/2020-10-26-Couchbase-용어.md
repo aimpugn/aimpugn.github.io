@@ -8,4 +8,7 @@ math: true
 use_math: true
 ---
 
-# [용어](https://docs.couchbase.com/server/current/learn/glossary.html)
+## [용어](https://docs.couchbase.com/server/current/learn/glossary.html)
+### Cluster
+### Bucket
+### Collection
