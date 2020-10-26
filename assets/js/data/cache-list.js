@@ -60,13 +60,15 @@ const include = [
   {% for url in post_list %}
     '{{ url }}',
   {% endfor %}
+/*
 
-  /* Trending tags */
+  /!* Trending tags *!/
   {% include trending-tags.html %}
   {% for tag in trending_tags %}
     {% capture tag_url %}/tags/{{ tag | downcase | url_encode }}/{% endcapture %}
     '{{ tag_url | relative_url }}',
   {% endfor %}
+*/
 
   /*--- Icons ---*/
 
