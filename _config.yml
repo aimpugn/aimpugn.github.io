@@ -107,6 +107,7 @@ kramdown:
 # or you think you're smart enough to change other relevant URLs within this template.
 permalink: /posts/:title/
 
+# https://jekyllrb.com/docs/configuration/front-matter-defaults/
 defaults:
   -
     scope:
