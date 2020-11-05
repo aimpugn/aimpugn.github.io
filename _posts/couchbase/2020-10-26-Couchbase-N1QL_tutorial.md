@@ -1200,162 +1200,198 @@ LIMIT 1 OFFSET 1
 
 #### 4. relation 필드로 그룹화하고, 그때 그룹된 결과의 수가 1개 초과하는 경우
 
+- 각 그룹별로 relation, count, avg_age 필드를 가지는 한 문서씩 남아야 하지만, 이해를 위해 기존 데이터를 남겨둔다
+
 ```json
 [
-  // 각 그룹별로 relation, count, avg_age 필드를 가지는 한 문서씩 남아야 하지만, 이해를 위해 기존 데이터를 남겨둔다
-  //[friend 그룹]: {"avg_age": 17,"count": 2,"relation": "friend"}
   {
-    "c": { "age": 17, "fname": "Aiden", "gender": "m" },
-    "t": {
-      "type": "contact",
-      "title": "Mr.",
-      "fname": "Dave",
-      "lname": "Smith",
-      "age": 46,
-      "email": "dave@gmail.com",
-      "children": [
-        { "fname": "Aiden", "age": 17, "gender": "m" },
-        { "fname": "Bill", "age": 2, "gender": "f" }
-      ],
-      "hobbies": ["golf", "surfing"],
-      "relation": "friend"
+    "freind_group": {
+        "result" : {
+            "avg_age": 17,
+            "count": 2,
+            "relation": "friend"
+        },
+        "original_data": [
+            {
+                "c": { "age": 17, "fname": "Aiden", "gender": "m" },
+                "t": {
+                    "type": "contact",
+                    "title": "Mr.",
+                    "fname": "Dave",
+                    "lname": "Smith",
+                    "age": 46,
+                    "email": "dave@gmail.com",
+                    "children": [
+                            { "fname": "Aiden", "age": 17, "gender": "m" },
+                            { "fname": "Bill", "age": 2, "gender": "f" }
+                        ],
+                    "hobbies": ["golf", "surfing"],
+                    "relation": "friend"
+                }
+            },
+            {
+                "c": { "age": 17, "fname": "Xena", "gender": "f" },
+                "t": {
+                    "type": "contact",
+                    "title": "Mr.",
+                    "fname": "Earl",
+                    "lname": "Johnson",
+                    "age": 46,
+                    "email": "earl@gmail.com",
+                    "children": [
+                        { "fname": "Xena", "age": 17, "gender": "f" },
+                        { "fname": "Yuri", "age": 2, "gender": "m" }
+                    ],
+                    "hobbies": ["surfing"],
+                    "relation": "friend"
+                }
+            }
+        ]
+    },
+    "cousin_group": {
+        "result":{"avg_age": 19,"count": 2,"relation": "cousin"},
+        "original_data": [
+            {
+                "c": { "age": 17, "fname": "Abama", "gender": "m" },
+                "t": {
+                "type": "contact",
+                "title": "Mr.",
+                "fname": "Ian",
+                "lname": "Taylor",
+                "age": 56,
+                "email": "ian@gmail.com",
+                "children": [
+                    { "fname": "Abama", "age": 17, "gender": "m" },
+                    { "fname": "Bebama", "age": 21, "gender": "m" }
+                ],
+                "hobbies": ["golf", "surfing"],
+                "relation": "cousin"
+                }
+            },
+            {
+                "c": { "age": 21, "fname": "Bebama", "gender": "m" },
+                "t": {
+                "type": "contact",
+                "title": "Mr.",
+                "fname": "Ian",
+                "lname": "Taylor",
+                "age": 56,
+                "email": "ian@gmail.com",
+                "children": [
+                    { "fname": "Abama", "age": 17, "gender": "m" },
+                    { "fname": "Bebama", "age": 21, "gender": "m" }
+                ],
+                "hobbies": ["golf", "surfing"],
+                "relation": "cousin"
+                }
+            }
+        ]
     }
-  },
-  {
-    "c": { "age": 17, "fname": "Xena", "gender": "f" },
-    "t": {
-      "type": "contact",
-      "title": "Mr.",
-      "fname": "Earl",
-      "lname": "Johnson",
-      "age": 46,
-      "email": "earl@gmail.com",
-      "children": [
-        { "fname": "Xena", "age": 17, "gender": "f" },
-        { "fname": "Yuri", "age": 2, "gender": "m" }
-      ],
-      "hobbies": ["surfing"],
-      "relation": "friend"
-    }
-  },
-
-  //[cousin 그룹]: {"avg_age": 19,"count": 2,"relation": "cousin"}
-  {
-    "c": { "age": 17, "fname": "Abama", "gender": "m" },
-    "t": {
-      "type": "contact",
-      "title": "Mr.",
-      "fname": "Ian",
-      "lname": "Taylor",
-      "age": 56,
-      "email": "ian@gmail.com",
-      "children": [
-        { "fname": "Abama", "age": 17, "gender": "m" },
-        { "fname": "Bebama", "age": 21, "gender": "m" }
-      ],
-      "hobbies": ["golf", "surfing"],
-      "relation": "cousin"
-    }
-  },
-  {
-    "c": { "age": 21, "fname": "Bebama", "gender": "m" },
-    "t": {
-      "type": "contact",
-      "title": "Mr.",
-      "fname": "Ian",
-      "lname": "Taylor",
-      "age": 56,
-      "email": "ian@gmail.com",
-      "children": [
-        { "fname": "Abama", "age": 17, "gender": "m" },
-        { "fname": "Bebama", "age": 21, "gender": "m" }
-      ],
-      "hobbies": ["golf", "surfing"],
-      "relation": "cousin"
-    }
-  }
-]
+}
 ```
 
 ### 5. 평균 나이로 내림차순 정렬
 
-- friend 그룹 자식의 평균 나이는 17
 - cousin 그룹 자식의 평균 나이는 19
+- friend 그룹 자식의 평균 나이는 17
 
 ```json
 [
-  // 각 그룹별로 relation, count, avg_age 필드를 가지는 한 문서씩 남아야 하지만, 이해를 위해 기존 데이터를 남겨둔다
-  // [cousin 그룹]: {"avg_age": 19,"count": 2,"relation": "cousin"}
   {
-    "c": { "age": 17, "fname": "Abama", "gender": "m" },
-    "t": {
-      "type": "contact",
-      "title": "Mr.",
-      "fname": "Ian",
-      "lname": "Taylor",
-      "age": 56,
-      "email": "ian@gmail.com",
-      "children": [
-        { "fname": "Abama", "age": 17, "gender": "m" },
-        { "fname": "Bebama", "age": 21, "gender": "m" }
-      ],
-      "hobbies": ["golf", "surfing"],
-      "relation": "cousin"
+    "cousin_group": {
+        "result":{
+            "avg_age": 19,
+            "count": 2,
+            "relation": "cousin"
+        },
+        "original_data": [
+            {
+                "c": {
+                    "age": 17,
+                    "fname": "Abama",
+                    "gender": "m" },
+                "t": {
+                "type": "contact",
+                "title": "Mr.",
+                "fname": "Ian",
+                "lname": "Taylor",
+                "age": 56,
+                "email": "ian@gmail.com",
+                "children": [
+                    { "fname": "Abama", "age": 17, "gender": "m" },
+                    { "fname": "Bebama", "age": 21, "gender": "m" }
+                ],
+                "hobbies": ["golf", "surfing"],
+                "relation": "cousin"
+                }
+            },
+            {
+                "c": {
+                    "age": 21,
+                    "fname": "Bebama",
+                    "gender": "m"
+                },
+                "t": {
+                "type": "contact",
+                "title": "Mr.",
+                "fname": "Ian",
+                "lname": "Taylor",
+                "age": 56,
+                "email": "ian@gmail.com",
+                "children": [
+                    { "fname": "Abama", "age": 17, "gender": "m" },
+                    { "fname": "Bebama", "age": 21, "gender": "m" }
+                ],
+                "hobbies": ["golf", "surfing"],
+                "relation": "cousin"
+                }
+            }
+        ]
+    },
+    "freind_group": {
+        "result" : {
+            "avg_age": 17,
+            "count": 2,
+            "relation": "friend"
+        },
+        "original_data": [
+            {
+                "c": { "age": 17, "fname": "Aiden", "gender": "m" },
+                "t": {
+                    "type": "contact",
+                    "title": "Mr.",
+                    "fname": "Dave",
+                    "lname": "Smith",
+                    "age": 46,
+                    "email": "dave@gmail.com",
+                    "children": [
+                            { "fname": "Aiden", "age": 17, "gender": "m" },
+                            { "fname": "Bill", "age": 2, "gender": "f" }
+                        ],
+                    "hobbies": ["golf", "surfing"],
+                    "relation": "friend"
+                }
+            },
+            {
+                "c": { "age": 17, "fname": "Xena", "gender": "f" },
+                "t": {
+                    "type": "contact",
+                    "title": "Mr.",
+                    "fname": "Earl",
+                    "lname": "Johnson",
+                    "age": 46,
+                    "email": "earl@gmail.com",
+                    "children": [
+                        { "fname": "Xena", "age": 17, "gender": "f" },
+                        { "fname": "Yuri", "age": 2, "gender": "m" }
+                    ],
+                    "hobbies": ["surfing"],
+                    "relation": "friend"
+                }
+            }
+        ]
     }
-  },
-  {
-    "c": { "age": 21, "fname": "Bebama", "gender": "m" },
-    "t": {
-      "type": "contact",
-      "title": "Mr.",
-      "fname": "Ian",
-      "lname": "Taylor",
-      "age": 56,
-      "email": "ian@gmail.com",
-      "children": [
-        { "fname": "Abama", "age": 17, "gender": "m" },
-        { "fname": "Bebama", "age": 21, "gender": "m" }
-      ],
-      "hobbies": ["golf", "surfing"],
-      "relation": "cousin"
-    }
-  },
-  // [friend 그룹]: {"avg_age": 17,"count": 2,"relation": "friend"}
-  {
-    "c": { "age": 17, "fname": "Aiden", "gender": "m" },
-    "t": {
-      "type": "contact",
-      "title": "Mr.",
-      "fname": "Dave",
-      "lname": "Smith",
-      "age": 46,
-      "email": "dave@gmail.com",
-      "children": [
-        { "fname": "Aiden", "age": 17, "gender": "m" },
-        { "fname": "Bill", "age": 2, "gender": "f" }
-      ],
-      "hobbies": ["golf", "surfing"],
-      "relation": "friend"
-    }
-  },
-  {
-    "c": { "age": 17, "fname": "Xena", "gender": "f" },
-    "t": {
-      "type": "contact",
-      "title": "Mr.",
-      "fname": "Earl",
-      "lname": "Johnson",
-      "age": 46,
-      "email": "earl@gmail.com",
-      "children": [
-        { "fname": "Xena", "age": 17, "gender": "f" },
-        { "fname": "Yuri", "age": 2, "gender": "m" }
-      ],
-      "hobbies": ["surfing"],
-      "relation": "friend"
-    }
-  }
-]
+}
 ```
 
 ### 6. 0부터 시작하는 데이터에서, 1번째 인덱스 데이터 1개 반환
