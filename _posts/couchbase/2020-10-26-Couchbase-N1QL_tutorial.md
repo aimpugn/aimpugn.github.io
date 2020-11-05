@@ -904,7 +904,6 @@ ORDER BY avg_age DESC
 ### Query
 
 ```sql
-
 SELECT
     t.relation,
     COUNT(*) AS count,
