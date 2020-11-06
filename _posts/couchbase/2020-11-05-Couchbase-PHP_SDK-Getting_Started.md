@@ -2,7 +2,7 @@
 title: Couchbase PHP SDK Getting Started
 author: aimpugn
 date: 2020-11-05 11:00:00 +0900
-categories: [Couchbase.terminology]
+categories: [Couchbase.sdk.php]
 tags: [nosql, couchbase]
 math: true
 use_math: true

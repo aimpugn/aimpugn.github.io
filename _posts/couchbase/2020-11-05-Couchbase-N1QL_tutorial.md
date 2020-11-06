@@ -1,8 +1,8 @@
 ---
 title: Couchbase N1QL tutorial
 author: aimpugn
-date: 2020-10-26 13:10:00 +0900
-categories: [Couchbase.terminology]
+date: 2020-11-05 16:10:00 +0900
+categories: [Couchbase.n1ql]
 tags: [nosql, couchbase]
 math: true
 use_math: true
@@ -1430,6 +1430,13 @@ JOIN orders_with_users orders
         FOR s IN usr.shipped_order_history END
 
 ```
+
+### Expected flow
+
+1. `users_with_orders` 버킷에서 유저 정보를 가져온다
+2. `USE KEYS` 절로 Elinor_33313792 아이디에 해당하는 정보는 가져온다
+3. `JOIN`으로 `orders_with_users` 버킷을 조인시킨다
+4.
 
 ### Result
 
