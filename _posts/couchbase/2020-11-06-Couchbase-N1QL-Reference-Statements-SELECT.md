@@ -1,7 +1,7 @@
 ---
 title: Couchbase N1QL Reference Statements SELECT
 author: aimpugn
-date: 2020-10-26 13:10:00 +0900
+date: 2020-10-26 16:00:00 +0900
 categories: [Couchbase.terminology]
 tags: [nosql, couchbase]
 math: true
