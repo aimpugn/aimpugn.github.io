@@ -9,6 +9,51 @@ use_math: true
 toc: true
 ---
 
+<!-- TOC -->
+
+- [[SELECT](https://docs.couchbase.com/server/current/n1ql/n1ql-language-reference/selectintro.html)](#selecthttpsdocscouchbasecomservercurrentn1qln1ql-language-referenceselectintrohtml)
+  - [개요](#개요)
+  - [[`SELECT` 문법]()](#select-문법)
+  - [[`SELECT` 절]()](#select-절)
+  - [[`WITH` 절]()](#with-절)
+  - [[`FROM` 절]()](#from-절)
+  - [[`USE` 절](https://docs.couchbase.com/server/current/n1ql/n1ql-language-reference/hints.html)](#use-절httpsdocscouchbasecomservercurrentn1qln1ql-language-referencehintshtml)
+    - [목적](#목적)
+    - [전제 조건](#전제-조건)
+    - [문법](#문법)
+    - [`USE KEYS` 절](#use-keys-절)
+      - [목적](#목적-1)
+      - [문법](#문법-1)
+      - [인자](#인자)
+        - [expr](#expr)
+      - [예제1](#예제1)
+        - [Query](#query)
+        - [Result](#result)
+      - [예제2](#예제2)
+        - [Query](#query-1)
+        - [Result](#result-1)
+    - [`USE INDEX` 절](#use-index-절)
+      - [목적](#목적-2)
+      - [문법](#문법-2)
+      - [인자](#인자-1)
+        - [`index-name`](#index-name)
+      - [예제1](#예제1-1)
+        - [Query with GSI](#query-with-gsi)
+      - [예제2](#예제2-1)
+        - [Query with FTS](#query-with-fts)
+  - [[`JOIN` 절]()](#join-절)
+  - [[`NEST` 절]()](#nest-절)
+  - [[`UNNEST` 절]()](#unnest-절)
+  - [[`LET` 절]()](#let-절)
+  - [[`WHERE` 절]()](#where-절)
+  - [[`GROUP BY` 절]()](#group-by-절)
+  - [[`UNION`, `INTERSECT`, `EXCEPT` 절]()](#union-intersect-except-절)
+  - [[`ORDER BY` 절]()](#order-by-절)
+  - [[`LIMIT` 절]()](#limit-절)
+  - [[`OFFSET` 절]()](#offset-절)
+
+<!-- /TOC -->
+
 # [SELECT](https://docs.couchbase.com/server/current/n1ql/n1ql-language-reference/selectintro.html)
 
 ## 개요
@@ -66,8 +111,9 @@ use-keys-term ::= [ PRIMARY ] KEYS expr
 
 ##### expr
 
-- 문서 키
+- **문자열**로 된 문서 키
 - 콤마로 구별되는 문서 키 배열
+- [상수로 된 문자열이어야](https://forums.couchbase.com/t/n1ql-subquery-in-select/11295/16) 한다
 
 #### 예제1
 
