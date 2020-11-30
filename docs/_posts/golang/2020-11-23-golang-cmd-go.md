@@ -9,4 +9,3 @@ use_math: true
 ---
 
 # [go](https://golang.org/cmd/go)
-
