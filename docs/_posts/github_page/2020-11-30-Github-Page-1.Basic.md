@@ -255,3 +255,209 @@ To https://github.com/aimpugn/aimpugn.github.io.git
  * [new branch]      gh-pages -> gh-pages
 Branch 'gh-pages' set up to track remote branch 'gh-pages' from 'origin'.
 ```
+
+14. 로컬에서 테스트
+
+```s
+$ bundle exec jekyll serve
+# 에러 발생
+# Could not find gem 'github-pages (~> 209)' in any of the gem sources listed in your Gemfile.
+# Run `bundle install` to install missing gems.
+```
+
+`bundle install` 실행
+
+```s
+$ bundle install
+
+# 결과 출력
+The dependency tzinfo (~> 1.2) will be unused by any of the platforms Bundler is installing for. Bundler is installing for ruby but the dependency is only for x86-mingw32, x64-mingw32, x86-mswin32, java. To add those platforms to the bundle, run `bundle lock --add-platform x86-mingw32 x64-mingw32 x86-mswin32 java`.
+The dependency tzinfo-data (>= 0) will be unused by any of the platforms Bundler is installing for. Bundler is installing for ruby but the dependency is only for x86-mingw32, x64-mingw32, x86-mswin32, java. To add those platforms to the bundle, run `bundle lock --add-platform x86-mingw32 x64-mingw32 x86-mswin32 java`.
+The dependency wdm (~> 0.1.1) will be unused by any of the platforms Bundler is installing for. Bundler is installing for ruby but the dependency is only for x86-mingw32, x64-mingw32, x86-mswin32. To add those platforms to the bundle, run `bundle lock --add-platform x86-mingw32 x64-mingw32 x86-mswin32`.
+Fetching gem metadata from https://rubygems.org/...........
+Fetching gem metadata from https://rubygems.org/.
+Resolving dependencies...
+Using concurrent-ruby 1.1.7
+Fetching i18n 0.9.5
+Installing i18n 0.9.5
+Fetching minitest 5.14.2
+Installing minitest 5.14.2
+Fetching thread_safe 0.3.6
+Installing thread_safe 0.3.6
+Fetching tzinfo 1.2.8
+Installing tzinfo 1.2.8
+Installing thread_safe 0.3.6
+Fetching tzinfo 1.2.8
+Installing tzinfo 1.2.8
+Fetching zeitwerk 2.4.2
+Installing zeitwerk 2.4.2
+Fetching activesupport 6.0.3.4
+Installing activesupport 6.0.3.4
+Fetching public_suffix 3.1.1
+Installing public_suffix 3.1.1
+Using addressable 2.7.0
+Using bundler 2.1.4
+Fetching coffee-script-source 1.11.1
+Installing coffee-script-source 1.11.1
+Fetching execjs 2.7.0
+Installing execjs 2.7.0
+Fetching coffee-script 2.4.1
+Installing coffee-script 2.4.1
+Using colorator 1.1.0
+Fetching ruby-enum 0.8.0
+Installing ruby-enum 0.8.0
+Fetching commonmarker 0.17.13
+Installing commonmarker 0.17.13 with native extensions
+Fetching unf_ext 0.0.7.7
+Installing unf_ext 0.0.7.7 with native extensions
+Fetching unf 0.1.4
+Installing unf 0.1.4
+Fetching simpleidn 0.1.1
+Installing simpleidn 0.1.1
+Fetching dnsruby 1.61.5
+Installing dnsruby 1.61.5
+Using eventmachine 1.2.7
+Using http_parser.rb 0.6.0
+Using em-websocket 0.5.2
+Using ffi 1.13.1
+Using ethon 0.12.0
+Fetching multipart-post 2.1.1
+Installing multipart-post 2.1.1
+Fetching ruby2_keywords 0.0.2
+Installing ruby2_keywords 0.0.2
+Fetching faraday 1.1.0
+Installing faraday 1.1.0
+Using forwardable-extended 2.6.0
+Fetching gemoji 3.0.1
+Installing gemoji 3.0.1
+Fetching sawyer 0.8.2
+Installing sawyer 0.8.2
+Fetching octokit 4.19.0
+Installing octokit 4.19.0
+Using typhoeus 1.4.0
+Fetching github-pages-health-check 1.16.1
+Installing github-pages-health-check 1.16.1
+Using rb-fsevent 0.10.4
+Using rb-inotify 0.10.1
+Fetching sass-listen 4.0.0
+Installing sass-listen 4.0.0
+Fetching sass 3.7.4
+Installing sass 3.7.4
+Fetching jekyll-sass-converter 1.5.2
+Installing jekyll-sass-converter 1.5.2
+Fetching listen 3.3.3
+Installing listen 3.3.3
+Using jekyll-watch 2.2.1
+Using rexml 3.2.4
+Using kramdown 2.3.0
+Using liquid 4.0.3
+Fetching mercenary 0.3.6
+Installing mercenary 0.3.6
+Using pathutil 0.16.2
+Using rouge 3.23.0
+Using safe_yaml 1.0.5
+Fetching jekyll 3.9.0
+Installing jekyll 3.9.0
+Fetching jekyll-avatar 0.7.0
+Installing jekyll-avatar 0.7.0
+Fetching jekyll-coffeescript 1.1.1
+Installing jekyll-coffeescript 1.1.1
+Fetching jekyll-commonmark 1.3.1
+Installing jekyll-commonmark 1.3.1
+Fetching jekyll-commonmark-ghpages 0.1.6
+Installing jekyll-commonmark-ghpages 0.1.6
+Fetching jekyll-default-layout 0.1.4
+Installing jekyll-default-layout 0.1.4
+Fetching jekyll-feed 0.15.1
+Installing jekyll-feed 0.15.1
+Fetching jekyll-gist 1.5.0
+Installing jekyll-gist 1.5.0
+Fetching jekyll-github-metadata 2.13.0
+Installing jekyll-github-metadata 2.13.0
+Using mini_portile2 2.4.0
+Using nokogiri 1.10.10
+Fetching html-pipeline 2.14.0
+Installing html-pipeline 2.14.0
+Fetching jekyll-mentions 1.6.0
+Installing jekyll-mentions 1.6.0
+Fetching jekyll-optional-front-matter 0.3.2
+Installing jekyll-optional-front-matter 0.3.2
+Using jekyll-paginate 1.1.0
+Fetching jekyll-readme-index 0.3.0
+Installing jekyll-readme-index 0.3.0
+Using jekyll-redirect-from 0.16.0
+Fetching jekyll-relative-links 0.6.1
+Installing jekyll-relative-links 0.6.1
+Fetching rubyzip 2.3.0
+Installing rubyzip 2.3.0
+Fetching jekyll-remote-theme 0.4.2
+Installing jekyll-remote-theme 0.4.2
+Using jekyll-seo-tag 2.6.1
+Fetching jekyll-sitemap 1.4.0
+Installing jekyll-sitemap 1.4.0
+Fetching jekyll-swiss 1.0.0
+Installing jekyll-swiss 1.0.0
+Fetching jekyll-theme-architect 0.1.1
+Installing jekyll-theme-architect 0.1.1
+Fetching jekyll-theme-cayman 0.1.1
+Installing jekyll-theme-cayman 0.1.1
+Fetching jekyll-theme-dinky 0.1.1
+Installing jekyll-theme-dinky 0.1.1
+Fetching jekyll-theme-hacker 0.1.2
+Installing jekyll-theme-hacker 0.1.2
+Fetching jekyll-theme-leap-day 0.1.1
+Installing jekyll-theme-leap-day 0.1.1
+Fetching jekyll-theme-merlot 0.1.1
+Installing jekyll-theme-merlot 0.1.1
+Fetching jekyll-theme-midnight 0.1.1
+Installing jekyll-theme-midnight 0.1.1
+Fetching jekyll-theme-minimal 0.1.1
+Installing jekyll-theme-minimal 0.1.1
+Fetching jekyll-theme-modernist 0.1.1
+Installing jekyll-theme-modernist 0.1.1
+Fetching jekyll-theme-primer 0.5.4
+Installing jekyll-theme-primer 0.5.4
+Fetching jekyll-theme-slate 0.1.1
+Installing jekyll-theme-slate 0.1.1
+Fetching jekyll-theme-tactile 0.1.1
+Installing jekyll-theme-tactile 0.1.1
+Fetching jekyll-theme-time-machine 0.1.1
+Installing jekyll-theme-time-machine 0.1.1
+Fetching jekyll-titles-from-headings 0.5.3
+Installing jekyll-titles-from-headings 0.5.3
+Fetching jemoji 0.12.0
+Installing jemoji 0.12.0
+Using kramdown-parser-gfm 1.1.0
+Fetching minima 2.5.1
+Installing minima 2.5.1
+Using unicode-display_width 1.7.0
+Using terminal-table 1.8.0
+Fetching github-pages 209
+Installing github-pages 209
+Bundle complete! 5 Gemfile dependencies, 91 gems now installed.
+Use `bundle info [gemname]` to see where a bundled gem is installed.
+Post-install message from dnsruby:
+Installing dnsruby...
+  For issues and source code: https://github.com/alexdalitz/dnsruby
+  For general discussion (please tell us how you use dnsruby): https://groups.google.com/forum/#!forum/dnsruby
+Post-install message from sass:
+
+Ruby Sass has reached end-of-life and should no longer be used.
+
+* If you use Sass as a command-line tool, we recommend using Dart Sass, the new
+  primary implementation: https://sass-lang.com/install
+
+* If you use Sass as a plug-in for a Ruby web framework, we recommend using the
+  sassc gem: https://github.com/sass/sassc-ruby#readme
+
+* For more details, please refer to the Sass blog:
+  https://sass-lang.com/blog/posts/7828841
+
+Post-install message from html-pipeline:
+-------------------------------------------------
+Thank you for installing html-pipeline!
+You must bundle Filter gem dependencies.
+See html-pipeline README.md for more details.
+https://github.com/jch/html-pipeline#dependencies
+-------------------------------------------------
+```

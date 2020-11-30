@@ -20,8 +20,8 @@
 
 title: Aimpugn's Dev Blog
 email: aimpugn@gmail.com
-description: >- # this means to ignore newlines until "baseurl:"
-  Learn algorithms, network, language, and frameworks, anything I want to learn
+# description: >- # this means to ignore newlines until "baseurl:"
+description: Learn algorithms, network, language, and frameworks, anything I want to learn
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "" # the base hostname & protocol for your site, e.g. http://example.com
 # twitter_username: jekyllrb
