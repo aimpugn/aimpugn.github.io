@@ -205,3 +205,23 @@ qnib/httpcheck             latest              3df1ccc70b53        4 years ago  
 
 [stackoverflow 검색해보면](https://stackoverflow.com/a/48039003/8562273), 기본 레지스트리(docker hub)가 아닌 곳에 push 할 경우
 `regitry name`과 `port`를 포함해야 한다
+
+```s
+Successfully built 4634d3bc9e76
+Successfully tagged ghcr.io/aimpugn/pgsb:1.1.0
+```
+
+이를 push하면 다음과 같이 push가 된다
+
+```s
+$ docker push ghcr.io/aimpugn/pgsb:1.1.0
+The push refers to repository [ghcr.io/aimpugn/pgsb]
+c536b765fbc6: Pushed
+aa32009142e4: Pushed
+d7e330f94ce7: Pushed
+72f3b72640b9: Pushed
+27fc4e020136: Pushed
+c07f8a820edc: Pushed
+ace0eda3e3be: Pushed
+size: 1787
+```
