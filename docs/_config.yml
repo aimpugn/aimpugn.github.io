@@ -32,25 +32,25 @@ github_username:  aimpugn
 # theme: jekyll-theme-minimal
 remote_theme : mmistakes/minimal-mistakes
 plugins:
+  - classifier-reborn
   - json
+  - jekyll-feed
+  - jekyll-gist
+  - jekyll-include-cache
   - jekyll-paginate
   - jekyll-sitemap
-  - jekyll-gist
-  - jekyll-feed
   - jemoji
-  - classifier-reborn
-  - jekyll-include-cache
 
 lsi: true
 safe: true
-# source: [/docs]
-# incremental: false
-# highlighter: rouge
-# gist:
-#   noscript: false
-# kramdown:
-#   math_engine: mathjax
-#   syntax_highlighter: rouge
+source: [/docs]
+incremental: false
+highlighter: rouge
+gist:
+  noscript: false
+kramdown:
+  math_engine: mathjax
+  syntax_highlighter: rouge
 
 # Exclude from processing.
 # The following items will not be processed, by default.
@@ -60,15 +60,15 @@ safe: true
 # Excluded items can be processed by explicitly listing the directories or
 # their entries' file path in the `include:` list.
 #
-# exclude:
-#   - .sass-cache/
-#   - .jekyll-cache/
-#   - gemfiles/
-#   - Gemfile
-#   - Gemfile.lock
-#   - node_modules/
-#   - vendor/bundle/
-#   - vendor/cache/
-#   - vendor/gems/
-#   - vendor/ruby/
+exclude:
+  - .sass-cache/
+  - .jekyll-cache/
+  - gemfiles/
+  - Gemfile
+  - Gemfile.lock
+  - node_modules/
+  - vendor/bundle/
+  - vendor/cache/
+  - vendor/gems/
+  - vendor/ruby/
 
