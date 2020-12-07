@@ -17,20 +17,40 @@
 # you will see them accessed via {{ site.title }}, {{ site.email }}, and so on.
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
-
+locale: "ko-KR"
 title: Aimpugn's Dev Blog
 email: aimpugn@gmail.com
-description: >- # this means to ignore newlines until "baseurl:"
-  Learn algorithms, network, language, and frameworks, anything I want to learn
+# description: >- # this means to ignore newlines until "baseurl:"
+description: Learn algorithms, network, language, and frameworks, anything I want to learn
 baseurl: "" # the subpath of your site, e.g. /blog
-url: "" # the base hostname & protocol for your site, e.g. http://example.com
+url: "https://aimpugn.github.io" # the base hostname & protocol for your site, e.g. http://example.com
 # twitter_username: jekyllrb
 github_username:  aimpugn
 
+
 # Build settings
 theme: jekyll-theme-minimal
+# remote_theme : mmistakes/minimal-mistakes
 plugins:
+  - json
+  - jekyll-paginate
+  - jekyll-sitemap
+  - jekyll-gist
   - jekyll-feed
+  - jemoji
+  - classifier-reborn
+  - jekyll-include-cache
+
+lsi: true
+safe: true
+# source: [/docs]
+# incremental: false
+# highlighter: rouge
+# gist:
+#   noscript: false
+# kramdown:
+#   math_engine: mathjax
+#   syntax_highlighter: rouge
 
 # Exclude from processing.
 # The following items will not be processed, by default.
