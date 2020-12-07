@@ -9,6 +9,8 @@ GEM
       zeitwerk (~> 2.2, >= 2.2.2)
     addressable (2.7.0)
       public_suffix (>= 2.0.2, < 5.0)
+    classifier-reborn (2.2.0)
+      fast-stemmer (~> 1.0)
     coffee-script (2.4.1)
       coffee-script-source
       execjs
@@ -29,6 +31,7 @@ GEM
     faraday (1.1.0)
       multipart-post (>= 1.2, < 3)
       ruby2_keywords
+    fast-stemmer (1.0.2)
     ffi (1.13.1)
     forwardable-extended (2.6.0)
     gemoji (3.0.1)
@@ -113,6 +116,8 @@ GEM
       commonmarker (~> 0.17.6)
       jekyll-commonmark (~> 1.2)
       rouge (>= 2.0, < 4.0)
+    jekyll-data (1.1.0)
+      jekyll (>= 3.3, < 5.0.0)
     jekyll-default-layout (0.1.4)
       jekyll (~> 3.0)
     jekyll-feed (0.15.1)
@@ -122,6 +127,8 @@ GEM
     jekyll-github-metadata (2.13.0)
       jekyll (>= 3.4, < 5.0)
       octokit (~> 4.0, != 4.4.0)
+    jekyll-include-cache (0.2.1)
+      jekyll (>= 3.7, < 5.0)
     jekyll-mentions (1.6.0)
       html-pipeline (~> 2.3)
       jekyll (>= 3.7, < 5.0)
@@ -194,6 +201,7 @@ GEM
       gemoji (~> 3.0)
       html-pipeline (~> 2.2)
       jekyll (>= 3.0, < 5.0)
+    json (2.3.1)
     kramdown (2.3.0)
       rexml
     kramdown-parser-gfm (1.1.0)
@@ -208,6 +216,14 @@ GEM
       jekyll (>= 3.5, < 5.0)
       jekyll-feed (~> 0.9)
       jekyll-seo-tag (~> 2.1)
+    minimal-mistakes-jekyll (4.13.0)
+      jekyll (~> 3.7)
+      jekyll-data (~> 1.0)
+      jekyll-feed (~> 0.10)
+      jekyll-gist (~> 1.5)
+      jekyll-paginate (~> 1.1)
+      jekyll-sitemap (~> 1.2)
+      jemoji (~> 0.10)
     minitest (5.14.2)
     multipart-post (2.1.1)
     nokogiri (1.10.10)
@@ -255,8 +271,17 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  classifier-reborn
   github-pages (~> 209)
-  jekyll-feed (~> 0.12)
+  jekyll
+  jekyll-feed
+  jekyll-gist
+  jekyll-include-cache
+  jekyll-paginate
+  jekyll-sitemap
+  jemoji
+  json
+  minimal-mistakes-jekyll (= 4.13.0)
   tzinfo (~> 1.2)
   tzinfo-data
   wdm (~> 0.1.1)
