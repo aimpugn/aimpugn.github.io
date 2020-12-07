@@ -1,6 +1,7 @@
 ---
 title: containerd BUILDING
 author: aimpugn
+layout: single
 date: 2020-11-23 23:34:00 +0900
 categories: [containerd.BUILDING]
 tags: [containerd]

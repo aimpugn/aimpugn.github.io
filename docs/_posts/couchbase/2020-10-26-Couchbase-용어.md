@@ -1,6 +1,7 @@
 ---
 title: Couchbase 용어
 author: aimpugn
+layout: single.
 date: 2020-10-26 13:10:00 +0900
 categories: [Couchbase.terminology]
 tags: [nosql, couchbase]

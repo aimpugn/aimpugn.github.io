@@ -1,6 +1,4 @@
 ---
-layout: default
-title: Index Page
+layout: home
+author_profile: true
 ---
-
-# Hello
