@@ -29,8 +29,8 @@ github_username:  aimpugn
 
 
 # Build settings
-theme: jekyll-theme-minimal
-# remote_theme : mmistakes/minimal-mistakes
+# theme: jekyll-theme-minimal
+remote_theme : mmistakes/minimal-mistakes
 plugins:
   - json
   - jekyll-paginate
