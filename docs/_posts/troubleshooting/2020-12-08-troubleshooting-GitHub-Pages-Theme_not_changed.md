@@ -1,5 +1,5 @@
 ---
-Title: Troubleshooting GitHub Pages
+Title: Troubleshooting GitHub Pages theme not change
 Author: aimpugn
 Date: 2020-12-08 00:08:00 +0900
 ---
@@ -22,6 +22,6 @@ Date: 2020-12-08 00:08:00 +0900
 바로 확인하고 싶으면 익명 모드로 접속
 ```
 
-- 하지만, 며칠이 지나도 적용이 안 되는 건 왜?
-
 ### 해결
+
+- *Chrome Browser > Developer Tools > Application > Clear Storage*에서 저장된 스토리지 삭제하고 새로고침 하니 페이지가 정상으로 나온다
