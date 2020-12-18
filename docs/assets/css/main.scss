@@ -8,6 +8,21 @@
 @import "minimal-mistakes"; // main partials
 
 html {
+    // https://github.com/mmistakes/minimal-mistakes/issues/1043
     font-family: $global-font-family;
     font-size: $type-size-7;
+    box-sizing: border-box;
+    background-color: $background-color;
+  
+    @include breakpoint($medium) {
+      font-size: 18px;
+    }
+  
+    @include breakpoint($large) {
+      font-size: 20px;
+    }
+  
+    @include breakpoint($x-large) {
+      font-size: 22px;
+    }
 }
