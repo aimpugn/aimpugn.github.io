@@ -61,9 +61,7 @@ kramdown:
 # Excluded items can be processed by explicitly listing the directories or
 # their entries' file path in the `include:` list.
 #
-include:
-  - .htaccess
-  - _posts
+include: [".htaccess", "_posts", "_pages"]
 exclude:
   - .sass-cache/
   - .jekyll-cache/
