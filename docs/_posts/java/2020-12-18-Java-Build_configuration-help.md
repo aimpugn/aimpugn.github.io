@@ -4,6 +4,24 @@ date: 2020-12-19 00:00:00+0900
 author: aimpugn
 ---
 
+- [개요](#개요)
+  - [configure 스크립트](#configure-스크립트)
+  - [Configuration](#configuration)
+  - [설치 디렉토리(Installation directories)](#설치-디렉토리installation-directories)
+    - [`make`](#make)
+    - [Fine tuning of the installation directories:](#fine-tuning-of-the-installation-directories)
+      - [EPREFIX](#eprefix)
+      - [PREFIX](#prefix)
+      - [DATAROOTDIR](#datarootdir)
+      - [DOCDIR](#docdir)
+    - [X features:](#x-features)
+    - [System types:](#system-types)
+    - [Optional Features](#optional-features)
+      - [jvm-feature in Optional Features](#jvm-feature-in-optional-features)
+      - [etc in Optional Features](#etc-in-optional-features)
+    - [Optional Packages:](#optional-packages)
+  - [Additional (non-autoconf) OpenJDK Options:](#additional-non-autoconf-openjdk-options)
+
 # 개요
 
 - `bash configure --help`로 출력된, java configure 시 필요한 또는 사용 가능한 값들을 정리

@@ -6,22 +6,21 @@ permalink: /about/
 
 # About page
 
-## Goal
+## 목표
 
 ### Web Server
 
-#### Java
+- Java
 
 ### Front
 
-#### Vanilla JS
-
-#### React
+- Vanilla JS
+- React
 
 ### CLI
 
-#### GoLang
+- GoLang
 
 ### Algorithms
 
-#### Python
+- Python
