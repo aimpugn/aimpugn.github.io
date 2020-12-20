@@ -20,6 +20,13 @@ author: aimpugn
       - [jvm-feature in Optional Features](#jvm-feature-in-optional-features)
       - [etc in Optional Features](#etc-in-optional-features)
     - [Optional Packages:](#optional-packages)
+      - [toochain](#toochain)
+      - [vendor](#vendor)
+      - [version](#version)
+      - [MACOSX](#macosx)
+      - [Boot](#boot)
+      - [EXTRA](#extra)
+      - [ETC](#etc)
   - [Additional (non-autoconf) OpenJDK Options:](#additional-non-autoconf-openjdk-options)
 
 # 개요
@@ -134,26 +141,27 @@ author: aimpugn
 
 ### Optional Features
 
-| 옵션                               | 설명                                                                        | 기본값                                             |
-| ---------------------------------- | --------------------------------------------------------------------------- | -------------------------------------------------- |
-| --disable-option-checking          | 식별할 수 없는 --enable/--with 옵션 무시                                    |                                                    |
-| --disable-FEATURE                  | do not include FEATURE (same as --enable-FEATURE=no)                        |                                                    |
-| --enable-FEATURE[=ARG]             | include FEATURE                                                             | [ARG=yes]                                          |
-| --enable-deprecated-ports          | Deprecated. Option is kept for backwards. compatibility and is ignored      |                                                    |
-| --enable-openjdk-only              | suppress building custom source even if present                             | `disabled`                                         |
-| --enable-debug                     | enable debugging (shorthand for --with-debug-level=fastdebug)               | [disabled]                                         |
-| --disable-absolute-paths-in-output | 빌드 출력이 되는 빌드에서 절대 경로를 방지하려면 disable                    | 릴리즈 빌드에서 `disabled`, 그 외 `enabled`        |
-| --enable-keep-packaged-modules     | enable keeping of packaged modules in jdk image                             | `enabled`                                          |
-| --enable-headless-only             | only build headless (no GUI) support                                        | `disabled`                                         |
-| --enable-linktime-gc               | use link time gc on unused code sections in the JDK build                   | `auto`                                             |
-| --enable-full-docs                 | build complete documentation                                                | `enabled` if all tools found                       |
-| --enable-unlimited-crypto          | enable unlimited crypto policy                                              | `enabled`                                          |
-| --enable-static-build              | enable static library build                                                 | `disabled`                                         |
-| --enable-reproducible-build        | enable reproducible builds (not yet fully functional)                       | `enabled`(--with-source-date, no abs path Windows) |
-| --enable-warnings-as-errors        | consider native warnings to be an error                                     | `auto`                                             |
-| --enable-native-coverage           | enable native compilation with code coverage data                           | `disabled`                                         |
-| --enable-asan                      | enable AddressSanitizer                                                     | `disabled`                                         |
-| --enable-libffi-bundling           | enable bundling of libffi.so to make the built JDK runnable on more systems | `disabled`                                         |
+| 옵션                               | 설명                                                                        | 기본값                                      |
+| ---------------------------------- | --------------------------------------------------------------------------- | ------------------------------------------- |
+| --disable-option-checking          | 식별할 수 없는 --enable/--with 옵션 무시                                    |                                             |
+| --disable-FEATURE                  | do not include FEATURE (same as --enable-FEATURE=no)                        |                                             |
+| --enable-FEATURE[=ARG]             | include FEATURE                                                             | [ARG=yes]                                   |
+| --enable-deprecated-ports          | Deprecated. Option is kept for backwards. compatibility and is ignored      |                                             |
+| --enable-openjdk-only              | suppress building custom source even if present                             | `disabled`                                  |
+| --enable-debug                     | enable debugging (shorthand for --with-debug-level=fastdebug)               | [disabled]                                  |
+| --disable-absolute-paths-in-output | 빌드 출력이 되는 빌드에서 절대 경로를 방지하려면 disable                    | 릴리즈 빌드에서 `disabled`, 그 외 `enabled` |
+| --enable-keep-packaged-modules     | enable keeping of packaged modules in jdk image                             | `enabled`                                   |
+| --enable-headless-only             | only build headless (no GUI) support                                        | `disabled`                                  |
+| --enable-linktime-gc               | use link time gc on unused code sections in the JDK build                   | `auto`                                      |
+| --enable-full-docs                 | build complete documentation                                                | `enabled` if all tools found                |
+| --enable-unlimited-crypto          | enable unlimited crypto policy                                              | `enabled`                                   |
+| --enable-static-build              | enable static library build                                                 | `disabled`                                  |
+| --enable-reproducible-build        | enable reproducible builds (not yet fully functional)                       | `enabled`                                   |
+|                                    |                                                                             | (--with-source-date, no abs path Windows)   |
+| --enable-warnings-as-errors        | consider native warnings to be an error                                     | `auto`                                      |
+| --enable-native-coverage           | enable native compilation with code coverage data                           | `disabled`                                  |
+| --enable-asan                      | enable AddressSanitizer                                                     | `disabled`                                  |
+| --enable-libffi-bundling           | enable bundling of libffi.so to make the built JDK runnable on more systems | `disabled`                                  |
 
 #### jvm-feature in Optional Features
 
@@ -192,210 +200,163 @@ author: aimpugn
 
 #### etc in Optional Features
 
-| 옵션                           | 설명                                                                   | 기본값                                         |
-| ------------------------------ | ---------------------------------------------------------------------- | ---------------------------------------------- |
-| --enable-hotspot-gtest         | Deprecated. Option is kept for backwards. compatibility and is ignored |                                                |
-| --enable-jtreg-failure-handler | enable keeping of packaged modules in jdk image                        | [enabled if jtreg is present]                  |
-| --enable-generate-classlist    | enable generation of a CDS classlist at build time                     | `enabled` if `cds` enabled for all JVM vriants |
+| 옵션                           | 설명                                                                   | 기본값                               |
+| ------------------------------ | ---------------------------------------------------------------------- | ------------------------------------ |
+| --enable-hotspot-gtest         | Deprecated. Option is kept for backwards. compatibility and is ignored |                                      |
+| --enable-jtreg-failure-handler | enable keeping of packaged modules in jdk image                        | [enabled if jtreg is present]        |
+| --enable-generate-classlist    | enable generation of a CDS classlist at build time                     | `enabled`                            |
+|                                |                                                                        | if `cds` enabled for all JVM vriants |
 
 ### Optional Packages:
 
---with-PACKAGE[=ARG] use PACKAGE [ARG=yes]
---without-PACKAGE do not use PACKAGE (same as --with-PACKAGE=no)
---with-target-bits build 32-bit or 64-bit binaries (for platforms that
-support it), e.g. --with-target-bits=32 [guessed]
---with-debug-level set the debug level (release, fastdebug, slowdebug,
-optimized) [release]
---with-jvm-variants JVM variants to build, separated by commas (server
-client minimal core zero custom) [server]
---with-devkit use this devkit for compilers, tools and resources
---with-sys-root alias for --with-sysroot for backwards compatability
---with-sysroot use this directory as sysroot
---with-tools-dir alias for --with-toolchain-path for backwards
-compatibility
---with-toolchain-path prepend these directories when searching for
-toolchain binaries (compilers etc)
---with-extra-path prepend these directories to the default path
---with-sdk-name use the platform SDK of the given name. [macosx]
---with-conf-name use this as the name of the configuration [generated
-from important configuration options]
---with-output-sync set make output sync type if supported by make.
-[recurse]
---with-macosx-codesign-identity
-specify the code signing identity
---with-default-make-target
-set the default make target [exploded-image]
---with-log [default vaue for make LOG argument [warn]]
---with-jdk-rc-name Set JDK RC name. This is used for FileDescription
-and ProductName properties of MS Windows binaries.
-[not specified]
---with-vendor-name Set vendor name. Among others, used to set the
-'java.vendor' and 'java.vm.vendor' system
-properties. [not specified]
---with-vendor-url Set the 'java.vendor.url' system property [not
-specified]
---with-vendor-bug-url Set the 'java.vendor.url.bug' system property [not
-specified]
---with-vendor-vm-bug-url
-Sets the bug URL which will be displayed when the VM
-crashes [not specified]
---with-version-string Set version string [calculated]
---with-version-pre Set the base part of the version 'PRE' field
-(pre-release identifier) ['internal']
---with-version-opt Set version 'OPT' field (build metadata)
-[<timestamp>.<user>.<dirname>]
---with-version-build Set version 'BUILD' field (build number) [not
-specified]
---with-version-feature Set version 'FEATURE' field (first number) [current
-source value]
---with-version-interim Set version 'INTERIM' field (second number) [current
-source value]
---with-version-update Set version 'UPDATE' field (third number) [current
-source value]
---with-version-patch Set version 'PATCH' field (fourth number) [not
-specified]
---with-version-extra1 Set 1st version extra number [not specified]
---with-version-extra2 Set 2nd version extra number [not specified]
---with-version-extra3 Set 3rd version extra number [not specified]
---with-version-date Set version date [current source value]
---with-vendor-version-string
-Set vendor version string [not specified]
---with-macosx-bundle-name-base
-Set the MacOSX Bundle Name base. This is the base
-name for calculating MacOSX Bundle Names. [not
-specified]
---with-macosx-bundle-id-base
-Set the MacOSX Bundle ID base. This is the base ID
-for calculating MacOSX Bundle IDs. [not specified]
---with-macosx-bundle-build-version
-Set the MacOSX Bundle CFBundleVersion field. This
-key is a machine-readable string composed of one to
-three period-separated integers and should represent
-the build version. Defaults to the build number.
---with-boot-jdk path to Boot JDK (used to bootstrap build) [probed]
---with-boot-jdk-jvmargs specify additional arguments to be passed to Boot
-JDK tools [none]
---with-build-jdk path to JDK of same version as is being built[the
-newly built JDK]
---with-cacerts-file specify alternative cacerts file
---with-copyright-year Set copyright year value for build [current year]
---with-jni-libpath override default JNI library search path
---with-import-modules import a set of prebuilt modules either as a zip
-file or an exploded directory
---with-toolchain-type the toolchain type (or family) to use, use '--help'
-to show possible values [platform dependent]
---with-extra-cflags extra flags to be used when compiling jdk c-files
---with-extra-cxxflags extra flags to be used when compiling jdk c++-files
---with-extra-ldflags extra flags to be used when linking jdk
---with-extra-asflags extra flags to be passed to the assembler
---with-toolchain-version
-the version of the toolchain to look for, use
-'--help' to show possible values [platform
-dependent]
---with-msvc-toolset-version
-specific MSVC toolset version to use, passed as
--vcvars_ver argument to pass to vcvarsall.bat
-(Windows only)
---with-build-devkit Devkit to use for the build platform toolchain
---with-jtreg Regression Test Harness [probed]
---with-jmh Java Microbenchmark Harness for building the OpenJDK
-Microbenchmark Suite
---with-jib Jib dependency management tool [not used]
---with-source-date how to set SOURCE_DATE_EPOCH ('updated', 'current',
-'version' a timestamp or an ISO-8601 date) [updated]
---with-macosx-version-max
-error on use of newer functionality. [macosx]
---with-abi-profile specify ABI profile for ARM builds
-(arm-vfp-sflt,arm-vfp-hflt,arm-sflt,
-armv5-vfp-sflt,armv6-vfp-hflt,aarch64) [toolchain
-dependent]
---with-native-debug-symbols
-set the native debug symbol configuration (none,
-internal, external, zipped) [varying]
---with-external-symbols-in-bundles
-which type of external native debug symbol
-information shall be shipped in product bundles
-(none, public, full) (e.g. ship full/stripped pdbs
-on Windows) [none]
---with-jcov jcov library location
---with-jcov-input-jdk jdk image to instrument
---with-jcov-filters filters to limit code for jcov instrumentation and
-report generation
---with-stdc++lib=<static>,<dynamic>,<default>
-force linking of the C++ runtime on Linux to either
-static or dynamic, default is static with dynamic as
-fallback
---with-msvcr-dll path to microsoft C runtime dll (msvcr*.dll)
-(Windows only) [probed]
---with-msvcp-dll path to microsoft C++ runtime dll (msvcp*.dll)
-(Windows only) [probed]
---with-vcruntime-1-dll path to microsoft C++ runtime dll (vcruntime\*\_1.dll)
-(Windows x64 only) [probed]
---with-ucrt-dll-dir path to Microsoft Windows Kit UCRT DLL dir (Windows
-only) [probed]
---with-x use the X Window System
---with-cups specify prefix directory for the cups package
-(expecting the headers under PATH/include)
---with-cups-include specify directory for the cups include files
---with-fontconfig specify prefix directory for the fontconfig package
-(expecting the headers under PATH/include)
---with-fontconfig-include
-specify directory for the fontconfig include files
---with-freetype specify whether to use 'system' or 'bundled'
-freetype. The selected option applies to both build
-time and run time. The default behaviour can be
-platform dependent. If using 'system' and either the
-include files or libraries cannot be located
-automatically, then additionally specify both using
---with-freetype-include and --with-freetype-lib.
---with-freetype-include specify directory for the freetype include files
---with-freetype-lib specify directory for the freetype library
---with-alsa specify prefix directory for the alsa package
-(expecting the libraries under PATH/lib and the
-headers under PATH/include)
---with-alsa-include specify directory for the alsa include files
---with-alsa-lib specify directory for the alsa library
---with-libffi specify prefix directory for the libffi package
-(expecting the libraries under PATH/lib and the
-headers under PATH/include)
---with-libffi-include specify directory for the libffi include files
---with-libffi-lib specify directory for the libffi library
---with-libjpeg use libjpeg from build system or OpenJDK source
-(system, bundled) [bundled]
---with-giflib use giflib from build system or OpenJDK source
-(system, bundled) [bundled]
---with-libpng use libpng from build system or OpenJDK source
-(system, bundled) [bundled]
---with-zlib use zlib from build system or OpenJDK source
-(system, bundled) [bundled]
---with-lcms use lcms2 from build system or OpenJDK source
-(system, bundled) [bundled]
---with-harfbuzz use harfbuzz from build system or OpenJDK source
-(system, bundled) [bundled]
---with-graalunit-lib specify location of 3rd party libraries used by
-Graal unit tests
---with-gtest specify prefix directory for the gtest framework
---with-jvm-features JVM features to enable (foo) or disable (-foo),
-separated by comma. Use '--help' to show possible
-values [none]
---with-hotspot-build-time
-timestamp to use in hotspot version string, empty
-for on-the-fly [empty]
---with-with-cpu-port Deprecated. Option is kept for backwards
-compatibility and is ignored
---with-exclude-translations
-a comma separated list of locales to exclude
-translations for. Default is to include all
-translations present in the source.
---with-num-cores number of cores in the build system, e.g.
---with-num-cores=8 [probed]
---with-memory-size memory (in MB) available in the build system, e.g.
---with-memory-size=1024 [probed]
---with-jobs number of parallel jobs to let make run [calculated
-based on cores and memory]
---with-test-jobs number of parallel tests jobs to run [based on build
-jobs]
---with-ccache-dir where to store ccache files [~/.ccache]
+| 옵션                            | 설명                                                                                                 | 기본값                                           |
+| ------------------------------- | ---------------------------------------------------------------------------------------------------- | ------------------------------------------------ |
+| --with-PACKAGE[=ARG]            | use PACKAGE                                                                                          | `ARG=yes`                                        |
+| --without-PACKAGE               | do not use PACKAGE (same as --with-PACKAGE=no)                                                       |                                                  |
+| --with-target-bits              | build 32-bit or 64-bit binaries (for platforms that support it)                                      | `guessed`                                        |
+|                                 | e.g. --with-target-bits=32                                                                           |                                                  |
+| --with-debug-level              | set the debug level (release, fastdebug, slowdebug,optimized)                                        | `release`                                        |
+| --with-jvm-variants             | JVM variants to build, separated by commas (server client minimal core zero custom)                  | `server`                                         |
+| --with-devkit                   | use this devkit for compilers, tools and resources                                                   |                                                  |
+| --with-sys-root                 | alias for --with-sysroot for backwards compatability                                                 |                                                  |
+| --with-sysroot                  | use this directory as sysroot                                                                        |                                                  |
+| --with-extra-path               | prepend these directories to the default path                                                        |                                                  |
+| --with-sdk-name                 | use the platform SDK of the given name.                                                              | [macosx]                                         |
+| --with-conf-name                | use this as the name of the configuration                                                            | [generated from important configuration options] |
+| --with-output-sync              | set make output sync type if supported by make.                                                      | [recurse]                                        |
+| --with-macosx-codesign-identity | specify the code signing identity                                                                    |                                                  |
+| --with-default-make-target      | set the default make target                                                                          | [exploded-image]                                 |
+| --with-log                      |                                                                                                      | [default vaue for make LOG argument [warn]]      |
+| --with-jdk-rc-name              | Set JDK RC name. This is used for FileDescription and ProductName properties of MS Windows binaries. | [not specified]                                  |
+
+#### toochain
+
+| 옵션                     | 설명                                                                            | 기본값               |
+| ------------------------ | ------------------------------------------------------------------------------- | -------------------- |
+| --with-tools-dir         | alias for --with-toolchain-path for backwardscompatibility                      |                      |
+| --with-toolchain-path    | prepend these directories when searching for toolchain binaries (compilers etc) |                      |
+| --with-toolchain-type    | the toolchain type (or family) to use, use '--help' to show possible values     | [platform dependent] |
+| --with-toolchain-version | the version of the toolchain to look for, use '--help' to show possible values  | [platform dependent] |
+
+#### vendor
+
+| 옵션                         | 설명                                                                                                 | 기본값          |
+| ---------------------------- | ---------------------------------------------------------------------------------------------------- | --------------- |
+| --with-vendor-name           | Set vendor name. Among others, used to set the 'java.vendor' and 'java.vm.vendor' system properties. | [not specified] |
+| --with-vendor-url            | Set the 'java.vendor.url' system property                                                            | [not specified] |
+| --with-vendor-bug-url        | Set the 'java.vendor.url.bug' system property                                                        | [not specified] |
+| --with-vendor-vm-bug-url     | Sets the bug URL which will be displayed when the VM crashes                                         | [not specified] |
+| --with-vendor-version-string | Set vendor version string                                                                            | [not specified] |
+
+#### version
+
+| 옵션                   | 설명                                                                  | 기본값                         |
+| ---------------------- | --------------------------------------------------------------------- | ------------------------------ |
+| --with-version-string  | Set version string                                                    | [calculated]                   |
+| --with-version-pre     | Set the base part of the version 'PRE' field (pre-release identifier) | ['internal']                   |
+| --with-version-opt     | Set version 'OPT' field (build metadata)                              | [<timestamp>.<user>.<dirname>] |
+| --with-version-build   | Set version 'BUILD' field (build number)                              | [not specified]                |
+| --with-version-feature | Set version 'FEATURE' field (first number)                            | [current source value]         |
+| --with-version-interim | Set version 'INTERIM' field (second number)                           | [current source value]         |
+| --with-version-update  | Set version 'UPDATE' field (third number)                             | [current source value]         |
+| --with-version-patch   | Set version 'PATCH' field (fourth number)                             | [not specified]                |
+| --with-version-extra1  | Set 1st version extra number                                          | [not specified]                |
+| --with-version-extra2  | Set 2nd version extra number                                          | [not specified]                |
+| --with-version-extra3  | Set 3rd version extra number                                          | [not specified]                |
+| --with-version-date    | Set version date                                                      | [current source value]         |
+
+#### MACOSX
+
+| 옵션                               | 설명                                                                                        | 기본값          |
+| ---------------------------------- | ------------------------------------------------------------------------------------------- | --------------- |
+| --with-macosx-bundle-name-base     | Set the MacOSX Bundle Name base. This is the base name for calculating MacOSX Bundle Names. | [not specified] |
+| --with-macosx-bundle-id-base       | Set the MacOSX Bundle ID base. This is the base ID for calculating MacOSX Bundle IDs.       | [not specified] |
+| --with-macosx-bundle-build-version | Set the MacOSX Bundle CFBundleVersion field.Defaults to the build number.                   |                 |
+|                                    | This key is a machine-readable string composed of one to three period-separated integers    |                 |
+|                                    | and should represent the build version. Defaults to the build number.                       |                 |
+| --with-macosx-version-max          | error on use of newer functionality.                                                        | [macosx]        |
+
+#### Boot
+
+| 옵션                    | 설명                                                        | 기본값   |
+| ----------------------- | ----------------------------------------------------------- | -------- |
+| --with-boot-jdk         | path to Boot JDK (used to bootstrap build)                  | [probed] |
+| --with-boot-jdk-jvmargs | specify additional arguments to be passed to Boot JDK tools | [none]   |
+
+#### EXTRA
+
+| 옵션                  | 설명                                                | 기본값 |
+| --------------------- | --------------------------------------------------- | ------ |
+| --with-extra-cflags   | extra flags to be used when compiling jdk c-files   |        |
+| --with-extra-cxxflags | extra flags to be used when compiling jdk c++-files |        |
+| --with-extra-ldflags  | extra flags to be used when linking jdk             |        |
+| --with-extra-asflags  | extra flags to be passed to the assembler           |        |
+
+#### ETC
+
+| 옵션                                          | 설명                                                                                                          | 기본값                                 |
+| --------------------------------------------- | ------------------------------------------------------------------------------------------------------------- | -------------------------------------- |
+| --with-build-jdk                              | path to JDK of same version as is being built                                                                 | [the newly built JDK]                  |
+| --with-cacerts-file                           | specify alternative cacerts file                                                                              |                                        |
+| --with-copyright-year                         | Set copyright year value for build                                                                            | [current year]                         |
+| --with-jni-libpath                            | override default JNI library search path                                                                      |                                        |
+| --with-import-modules                         | import a set of prebuilt modules either as a zip file or an exploded directory                                |                                        |
+| --with-msvc-toolset-version                   | specific MSVC toolset version to use, passed as-vcvars_ver argument to pass to vcvarsall.bat (Windows only)   |                                        |
+| --with-build-devkit                           | Devkit to use for the build platform toolchain                                                                |                                        |
+| --with-jtreg                                  | Regression Test Harness                                                                                       | [probed]                               |
+| --with-jmh                                    | Java Microbenchmark Harness for building the OpenJDK Microbenchmark Suite                                     |                                        |
+| --with-jib                                    | Jib dependency management tool                                                                                | [not used]                             |
+| --with-source-date                            | how to set SOURCE_DATE_EPOCH ('updated', 'current', 'version' a timestamp or an ISO-8601 date)                | [updated]                              |
+| --with-abi-profile                            | specify ABI profile for ARM builds (arm-vfp-sflt,arm-vfp-hflt,arm-sflt,armv5-vfp-sflt,armv6-vfp-hflt,aarch64) | [toolchain dependent]                  |
+| --with-native-debug-symbols                   | set the native debug symbol configuration (none, internal, external, zipped)                                  | [varying]                              |
+| --with-external-symbols-in-bundles            | which type of external native debug symbol information                                                        | [none]                                 |
+|                                               | shall be shipped in product bundles (none, public, full) (e.g. ship full stripped pdbs on Windows)            |                                        |
+| --with-jcov                                   | jcov library location                                                                                         |                                        |
+| --with-jcov-input-jdk                         | jdk image to instrument                                                                                       |                                        |
+| --with-jcov-filters                           | filters to limit code for jcov instrumentation and report generation                                          |                                        |
+| --with-stdc++lib=<static>,<dynamic>,<default> | force linking of the C++ runtime on Linux                                                                     |                                        |
+|                                               | to either static or dynamic, default is static with dynamic as fallback                                       |                                        |
+| --with-msvcr-dll                              | path to microsoft C runtime dll (msvcr\*.dll) (Windows only)                                                  | [probed]                               |
+| --with-msvcp-dll                              | path to microsoft C++ runtime dll (msvcp\*.dll) (Windows only)                                                | [probed]                               |
+| --with-vcruntime-1-dll                        | path to microsoft C++ runtime dll (vcruntime\*\_1.dll) (Windows x64 only)                                     | [probed]                               |
+| --with-ucrt-dll-dir                           | path to Microsoft Windows Kit UCRT DLL dir (Windows only)                                                     | [probed]                               |
+| --with-x                                      | use the X Window System                                                                                       |                                        |
+| --with-cups                                   | specify prefix directory for the cups package (expecting the headers under PATH/include)                      |                                        |
+| --with-cups-include                           | specify directory for the cups include files                                                                  |                                        |
+| --with-fontconfig                             | specify prefix directory for the fontconfig package (expecting the headers under PATH/include)                |                                        |
+| --with-fontconfig-include                     | specify directory for the fontconfig include files                                                            |                                        |
+| --with-freetype                               | specify whether to use 'system' or 'bundled' freetype.                                                        |                                        |
+|                                               | The selected option applies to both build time and run time. The default behaviour can be platform dependent. |                                        |
+|                                               | If using 'system' and either the include files or libraries cannot be located automatically,                  |                                        |
+|                                               | then additionally specify both using --with-freetype-include and --with-freetype-lib.                         |                                        |
+| --with-freetype-include                       | specify directory for the freetype include files                                                              |                                        |
+| --with-freetype-lib                           | specify directory for the freetype library                                                                    |                                        |
+| --with-alsa specify                           | prefix directory for the alsa package                                                                         |                                        |
+|                                               | (expecting the libraries under PATH/lib and the headers under PATH/include)                                   |                                        |
+| --with-alsa-include                           | specify directory for the alsa include files                                                                  |                                        |
+| --with-alsa-lib                               | specify directory for the alsa library                                                                        |                                        |
+| --with-libffi                                 | specify prefix directory for the libffi package                                                               |                                        |
+|                                               | (expecting the libraries under PATH/lib and the headers under PATH/include)                                   |                                        |
+| --with-libffi-include                         | specify directory for the libffi include files                                                                |                                        |
+| --with-libffi-lib                             | specify directory for the libffi library                                                                      |                                        |
+| --with-libjpeg                                | use libjpeg from build system or OpenJDK source (system, bundled)                                             | [bundled]                              |
+| --with-giflib                                 | use giflib from build system or OpenJDK source (system, bundled)                                              | [bundled]                              |
+| --with-libpng                                 | use libpng from build system or OpenJDK source (system, bundled)                                              | [bundled]                              |
+| --with-zlib                                   | use zlib from build system or OpenJDK source (system, bundled)                                                | [bundled]                              |
+| --with-lcms                                   | use lcms2 from build system or OpenJDK source (system, bundled)                                               | [bundled]                              |
+| --with-harfbuzz                               | use harfbuzz from build system or OpenJDK source (system, bundled)                                            | [bundled]                              |
+| --with-graalunit-lib                          | specify location of 3rd party libraries used by Graal unit tests                                              |                                        |
+| --with-gtest                                  | specify prefix directory for the gtest framework                                                              |                                        |
+| **--with-jvm-features**                       | JVM features to enable (foo) or disable (-foo), separated by comma. Use '--help' to show possible values      | [none]                                 |
+| --with-hotspot-build-time                     | timestamp to use in hotspot version string, empty for on-the-fly                                              | [empty]                                |
+| --with-with-cpu-port                          | Deprecated. Option is kept for backwards compatibility and is ignored                                         |                                        |
+| --with-exclude-translations                   | a comma separated list of locales to exclude translations for.                                                |                                        |
+|                                               | Default is to include all translations present in the source.                                                 |                                        |
+| **--with-num-cores**                          | numberof cores in the build system, e.g. --with-num-cores=8                                                   |                                        |
+| **--with-memory-size memory**                 | (in MB) available in the build system, e.g. --with-memory-size=1024                                           |                                        |
+| --with-jobs                                   | number of parallel jobs to let make run                                                                       | [calculated based on cores and memory] |
+| --with-test-jobs                              | number of parallel tests jobs to run                                                                          | [based on build jobs]                  |
+| --with-ccache-dir                             | where to store ccache files                                                                                   | [~/.ccache]                            |
 
 Some influential environment variables:
 BASH Override default value for BASH
