@@ -35,9 +35,9 @@ github: [metadata]
 
 
 # theme
-theme: "minimal-mistakes-jekyll"
-minimal_mistakes_skin: "default" # "air", "aqua", "contrast", "dark", "dirt", "neon", "mint", "plum" "sunrise"
-# remote_theme : "mmistakes/minimal-mistakes@4.21.0"
+# theme: "minimal-mistakes-jekyll"
+# minimal_mistakes_skin: "default" # "air", "aqua", "contrast", "dark", "dirt", "neon", "mint", "plum" "sunrise"
+remote_theme : "mmistakes/minimal-mistakes@4.21.0"
 plugins:
   - classifier-reborn
   - json
