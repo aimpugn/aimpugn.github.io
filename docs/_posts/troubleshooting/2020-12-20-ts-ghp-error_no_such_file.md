@@ -14,8 +14,8 @@ jekyll 3.9.0 | Error:  No such file or directory @ rb_sysopen -
 
 ...
 
-  Writing: C:/Users/daybreak/vscode_projects/proejct_docs/aimpugn.github.io/docs/_site/couchbase/2020-11-09-Couchbase-Create_the_Right_Index_Get_the_Right_Performance/2te_the_Right_Index_Get_the_Right_Performance.html
-           Writing: C:/Users/daybreak/vscode_projects/proejct_docs/aimpugn.github.io/docs/_site/couchbase/2020-11-17-Couchbase-Blog-Using_Eviction_Effectively_to_Manage_Memory_U20/11/17/Couchbase-Blog-Using_Eviction_Effectively_to_Manage_Memory_Usage_in_Couchbase_GSI.html
+  Writing: path/to/aimpugn.github.io/docs/_site/couchbase/2020-11-09-Couchbase-Create_the_Right_Index_Get_the_Right_Performance/2te_the_Right_Index_Get_the_Right_Performance.html
+           Writing: path/to/proejct_docs/aimpugn.github.io/docs/_site/couchbase/2020-11-17-Couchbase-Blog-Using_Eviction_Effectively_to_Manage_Memory_U20/11/17/Couchbase-Blog-Using_Eviction_Effectively_to_Manage_Memory_Usage_in_Couchbase_GSI.html
 /2020-11-17-Couchbase-Blog-Using_Eviction_Effectively_to_Manage_Memory_Usage_in_Couchbase_GSI/2020/11/17/Couchbase-Blog-Using_Eviction_Effectively_to/2020-11-17-Couchbase-Blog-U_Manage_Memory_Usage_in_Couchbase_GSI.html                                                                                                           hbase_GSI.html
 Traceback (most recent call last):
 ```
