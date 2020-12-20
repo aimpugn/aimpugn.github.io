@@ -1,4 +1,4 @@
----
+﻿---
 title: Couchbase N1QL Operators
 author: aimpugn
 date: 2020-10-26 13:10:00 +0900
