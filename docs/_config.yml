@@ -18,19 +18,26 @@
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
 locale: "ko-KR"
+encoding: utf-8
 title: Aimpugn's Dev Blog
 email: aimpugn@gmail.com
 # description: >- # this means to ignore newlines until "baseurl:"
 description: Learn algorithms, network, language, and frameworks, anything I want to learn
-baseurl: "" # the subpath of your site, e.g. /blog
-url: "https://aimpugn.github.io" # the base hostname & protocol for your site, e.g. http://example.com
+# the subpath of your site, e.g. /blog
+baseurl: "" 
+# the base hostname & protocol for your site, e.g. http://example.com
+url: "https://aimpugn.github.io"
+# twitter
 # twitter_username: jekyllrb
-github_username:  aimpugn
+# github
+github_username: aimpugn
+github: [metadata]
 
 
-# Build settings
-# theme: jekyll-theme-minimal
-remote_theme : "mmistakes/minimal-mistakes@4.21.0"
+# theme
+theme: "minimal-mistakes-jekyll"
+minimal_mistakes_skin: "default" # "air", "aqua", "contrast", "dark", "dirt", "neon", "mint", "plum" "sunrise"
+# remote_theme : "mmistakes/minimal-mistakes@4.21.0"
 plugins:
   - classifier-reborn
   - json
@@ -111,15 +118,11 @@ incremental: false
 defaults:
   # _pages
   - scope:
-      path: ""
+      path: "_pages"
       type: pages
     values:
       layout: single
       author_profile: true
-      read_time: true
-      comments: # true
-      share: true
-      related: true
   # _posts
   - scope:
       path: ""
@@ -127,6 +130,7 @@ defaults:
     values:
       layout: single
       classes: wide
+      permalink: /:path/:year/:month/:day/:title
       author_profile: true
       read_time: true
       comments: # true
