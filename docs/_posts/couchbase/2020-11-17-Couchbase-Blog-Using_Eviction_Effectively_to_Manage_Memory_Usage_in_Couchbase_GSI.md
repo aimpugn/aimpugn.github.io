@@ -4,8 +4,6 @@ author: aimpugn
 date: 2020-11-17 09:00:00 +0900
 categories: [Couchbase.memory, Couchbase.eviction]
 tags: [nosql, couchbase]
-math: true
-use_math: true
 ---
 
 # [Using Eviction Effectively to Manage Memory Usage in Couchbase GSI](https://blog.couchbase.com/using-eviction-effectively-to-manage-memory-usage-in-couchbase-gsi/)

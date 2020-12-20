@@ -1,7 +1,7 @@
 ---
-Title: Troubleshooting GitHub Pages theme not change
-Author: aimpugn
-Date: 2020-12-08 00:08:00 +0900
+title: Troubleshooting GitHub Pages theme not change
+author: aimpugn
+date: 2020-12-08 00:08:00 +0900
 ---
 
 ## GitHub Pages 테마 변경이 바로 안 보이는 경우

@@ -1,7 +1,7 @@
 ---
-Title: Docker Network
-Author: aimpugn
-Date: 2020-11-29 22:47:00 +0900
+title: Docker Network
+author: aimpugn
+date: 2020-11-29 22:47:00 +0900
 ---
 
 ## [No network connectivity to/from Docker CE container on CentOS 8](https://serverfault.com/a/987687/602508)

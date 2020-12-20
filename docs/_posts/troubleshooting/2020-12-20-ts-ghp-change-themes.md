@@ -38,7 +38,18 @@ gem "minimal-mistakes-jekyll", "4.13.0"
 
 - 로컬 테스트
 
-```
+```s
 bundle install
+bundle exec jekyll serve -V
 
+Configuration file: path/to/aimpugn.github.io/docs/_config.yml
+            Source: path/to/aimpugn.github.io/docs
+       Destination: path/to/aimpugn.github.io/docs/_site
+ Incremental build: disabled. Enable with --incremental
+      Generating...
+       Jekyll Feed: Generating feed for posts
+                    done in 5.854 seconds.
+ Auto-regeneration: enabled for 'path/to/aimpugn.github.io/docs'
+    Server address: http://127.0.0.1:4000/
+  Server running... press ctrl-c to stop.
 ```

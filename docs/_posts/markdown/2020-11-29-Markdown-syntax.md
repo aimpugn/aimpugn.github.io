@@ -1,9 +1,9 @@
 ---
-Title: Markdown syntax
-Author: aimpugn
-Date: 2020-11-29 21:25:00 +0900
-Categories: [Markdown.syntax]
-Tag: [Markdown, syntax]
+title: Markdown syntax
+author: aimpugn
+date: 2020-11-29 21:25:00 +0900
+categories: [Markdown.syntax]
+tag: [Markdown, syntax]
 ---
 
 # Markdown syntax
