@@ -26,3 +26,8 @@ html {
       font-size: 16px;
     }
 }
+
+.katex .katex-html>.newline {
+  display: block;
+  padding-bottom: 10px;
+}
