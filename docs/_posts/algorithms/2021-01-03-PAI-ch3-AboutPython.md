@@ -1,10 +1,16 @@
 ---
-title: Python Algorithms Interview ch3 About Pythonm
+title: ch3 About Pythonm
 author: aimpugn
-date: 2021-01-03 16:25:00+0900
+date: 2021-01-18 23:25:00+0900
 use_math: true
-categories: [algorithms]
+categories: [PAI, algorithms]
 ---
+- [문법](#문법)
+  - [인덴트](#인덴트)
+  - [네이밍 컨벤션](#네이밍-컨벤션)
+  - [타입 힌트](#타입-힌트)
+  - [리스트 컴프리헨션](#리스트-컴프리헨션)
+  - [제네레이터](#제네레이터)
 
 ## 문법
 

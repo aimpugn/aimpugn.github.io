@@ -9,17 +9,17 @@ author: aimpugn
   - [Configuration](#configuration)
   - [설치 디렉토리(Installation directories)](#설치-디렉토리installation-directories)
     - [`make`](#make)
-    - [Fine tuning of the installation directories:](#fine-tuning-of-the-installation-directories)
+    - [Fine tuning of the installation directories](#fine-tuning-of-the-installation-directories)
       - [EPREFIX](#eprefix)
       - [PREFIX](#prefix)
       - [DATAROOTDIR](#datarootdir)
       - [DOCDIR](#docdir)
-    - [X features:](#x-features)
-    - [System types:](#system-types)
+    - [X features](#x-features)
+    - [System types](#system-types)
     - [Optional Features](#optional-features)
       - [jvm-feature in Optional Features](#jvm-feature-in-optional-features)
       - [etc in Optional Features](#etc-in-optional-features)
-    - [Optional Packages:](#optional-packages)
+    - [Optional Packages](#optional-packages)
       - [toochain](#toochain)
       - [vendor](#vendor)
       - [version](#version)
@@ -27,7 +27,8 @@ author: aimpugn
       - [Boot](#boot)
       - [EXTRA](#extra)
       - [ETC](#etc)
-  - [Additional (non-autoconf) OpenJDK Options:](#additional-non-autoconf-openjdk-options)
+    - [Some influential environment variables](#some-influential-environment-variables)
+  - [Additional (non-autoconf) OpenJDK Options](#additional-non-autoconf-openjdk-options)
 
 # 개요
 
@@ -81,7 +82,7 @@ author: aimpugn
 - 기본적으로 `make install`은 모든 파일을 `/usr/local/bin`, `/usr/local/lib` 등에 설치한다
 - `--prefix` 옵션 사용하여 `/usr/local`이 아닌 다른 곳에 설치 가능. 예를 들어 `--prefix=$HOME`
 
-### Fine tuning of the installation directories:
+### Fine tuning of the installation directories
 
 #### EPREFIX
 
@@ -122,14 +123,14 @@ author: aimpugn
 | --pdfdir=DIR  | pdf documentation  | `DOCDIR` |
 | --psdir=DIR   | ps documentation   | `DOCDIR` |
 
-### X features:
+### X features
 
 | 옵션              | 설명                                    | 기본값 |
 | ----------------- | --------------------------------------- | ------ |
 | --x-includes=DIR  | DIR에 있는 X 포함 파일들(include files) |        |
 | --x-libraries=DIR | DIR에 있는 X 라이브러리 파일들          |        |
 
-### System types:
+### System types
 
 | 옵션            | 설명                                                          | 기본값    |
 | --------------- | ------------------------------------------------------------- | --------- |
@@ -137,7 +138,7 @@ author: aimpugn
 | --host=HOST     | HOST에서 실행되도록 프로그램을 빌드하도록 `cross-compile`[^1] | `BUILD`   |
 | --build=BUILD   | BUILD에 빌드함을 설정                                         | `guessed` |
 
-[^1]: cross-comiplation https://www.gnu.org/software/automake/manual/html_node/Cross_002dCompilation.html
+[^1]: cross-comiplation <https://www.gnu.org/software/automake/manual/html_node/Cross_002dCompilation.html>
 
 ### Optional Features
 
@@ -174,14 +175,14 @@ author: aimpugn
 | --enable-jvm-feature-cds           | enable jvm feature 'cds' (enable class data sharing (CDS))                           |        |
 | --enable-jvm-feature-compiler1     | enable jvm feature 'compiler1' (enable hotspot compiler C1)                          |        |
 | --enable-jvm-feature-compiler2     | enable jvm feature 'compiler2' (enable hotspot compiler C2)                          |        |
-| **--enable-jvm-feature-dtrace **   | enable jvm feature 'dtrace' (enable dtrace support)                                  |        |
+| **--enable-jvm-feature-dtrace**    | enable jvm feature 'dtrace' (enable dtrace support)                                  |        |
 | --enable-jvm-feature-epsilongc     | enable jvm feature 'epsilongc' (include the epsilon (no-op) garbage collector)       |        |
 | --enable-jvm-feature-g1gc          | enable jvm feature 'g1gc' (include the G1 garbage collector)                         |        |
-| **--enable-jvm-feature-graal **    | enable jvm feature 'graal' (enable Graal (jdk.internal.vm.compiler))                 |        |
-| **--enable-jvm-feature-jfr **      | enable jvm feature 'jfr' (enable JDK Flight Recorder (JFR))                          |        |
+| **--enable-jvm-feature-graal**     | enable jvm feature 'graal' (enable Graal (jdk.internal.vm.compiler))                 |        |
+| **--enable-jvm-feature-jfr**       | enable jvm feature 'jfr' (enable JDK Flight Recorder (JFR))                          |        |
 | --enable-jvm-feature-jni-check     | enable jvm feature 'jni-check' (enable -Xcheck:jni support)                          |        |
-| **--enable-jvm-feature-jvmci **    | enable jvm feature 'jvmci' (enable JVM Compiler Interface (JVMCI))                   |        |
-| **--enable-jvm-feature-jvmti **    | enable jvm feature 'jvmti' (enable Java Virtual Machine Tool Interface (JVM TI))     |        |
+| **--enable-jvm-feature-jvmci**     | enable jvm feature 'jvmci' (enable JVM Compiler Interface (JVMCI))                   |        |
+| **--enable-jvm-feature-jvmti**     | enable jvm feature 'jvmti' (enable Java Virtual Machine Tool Interface (JVM TI))     |        |
 | --enable-jvm-feature-link-time-opt | enable jvm feature 'link-time-opt' (enable link time optimization)                   |        |
 | --enable-jvm-feature-management    | enable jvm feature 'management' (enable java.lang.management API support)            |        |
 | --enable-jvm-feature-minimal       | enable jvm feature 'minimal' (support building variant 'minimal')                    |        |
@@ -207,7 +208,7 @@ author: aimpugn
 | --enable-generate-classlist    | enable generation of a CDS classlist at build time                     | `enabled`                            |
 |                                |                                                                        | if `cds` enabled for all JVM vriants |
 
-### Optional Packages:
+### Optional Packages
 
 | 옵션                            | 설명                                                                                                 | 기본값                                           |
 | ------------------------------- | ---------------------------------------------------------------------------------------------------- | ------------------------------------------------ |
@@ -358,158 +359,143 @@ author: aimpugn
 | --with-test-jobs                              | number of parallel tests jobs to run                                                                          | [based on build jobs]                  |
 | --with-ccache-dir                             | where to store ccache files                                                                                   | [~/.ccache]                            |
 
-Some influential environment variables:
-BASH Override default value for BASH
-CAT Override default value for CAT
-CHMOD Override default value for CHMOD
-CP Override default value for CP
-CUT Override default value for CUT
-DATE Override default value for DATE
-DIFF Override default value for DIFF
-ECHO Override default value for ECHO
-EXPR Override default value for EXPR
-FIND Override default value for FIND
-GUNZIP Override default value for GUNZIP
-GZIP Override default value for GZIP
-HEAD Override default value for HEAD
-LN Override default value for LN
-LS Override default value for LS
-MKDIR Override default value for MKDIR
-MKTEMP Override default value for MKTEMP
-MV Override default value for MV
-AWK Override default value for AWK
-PRINTF Override default value for PRINTF
-RM Override default value for RM
-RMDIR Override default value for RMDIR
-SH Override default value for SH
-SORT Override default value for SORT
-TAIL Override default value for TAIL
-TAR Override default value for TAR
-TEE Override default value for TEE
-TOUCH Override default value for TOUCH
-TR Override default value for TR
-UNAME Override default value for UNAME
-WC Override default value for WC
-XARGS Override default value for XARGS
-GREP Override default value for GREP
-EGREP Override default value for EGREP
-FGREP Override default value for FGREP
-SED Override default value for SED
-DF Override default value for DF
-NICE Override default value for NICE
-READLINK Override default value for READLINK
-PATHTOOL Override default value for PATHTOOL
-LSB_RELEASE Override default value for LSB_RELEASE
-CMD Override default value for CMD
-CMP Override default value for CMP
-UNIQ Override default value for UNIQ
-XCODEBUILD Override default value for XCODEBUILD
-PKGHANDLER Override default value for PKGHANDLER
-MAKE Override default value for MAKE
-CHECK_GMAKE Override default value for CHECK_GMAKE
-CHECK_MAKE Override default value for CHECK_MAKE
-CHECK_TOOLSDIR_GMAKE
-Override default value for CHECK_TOOLSDIR_GMAKE
-CHECK_TOOLSDIR_MAKE
-Override default value for CHECK_TOOLSDIR_MAKE
-PANDOC Override default value for PANDOC
-UNZIP Override default value for UNZIP
-ZIPEXE Override default value for ZIPEXE
-READELF Override default value for READELF
-DOT Override default value for DOT
-HG Override default value for HG
-GIT Override default value for GIT
-STAT Override default value for STAT
-TIME Override default value for TIME
-FLOCK Override default value for FLOCK
-DTRACE Override default value for DTRACE
-PATCH Override default value for PATCH
-DSYMUTIL Override default value for DSYMUTIL
-MIG Override default value for MIG
-XATTR Override default value for XATTR
-CODESIGN Override default value for CODESIGN
-SETFILE Override default value for SETFILE
-ULIMIT Override default value for ULIMIT
-PKG_CONFIG path to pkg-config utility
-JAVAC_CHECK Override default value for JAVAC_CHECK
-JAVA_CHECK Override default value for JAVA_CHECK
-JAVA Override default value for JAVA
-JAVAC Override default value for JAVAC
-JAVADOC Override default value for JAVADOC
-JAR Override default value for JAR
-POTENTIAL_CC
-Override default value for POTENTIAL_CC
-CC C compiler command
-CFLAGS C compiler flags
-LDFLAGS linker flags, e.g. -L<lib dir> if you have libraries in a
-nonstandard directory <lib dir>
-LIBS libraries to pass to the linker, e.g. -l<library>
-CPPFLAGS (Objective) C/C++ preprocessor flags, e.g. -I<include dir> if
-you have headers in a nonstandard directory <include dir>
-POTENTIAL_CXX
-Override default value for POTENTIAL_CXX
-CXX C++ compiler command
-CXXFLAGS C++ compiler flags
-CPP C preprocessor
-CXXCPP C++ preprocessor
-LD Override default value for LD
-LD_JAOTC Override default value for LD_JAOTC
-AS Override default value for AS
-AR Override default value for AR
-LIPO Override default value for LIPO
-OTOOL Override default value for OTOOL
-INSTALL_NAME_TOOL
-Override default value for INSTALL_NAME_TOOL
-MT Override default value for MT
-RC Override default value for RC
-DUMPBIN Override default value for DUMPBIN
-STRIP Override default value for STRIP
-NM Override default value for NM
-OBJCOPY Override default value for OBJCOPY
-OBJDUMP Override default value for OBJDUMP
-CXXFILT Override default value for CXXFILT
-BUILD_CC Override default value for BUILD_CC
-BUILD_CXX Override default value for BUILD_CXX
-BUILD_AS Override default value for BUILD_AS
-BUILD_AR Override default value for BUILD_AR
-BUILD_LD Override default value for BUILD_LD
-BUILD_NM Override default value for BUILD_NM
-BUILD_OBJCOPY
-Override default value for BUILD_OBJCOPY
-BUILD_STRIP Override default value for BUILD_STRIP
-JTREGEXE Override default value for JTREGEXE
-XMKMF Path to xmkmf, Makefile generator for X Window System
-FREETYPE_CFLAGS
-C compiler flags for FREETYPE, overriding pkg-config
-FREETYPE_LIBS
-linker flags for FREETYPE, overriding pkg-config
-ALSA_CFLAGS C compiler flags for ALSA, overriding pkg-config
-ALSA_LIBS linker flags for ALSA, overriding pkg-config
-LIBFFI_CFLAGS
-C compiler flags for LIBFFI, overriding pkg-config
-LIBFFI_LIBS linker flags for LIBFFI, overriding pkg-config
-PNG_CFLAGS C compiler flags for PNG, overriding pkg-config
-PNG_LIBS linker flags for PNG, overriding pkg-config
-LCMS_CFLAGS C compiler flags for LCMS, overriding pkg-config
-LCMS_LIBS linker flags for LCMS, overriding pkg-config
-HARFBUZZ_CFLAGS
-C compiler flags for HARFBUZZ, overriding pkg-config
-HARFBUZZ_LIBS
-linker flags for HARFBUZZ, overriding pkg-config
-ICECC_CMD Override default value for ICECC_CMD
-ICECC_CREATE_ENV
-Override default value for ICECC_CREATE_ENV
-ICECC_WRAPPER
-Override default value for ICECC_WRAPPER
-CCACHE Override default value for CCACHE
+### Some influential environment variables
 
-Use these variables to override the choices made by `configure' or to help
-it to find libraries and programs with nonstandard names/locations.
+- 이 변수들은 `configure`가 선택한 항목들을 대체(override)하거나 비표준 이름/경로의 라이브러리와 프로그램을 찾는 데 도움을 준다
 
-Report bugs to <build-dev@openjdk.java.net>.
-OpenJDK home page: <http://openjdk.java.net>.
+|      환경 변수       | 설명                                                                                    |
+| :------------------: | --------------------------------------------------------------------------------------- |
+|         BASH         | Override default value for BASH                                                         |
+|         CAT          | Override default value for CAT                                                          |
+|        CHMOD         | Override default value for CHMOD                                                        |
+|          CP          | Override default value for CP                                                           |
+|         CUT          | Override default value for CUT                                                          |
+|         DATE         | Override default value for DATE                                                         |
+|         DIFF         | Override default value for DIFF                                                         |
+|         ECHO         | Override default value for ECHO                                                         |
+|         EXPR         | Override default value for EXPR                                                         |
+|         FIND         | Override default value for FIND                                                         |
+|        GUNZIP        | Override default value for GUNZIP                                                       |
+|         GZIP         | Override default value for GZIP                                                         |
+|         HEAD         | Override default value for HEAD                                                         |
+|          LN          | Override default value for LN                                                           |
+|          LS          | Override default value for LS                                                           |
+|        MKDIR         | Override default value for MKDIR                                                        |
+|        MKTEMP        | Override default value for MKTEMP                                                       |
+|          MV          | Override default value for MV                                                           |
+|         AWK          | Override default value for AWK                                                          |
+|        PRINTF        | Override default value for PRINTF                                                       |
+|          RM          | Override default value for RM                                                           |
+|        RMDIR         | Override default value for RMDIR                                                        |
+|          SH          | Override default value for SH                                                           |
+|         SORT         | Override default value for SORT                                                         |
+|         TAIL         | Override default value for TAIL                                                         |
+|         TAR          | Override default value for TAR                                                          |
+|         TEE          | Override default value for TEE                                                          |
+|        TOUCH         | Override default value for TOUCH                                                        |
+|          TR          | Override default value for TR                                                           |
+|        UNAME         | Override default value for UNAME                                                        |
+|          WC          | Override default value for WC                                                           |
+|        XARGS         | Override default value for XARGS                                                        |
+|         GREP         | Override default value for GREP                                                         |
+|        EGREP         | Override default value for EGREP                                                        |
+|        FGREP         | Override default value for FGREP                                                        |
+|         SED          | Override default value for SED                                                          |
+|          DF          | Override default value for DF                                                           |
+|         NICE         | Override default value for NICE                                                         |
+|       READLINK       | Override default value for READLINK                                                     |
+|       PATHTOOL       | Override default value for PATHTOOL                                                     |
+|     LSB_RELEASE      | Override default value for LSB_RELEASE                                                  |
+|         CMD          | Override default value for CMD                                                          |
+|         CMP          | Override default value for CMP                                                          |
+|         UNIQ         | Override default value for UNIQ                                                         |
+|      XCODEBUILD      | Override default value for XCODEBUILD                                                   |
+|      PKGHANDLER      | Override default value for PKGHANDLER                                                   |
+|         MAKE         | Override default value for MAKE                                                         |
+|     CHECK_GMAKE      | Override default value for CHECK_GMAKE                                                  |
+|      CHECK_MAKE      | Override default value for CHECK_MAKE                                                   |
+| CHECK_TOOLSDIR_GMAKE | Override default value for CHECK_TOOLSDIR_GMAKE                                         |
+| CHECK_TOOLSDIR_MAKE  | Override default value for CHECK_TOOLSDIR_MAKE                                          |
+|        PANDOC        | Override default value for PANDOC                                                       |
+|        UNZIP         | Override default value for UNZIP                                                        |
+|        ZIPEXE        | Override default value for ZIPEXE                                                       |
+|       READELF        | Override default value for READELF                                                      |
+|         DOT          | Override default value for DOT                                                          |
+|          HG          | Override default value for HG                                                           |
+|         GIT          | Override default value for GIT                                                          |
+|         STAT         | Override default value for STAT                                                         |
+|         TIME         | Override default value for TIME                                                         |
+|        FLOCK         | Override default value for FLOCK                                                        |
+|        DTRACE        | Override default value for DTRACE                                                       |
+|        PATCH         | Override default value for PATCH                                                        |
+|       DSYMUTIL       | Override default value for DSYMUTIL                                                     |
+|         MIG          | Override default value for MIG                                                          |
+|        XATTR         | Override default value for XATTR                                                        |
+|       CODESIGN       | Override default value for CODESIGN                                                     |
+|       SETFILE        | Override default value for SETFILE                                                      |
+|        ULIMIT        | Override default value for ULIMIT                                                       |
+|      PKG_CONFIG      | path to pkg-config utility                                                              |
+|     JAVAC_CHECK      | Override default value for JAVAC_CHECK                                                  |
+|      JAVA_CHECK      | Override default value for JAVA_CHECK                                                   |
+|         JAVA         | Override default value for JAVA                                                         |
+|        JAVAC         | Override default value for JAVAC                                                        |
+|       JAVADOC        | Override default value for JAVADOC                                                      |
+|         JAR          | Override default value for JAR                                                          |
+|     POTENTIAL_CC     | Override default value for POTENTIAL_CC                                                 |
+|          CC          | C compiler command                                                                      |
+|        CFLAGS        | C compiler flags                                                                        |
+|     **LDFLAGS**      | linker flags. 예를 들어 표중 아닌 `<lib dir>`에 라이브러리 있는 경우 `-L<lib dir>` 사용 |
+|       **LIBS**       | 링커로 전달(pass)할 라이브러리. e.g. `-l<library>`                                      |
+|       CPPFLAGS       | (Objective) C/C++ preprocessor flags, e.g. `-I<include dir>`                            |
+|                      | if you have headers in a nonstandard directory `<include dir>`                          |
+|    POTENTIAL_CXX     | Override default value for POTENTIAL_CXX                                                |
+|         CXX          | C++ compiler command                                                                    |
+|       CXXFLAGS       | C++ compiler flags                                                                      |
+|         CPP          | C preprocessor                                                                          |
+|        CXXCPP        | C++ preprocessor                                                                        |
+|          LD          | Override default value for LD                                                           |
+|       LD_JAOTC       | Override default value for LD_JAOTC                                                     |
+|          AS          | Override default value for AS                                                           |
+|          AR          | Override default value for AR                                                           |
+|         LIPO         | Override default value for LIPO                                                         |
+|        OTOOL         | Override default value for OTOOL                                                        |
+|  INSTALL_NAME_TOOL   | Override default value for INSTALL_NAME_TOOL                                            |
+|          MT          | Override default value for MT                                                           |
+|          RC          | Override default value for RC                                                           |
+|       DUMPBIN        | Override default value for DUMPBIN                                                      |
+|        STRIP         | Override default value for STRIP                                                        |
+|          NM          | Override default value for NM                                                           |
+|       OBJCOPY        | Override default value for OBJCOPY                                                      |
+|       OBJDUMP        | Override default value for OBJDUMP                                                      |
+|       CXXFILT        | Override default value for CXXFILT                                                      |
+|       BUILD_CC       | Override default value for BUILD_CC                                                     |
+|      BUILD_CXX       | Override default value for BUILD_CXX                                                    |
+|       BUILD_AS       | Override default value for BUILD_AS                                                     |
+|       BUILD_AR       | Override default value for BUILD_AR                                                     |
+|       BUILD_LD       | Override default value for BUILD_LD                                                     |
+|       BUILD_NM       | Override default value for BUILD_NM                                                     |
+|    BUILD_OBJCOPY     | Override default value for BUILD_OBJCOPY                                                |
+|     BUILD_STRIP      | Override default value for BUILD_STRIP                                                  |
+|       JTREGEXE       | Override default value for JTREGEXE                                                     |
+|        XMKMF         | Path to xmkmf, Makefile generator for X Window System                                   |
+|   FREETYPE_CFLAGS    | C compiler flags for FREETYPE, overriding pkg-config                                    |
+|    FREETYPE_LIBS     | linker flags for FREETYPE, overriding pkg-config                                        |
+|     ALSA_CFLAGS      | C compiler flags for ALSA, overriding pkg-config                                        |
+|      ALSA_LIBS       | linker flags for ALSA, overriding pkg-config                                            |
+|    LIBFFI_CFLAGS     | C compiler flags for LIBFFI, overriding pkg-config                                      |
+|     LIBFFI_LIBS      | linker flags for LIBFFI, overriding pkg-config                                          |
+|      PNG_CFLAGS      | C compiler flags for PNG, overriding pkg-config                                         |
+|       PNG_LIBS       | linker flags for PNG, overriding pkg-config                                             |
+|     LCMS_CFLAGS      | C compiler flags for LCMS, overriding pkg-config                                        |
+|      LCMS_LIBS       | linker flags for LCMS, overriding pkg-config                                            |
+|   HARFBUZZ_CFLAGS    | C compiler flags for HARFBUZZ, overriding pkg-config                                    |
+|    HARFBUZZ_LIBS     | linker flags for HARFBUZZ, overriding pkg-config                                        |
+|      ICECC_CMD       | Override default value for ICECC_CMD                                                    |
+|   ICECC_CREATE_ENV   | Override default value for ICECC_CREATE_ENV                                             |
+|    ICECC_WRAPPER     | Override default value for ICECC_WRAPPER                                                |
+|        CCACHE        | Override default value for CCACHE                                                       |
 
-## Additional (non-autoconf) OpenJDK Options:
+## Additional (non-autoconf) OpenJDK Options
 
 | 옵션                    | 설명                                                                                              |
 | ----------------------- | ------------------------------------------------------------------------------------------------- |
