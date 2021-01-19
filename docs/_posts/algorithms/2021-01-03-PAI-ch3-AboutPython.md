@@ -1,10 +1,11 @@
 ---
-title: ch3 About Pythonm
+title: ch3 About Python
 author: aimpugn
 date: 2021-01-18 23:25:00+0900
 use_math: true
 categories: [PAI, algorithms]
 ---
+
 - [문법](#문법)
   - [인덴트](#인덴트)
   - [네이밍 컨벤션](#네이밍-컨벤션)
