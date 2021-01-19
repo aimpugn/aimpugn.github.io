@@ -5,6 +5,7 @@ date: 2021-01-19 23:41:00+0900
 use_math: true
 categories: [PAI, algorithms]
 ---
+
 - [연결 리스트](#연결-리스트)
   - [개요](#개요)
   - [장점](#장점)
@@ -38,15 +39,15 @@ categories: [PAI, algorithms]
 
 ### 단방향
 
-![Singly Linked List](/docs/assets/images/ch8/Singly-linked-list.png)
+![Singly Linked List](../../assets/images/ch8/Singly-linked-list.png)
 
 ### 양방향
 
-![Doubly Linked List](/docs/assets/images/ch8/Doubly-linked-list.png)
+![Doubly Linked List](../../assets/images/ch8/Doubly-linked-list.png)
 
 ### 단방향 환형
 
-![Circular Linked List](/docs/assets/images/ch8/Circularly-linked-list.png)
+![Circular Linked List](../../assets/images/ch8/Circularly-linked-list.png)
 
 ### 양방향 환형
 
