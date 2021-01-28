@@ -6,7 +6,9 @@ use_math: true
 categories: [hackerrank, algorithms]
 ---
 
-## [문제](https://www.hackerrank.com/challenges/magic-square-forming/problem)
+# [마방진](https://www.hackerrank.com/challenges/magic-square-forming/problem)
+
+## 문제
 
 - 매직 스퀘어? 마방진
   - s = n x n 행렬로, 각 행의 합, 각 열의 합, 각 대각선의 합이 모두 같은 행렬
