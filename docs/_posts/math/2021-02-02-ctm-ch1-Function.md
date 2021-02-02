@@ -6,6 +6,12 @@ use_math: true
 categories: ["math", "ctm"]
 ---
 
+- [함수](#함수)
+  - [집합에 대한 용어와 표기법](#집합에-대한-용어와-표기법)
+    - [개요](#개요)
+    - [표현](#표현)
+  - [카테시안 곱(Cartesian product)](#카테시안-곱cartesian-product)
+
 # 함수
 
 - 벡터 및 행렬 이해에 중요한 기본적 수학 개념
