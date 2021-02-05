@@ -1,4 +1,8 @@
 document.addEventListener('DOMContentLoaded', (e) => {
+
+});
+
+function renderMathInElementConfig(){
     renderMathInElement(document.body, {
         delimiters: [
             {left: "$$", right: "$$", display: true},
@@ -10,4 +14,4 @@ document.addEventListener('DOMContentLoaded', (e) => {
         leqno: true,    // If true, display math has \tags rendered on the left instead of the right
         fleqn: true     // If true, display math renders flush left with a 2em left margin
     });
-});
+}
