@@ -1,8 +1,5 @@
-document.addEventListener('DOMContentLoaded', (e) => {
-
-});
-
 function renderMathInElementConfig(){
+    // https://katex.org/docs/autorender.html
     renderMathInElement(document.body, {
         delimiters: [
             {left: "$$", right: "$$", display: true},
