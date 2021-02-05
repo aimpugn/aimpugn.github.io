@@ -106,7 +106,9 @@ categories: ["math", "ctm"]
 
 ### `매핑하는 함수`의 의미
 
-\(f : D \longrightarrow F\) = D에서 F로의 함수 = D를 F로 매핑하는 함수
+\(f : D \longrightarrow F\)
+= **D에서 F로의 함수** 
+= **D를 F로 매핑하는 함수**
 
 - f: 함수
 - D: 함수의 정의역(domain)
