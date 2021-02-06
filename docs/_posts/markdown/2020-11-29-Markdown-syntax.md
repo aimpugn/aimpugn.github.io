@@ -27,18 +27,25 @@ tag: [Markdown, syntax]
 
 ## [collapsible](https://gist.github.com/pierrejoubert73/902cc94d79424356a8d20be2b382e1ab)
 
+<details>
+    <summary>Callabsible code</summary>
+    <p>
 ```html
 # A collapsible section with markdown
 <details>
   <summary>Click to expand!</summary>
   
-  ## Heading
+## Heading
+
   1. A numbered
   2. list
      * With some
      * Sub bullets
+
 </details>
-```
+\```
+    </p>
+</details>
 
 ## [Unicode in Github markdwon](https://stackoverflow.com/questions/34538879/unicode-in-github-markdown/36616878#36616878)
 
