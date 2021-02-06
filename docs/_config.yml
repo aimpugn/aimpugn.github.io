@@ -32,7 +32,7 @@ url: "https://aimpugn.github.io"
 # github
 github_username: aimpugn
 github: [metadata]
-
+category_dir: category/
 
 # theme
 # theme: "minimal-mistakes-jekyll"

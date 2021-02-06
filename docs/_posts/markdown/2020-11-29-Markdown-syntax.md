@@ -43,7 +43,8 @@ tag: [Markdown, syntax]
      * Sub bullets
 
 </details>
-```
+\```
+
 </p>
 </details>
 
