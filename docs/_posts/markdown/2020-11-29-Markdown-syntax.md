@@ -25,6 +25,21 @@ tag: [Markdown, syntax]
 \![대체문구]\(이미지 링크\)
 ![이미지](https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png)
 
+## [collapsible](https://gist.github.com/pierrejoubert73/902cc94d79424356a8d20be2b382e1ab)
+
+```html
+# A collapsible section with markdown
+<details>
+  <summary>Click to expand!</summary>
+  
+  ## Heading
+  1. A numbered
+  2. list
+     * With some
+     * Sub bullets
+</details>
+```
+
 ## [Unicode in Github markdwon](https://stackoverflow.com/questions/34538879/unicode-in-github-markdown/36616878#36616878)
 
 | name           | direction | html entity |
