@@ -8,6 +8,23 @@ tag: [Markdown, syntax]
 
 # Markdown syntax
 
+# \# \<h1\>\<\/h1>
+
+## \## \<h2\>\<\/h2>
+
+### \### \<h3\>\<\/h3>
+
+#### \#### \<h4\>\<\/h4>
+
+##### \##### \<h5\>\<\/h5>
+
+###### \###### \<h6\>\<\/h6>
+
+## Image
+
+\![대체문구]\(이미지 링크\)
+![이미지](https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png)
+
 ## [Unicode in Github markdwon](https://stackoverflow.com/questions/34538879/unicode-in-github-markdown/36616878#36616878)
 
 | name           | direction | html entity |
