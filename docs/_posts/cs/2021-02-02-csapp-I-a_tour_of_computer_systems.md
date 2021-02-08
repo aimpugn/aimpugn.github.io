@@ -53,9 +53,17 @@ categories: ["cs", "csapp"]
       - [동시성(concurrency)](#동시성concurrency)
       - [병행(parallelism)](#병행parallelism)
         - [쓰레드 레벨의 동시성](#쓰레드-레벨의-동시성)
+          - [*uniprocessor system*](#uniprocessor-system)
+          - [*multiprocessor system*](#multiprocessor-system)
+          - [*multi-core* processor](#multi-core-processor)
+          - [*hyperthreading*](#hyperthreading)
         - [명령어 레벨의 동시성](#명령어-레벨의-동시성)
+          - [*pipelining*](#pipelining)
+          - [*superscalar* processors](#superscalar-processors)
         - [SIMD(Single-Instruction, Multiple-Data) Parallelism](#simdsingle-instruction-multiple-data-parallelism)
     - [1.9.3. 컴퓨터 시스템에서 추상화의 중요성](#193-컴퓨터-시스템에서-추상화의-중요성)
+      - [프로세서의 측면에서](#프로세서의-측면에서)
+      - [OS의 측면에서](#os의-측면에서)
   - [1.10 요약](#110-요약)
 
 # A Tour of Computer Systems
@@ -534,12 +542,91 @@ $1 / [(1 - 0.9) + 0.9/k] = 4\newline$
 
 ##### 쓰레드 레벨의 동시성
 
+- 프로세스 추상화 &#8594; 동시에 여러 프로그램 실행하는 시스템 가능
+- 쓰레드 &#8594; 단일 프로세스에서 실행되는 여러 제어 흐름(control flows) 가능
+
+###### *uniprocessor system*
+
+- 저글링하는 것처럼, 단일 컴퓨터가 빠르게 프로세스를 스위칭
+- 동시 실행되는 것처럼(*simulated*) 보였지만, 실제로는 동시에 실행되는 건 아니었다
+
+###### *multiprocessor system*
+
+![F1.16](../../assets/images/csapp/ch1/F1.16.png)
+
+- 모든 멀티 프로세서가 단일 OS 커널의 제어 하에 시스템을 구성.
+- 1980년대부터 가능.
+
+###### *multi-core* processor
+
+![F1.17](../../assets/images/csapp/ch1/F1.17.png)
+
+- 각 코어의 구성
+  - L1
+    - i-cache: 최근 가져(fetch) 온 명령어들 유지
+    - d-cache: 최근 가져온 데이터 유지
+  - L2
+- L3
+  - 더 높은 레벨의 캐시이자
+  - 주기억장치에 대한 인터페이스
+
+###### *hyperthreading*
+
+- *simultaneous multi-threading*라고도 불리며, 단일 CPU도 여러 흐름 제어(flows of contro) 실행 가능케 한다
+- PC(Program Counter)나 레지스터 파일 등 CPU의 복사본을 갖는 반면, 부동 소수점 산술 연산(floating-point arithmetic) 수행하는 유닛 같은 다른 CPU 부분은 한 개의 복사본을 갖는 경우를 포함한다
+- 이전 프로세서와 하이퍼쓰레드 프로세서의 차이?
+  - 이전 프로세서에서는 쓰레드 간에 이동을 하려면 20,000 clock cycles(주기) 정도 필요
+  - 하이퍼쓰레드 프로세서는 주기마다(cycle-by-cycle) 어떤 쓰레드를 실행할 것인지를 결정
+- 한 쓰레드가 어떤 데이터가 캐시에 로드될 때까지 반드시 기다려야 한다면, CPU는 다른 쓰레드 진행 가능
+  - 인텔 코어 i7 프로세서는 각 코어가 두 개의 쓰레드 실행 가능하므로, 4개의 코어 시스템은 8개의 쓰레드를 병렬로 실행 가능
+- 장점?
+  - 여러 작업 수행할 때 동시성을 모방(simulate)하는 것을 줄일 수 있다
+  - 효과적으로 병렬 실행되는 멀티 쓰레드의 측면에서 작성된 단일 응용 프로그램을 더 빠르게 실행할 수 있다
+
 ##### 명령어 레벨의 동시성
 
-##### SIMD(Single-Instruction, Multiple-Data) Parallelism
+- 과거에는 단일 명령어당 3 ~ 10 clock cycles 필요했지만, 요즘 프로세서는 clock cycle당 2 ~ 4 명령어 실행률 지속 가능
 
-([참고](https://blog.naver.com/dev_seung2/221379096180))
+###### *pipelining*
+
+- 어떤 명령어 실행하기 위한 행동들을 여러 단계로 분할
+- 프로세서 하드웨어는 일련의 스테이지(a series of stages)로 구성
+- 각 스테이지는 분할된 단계를 수행
+- 스테이지는 병렬로 수행될 수 있으며, 다양한 명령어들의 다양한 부분에서 이뤄질 수 있다
+
+###### *superscalar* processors
+
+- `주기당 1 명령어 실행`보다 빠른 실행률을 지속할 수 있는 프로세서
+
+##### [SIMD(Single-Instruction, Multiple-Data)](https://blog.naver.com/dev_seung2/221379096180) Parallelism
+
+- 단일 명령어가 병렬로 여러 작업을 일으킬 수 있는 특별한 하드웨어
+- 예를 들어 요즘 Intel과 AMD 프로세서는 8 쌍의 [단정밀도](https://whatisthenext.tistory.com/146) 부동소수점(single precision floating-point number, C에서 *float* 타입)을 병렬로 더할 수 있는 명령어를 가지고 있다
+- SIMD 명령어는 대부분 이미지, 소리 그리고 영상 데이터를 처리하는 응용 프로그램의 속도를 높이기 위해 제공된다
 
 ### 1.9.3. 컴퓨터 시스템에서 추상화의 중요성
 
+- *추상화(abstration)*는 컴퓨터 공학에서 가장 중요한 개념중 하나
+- 예를 들어, 좋은 개발 연습의 하나는 개발자가 굳이 내부 로직을 파고들 필요 없이 코드를 사용할 수 있게 하는 함수의 집합인 API(Application Program Interface)를 만들어보는 것
+- 서로 다른 개발 언어는 추상화에 대해 다른 형식과 레벨을 제공한다
+  - java: Class declarations
+  - C: function prototypes
+
+#### 프로세서의 측면에서
+
+![F1.18](../../assets/images/csapp/ch1/F1.18.png)
+
+- 프로세서 부분에서, *instruction set architecture*는 실제 프로세서 하드웨어에 대한 추상화 제공
+- 이 추상화 덕분에, 실제 하드웨어는 훨씬 정교하지만, `한번에 한 명령어를 수행하는 어떤 한 프로세서` 위에서 기계 코드 프로그램이 실행되는 것처럼 동작한다
+- *동일한 실행 모델을 유지*함으로써, 서로 다르게 구현되어 다양한 비용과 퍼포먼스를 보이는 프로세서들이 같은 기계 코드 실행 가능
+
+#### OS의 측면에서
+
+- *file*: I/O 장치의 추상화
+- *virtual memory*: 프로그램 메모리의 추상화
+- *prcoess*: 실행 프로그램의 추상화
+- *virtual machine*: OS, 프로세서, 프로그램을 포함하는 전체 컴퓨터의 추상화
+
 ## 1.10 요약
+
+- 생략
