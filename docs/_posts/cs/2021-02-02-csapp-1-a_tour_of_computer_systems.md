@@ -1,11 +1,12 @@
 ---
-title: I. A tour of Computer Systems
+title: 1 A tour of Computer Systems
 author: aimpugn
 date: 2021-02-02 19:00:00+0900
+use_math: true
 categories: ["cs", "csapp"]
 ---
 
-- [A Tour of Computer Systems](#a-tour-of-computer-systems)
+- [1 A Tour of Computer Systems](#1-a-tour-of-computer-systems)
   - [개요](#개요)
     - [이 책을 통해 배우는 내용](#이-책을-통해-배우는-내용)
   - [1.1 정보는 Bits + Context](#11-정보는-bits--context)
@@ -66,7 +67,7 @@ categories: ["cs", "csapp"]
       - [OS의 측면에서](#os의-측면에서)
   - [1.10 요약](#110-요약)
 
-# A Tour of Computer Systems
+# 1 A Tour of Computer Systems
 
 ## 개요
 
