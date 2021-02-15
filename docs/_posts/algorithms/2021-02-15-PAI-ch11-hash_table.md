@@ -37,6 +37,8 @@ categories: [PAI, algorithms]
 
 ## 1 개요
 
+![hash_collision](../assets/images/../../../assets/images/pai/ch11/hash_table.png)
+
 - 해시 테이블 또는 해시 맵
 - 키를 값에 매핑할 수 있는 구조인, `연관 배열(associative array)` 추상 자료형을 구현하는 자료 구조
 - 대부분의 연산이 분할 상환 분석에 따른 시간 복잡도가 $O(1)$
@@ -44,8 +46,6 @@ categories: [PAI, algorithms]
 ## 2 `해시`
 
 ### 2.1 `해시 함수`
-
-![hash_function](../assets/images/../../../assets/images/pai/ch11/hash_function.png)
 
 #### 2.1.1 설명
 
