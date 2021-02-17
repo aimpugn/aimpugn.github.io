@@ -93,7 +93,9 @@ AF32B   -해시 함수-> D5
 
 - 어떤 간단한 규칙 통해 만들어낸 충분히 랜덤한 상태의 키의 값
 - 조슈아 블로크는 자바 설계 시 값 x를 다항식의 결과로 정의
+
 $$P(x) = s[0]\times x^{n-1} + s[1]\times x^{n-2} + \dotsc + s[n-1] = \sum_{i=0}^{n-1}s[i]\times x^{n-1-i}$$
+
 - 여기서 $x$는 31로 하는 거듭제곱 $P(31)$의 연산으로 정의
 - 여러 해시 함수의 성능을 조사했고, **The C Programming Language**에서 P(31)을 찾아냈다. 이 값은 97년 당시 [RISC 머신](https://en.wikipedia.org/wiki/Reduced_instruction_set_computer)에서 가장 저렴한 계산 비용이 들었다고 한다
 
