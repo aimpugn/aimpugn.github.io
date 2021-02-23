@@ -73,4 +73,7 @@ function mermaidConfig(){
         }
     };
     mermaid.initialize(config);
+    // https://github.com/mermaidjs/mermaid-gitbook/blob/master/content/usage.md#calling-mermaidinit
+    // 원래는 자동으로 init이 실행되지만, 이 경우 수동으로 추가해서 자동으로 실행이 안 되는 듯 하니, 수동으로 init
+    window.mermaid.init(undefined, document.querySelectorAll('.language-mermaid'));
 }
