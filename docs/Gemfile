@@ -33,7 +33,8 @@ gem "jekyll-paginate"
 # jekyll-sitemap
 gem "jekyll-sitemap"
 # https://github.com/jeffreytse/jekyll-spaceship#installation
-gem "jekyll-spaceship"
+# GH page에서는 허용된 플러그인만 작동(https://pages.github.com/versions/)
+# gem "jekyll-spaceship"
 # jekyll-include-cache
 gem 'jekyll-include-cache', group: :jekyll_plugins
 # jemoji

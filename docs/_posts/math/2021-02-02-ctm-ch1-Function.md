@@ -263,3 +263,8 @@ def mul(p, q):
 graph LR
     A-->B
 ```
+
+```mermaid!
+graph LR
+    A-->B
+```
