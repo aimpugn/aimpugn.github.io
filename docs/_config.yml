@@ -46,8 +46,30 @@ plugins:
   - jekyll-include-cache
   - jekyll-paginate
   - jekyll-sitemap
+  - jekyll-spaceship
   - jemoji
 
+jekyll-spaceship:
+  # default enabled processors
+  processors:
+    - table-processor
+    # - mathjax-processor
+    # - plantuml-processor
+    - mermaid-processor
+    # - polyfill-processor
+    # - media-processor
+    - emoji-processor
+    # - element-processor
+  mermaid-processor:
+    mode: default  # mode value 'pre-fetch' for fetching image at building stage
+    css:
+      class: mermaid
+    syntax:
+      code: 'mermaid!'
+      custom: ['@startmermaid', '@endmermaid']
+    config:
+      theme: forest
+    src: https://mermaid.ink/svg/
   
 markdown: kramdown
 kramdown:
@@ -69,6 +91,7 @@ kramdown:
 head_scripts:
   - https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.js
   - https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.js
+  - https://cdnjs.cloudflare.com/ajax/libs/mermaid/8.9.1/mermaid.js
   - /assets/js/mathjax.js
 
 # pagination
