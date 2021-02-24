@@ -18,6 +18,7 @@ categories: ["math", "ctm"]
   - [근본적인 계산 문제(TODO)](#근본적인-계산-문제todo)
   - [다중 표현](#다중-표현)
   - [복수의 필드](#복수의-필드)
+  - [기타 참고 링크](#기타-참고-링크)
 
 (TODO) 선형대수가 생소한데 번역도 매끄럽지가 않다. 완독을 하고 추후 다시 다듬자.
 
@@ -97,3 +98,8 @@ categories: ["math", "ctm"]
   - 실수: 실수상의 벡터에 대한 내적은 매우 간단하다
   - 복소수: 벡터에 대한 내적은 약간 더 복잡
   - 유한 필드: 내적은 없다
+
+## 기타 참고 링크
+
+- <https://www.reddit.com/r/Python/comments/5j042r/coding_the_matrix_this_course_for_anyone_need/>
+- <https://academictorrents.com/details/54cd86f3038dfd446b037891406ba4e0b1200d5a>
