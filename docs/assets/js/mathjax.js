@@ -11,8 +11,9 @@ function renderMathInElementConfig(){
             /**
              * 없으면 github page에서 아래와 같이 나온다
              * \(7\cdot 16^2 + 10\cdot 16^1 + 15\) \(7\cdot 256 + 10\cdot 16^1 + 15\) \(1,792 + 160 + 15\) \(1,967\)
+             * $$ $$로 감싸면 ()로 나오므로, display 모드로 사용한다
              */
-            {left: "\\(", right: "\\)", display: false},
+            {left: "\\(", right: "\\)", display: true},
             // https://stackoverflow.com/a/45301641 
             // inline에서 사용 시 display는 false
             {left: "$", right: "$", display: false}
