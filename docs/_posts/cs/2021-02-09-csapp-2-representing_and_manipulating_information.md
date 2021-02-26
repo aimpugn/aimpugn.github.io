@@ -239,7 +239,7 @@ $$2^{i} + \text{j개의 0}: \enspace 2,048 = 2^{11}, n = 11, = 3 + (4 \times 2) 
 
 - 정수 $x$를 16으로 계속 나눠서 지수(quotient) $q$와 나머지 $r$을 구한다
   - $q$
-  - $r$: 최소 유효 숫자(least significant digit)
+  - $r$: 최소 유효 숫자(least significant digit), 즉 0부터 F까지 16진수로 나타낼 수 있는 수
 
 $$x = (q \cdot 16) + r\newline$$
 $$314,156 = 19,634\cdot 16 + 12 = C\newline$$
