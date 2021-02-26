@@ -8,6 +8,11 @@ function renderMathInElementConfig(){
              * \[\text{load factor} = \frac{\text{저장된 데이터 개수}}{\text{버킷의 개수}} = \frac{n}{k}\]
              */
             {left: "\\[", right: "\\]", display: true},
+            /**
+             * 없으면 github page에서 아래와 같이 나온다
+             * \(7\cdot 16^2 + 10\cdot 16^1 + 15\) \(7\cdot 256 + 10\cdot 16^1 + 15\) \(1,792 + 160 + 15\) \(1,967\)
+             */
+            {left: "\\(", right: "\\)", display: false},
             // https://stackoverflow.com/a/45301641 
             // inline에서 사용 시 display는 false
             {left: "$", right: "$", display: false}
