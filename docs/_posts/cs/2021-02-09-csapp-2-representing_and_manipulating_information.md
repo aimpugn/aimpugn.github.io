@@ -360,10 +360,104 @@ gcc -m64 prog.c
   1. 오브젝트의 주소는 어디에?
   2. 메모리에 byte를 어떤 순서로 정렬?
 - 사실 모든 머신에서 multi-byte의 오브젝트는 일련의 연속된 바이트로 저장된다
-
-#### 오브젝트 주소는 어디에?
+- 최상위 비트(MSB)부터 저장하는지, 아니면 최하위 비트(LSB)부터 저장하는지에 따라 big-edian 또는 little-edian이라 부른다
+- 최근 많은 마이크로프로세서 칩들이 `bi-edian`이지만, 실제로는 특정 OS가 결정되면 바이트 정렬 방식은 고정된다
 
 #### 메모리에 byte를 정렬은 어떻게?
+
+$$[x_{w-1}, x_{w-2}, \dotsb, x_1, x_0]$$
+
+- $x_0$: LSB(Least Significant Bit), 최하위 비트(bit)
+- $x_{w-1}$: MSB(Most Significant Bit), 최상위 비트(bit)
+- $w$: 8배수
+- $[x_{w-1}, x_{w-2}, \dotsb, x_{w-8}]$: 최상위 바이트(byte, 8bit)
+- $[x_{7}, x_{6}, \dotsb, x_{0}]$: 최하위 바이트(byte, 8bit)
+
+##### `little edian`
+
+```python
+# int 타입 변수 x는 0x100 wnthdp 16진수 0x01234567 값 가질 경우
+     0x100  0x101  0x102  0x103
+...|  67  |  45  |  23  |  01  | ...
+```
+
+- 0x01234567에서 0x67이 하위(low order)
+- 최하위 바이트부터 정렬
+- 대부분의 인텔 호환 머신은 little edian 모드로만 작동
+
+##### `big edian`
+
+```python
+# int 타입 변수 x는 0x100 주소에 16진수 0x01234567 값 가질 경우
+     0x100  0x101  0x102  0x103
+...|  01  |  23  |  45  |  67  | ...
+```
+
+- 0x01234567에서 0x01이 상위(high order)
+- 최상위 바이트부터 정렬
+- 대부분의 IBM과 Oracle 머신은 big-edian 모드로 작동
+
+##### 바이트 정렬은 언제 중요할까?
+
+###### 네트워크로 서로 다른 머신 간 이진 데이터 통신 시
+
+- 이 문제를 피하기 위해 전송 머신은 네트워크 표준에 따라 변환하여 전송하고
+- 수신 머신은 네트워크 표준을 내부 방식으로 변환
+
+###### 정수 데이터를 나타내는 바이트 시퀀스
+
+```
+4004d3: 01 05 43 0b 20 00   add   %eax,0x200b43(%rip)
+```
+
+- 일련의 16진수 바이트 `01 05 43 0b 20 00`는
+  - 현재 *program counter*의 값에 0x200b43을 더하여 얻은 주소 위치에 저장된 값에
+  - 데이터(a word of data)를 더하라는 명령을 나타내는 머신 레벨 코드
+- 마지막 4 byte `43 0b 20 00`에 대하여
+  - 역순으로 적으면 `00 20 0b 43`이 되고
+  - 앞의 0을 제거하면 `20 0b 43`이 되어 우측 쓰여 있는 `0x200b43`이란 값을 얻을 수 있다
+
+###### 일반 시스템을 우회하는 프로그램
+
+- C 언어에서 `cast`나 `union`은 오브젝트 생성 시 데이터 타입과 다른 데이터 타입으로 참조될 수 있도록 한다
+
+```c
+#include <stdio.h>
+
+typedef unsigned char *byte_pointer;
+
+void show_bytes(byte_pointer start, size_t len) {
+    int i;
+    for (i = 0; i < len; i++)
+        printf(" %.2x", start[i]);
+    printf("\n");
+}
+
+void show_int(int x){
+    show_bytes((byte_pointer) &x, sizeof(int));
+}
+
+void show_float(float x){
+    show_bytes((byte_pointer) &x, sizeof(float));
+}
+
+void show_pointer(void *x){
+    show_bytes((byte_pointer) &x, sizeof(void *));
+}
+
+
+int main(){
+    show_int(1); // 01 00 00 00
+    show_float(2.0); // 00 00 00 40
+
+    return 0;
+}
+```
+
+- 인자 `x`에 대한 포인터 `&x`를  `unsigned cahr *` 타입으로 캐스팅하여 전달
+- 이 `cast`는 컴파일러에게 포인터가 원래 데이터 타입의 오브젝트가 아닌 바이트 시퀀스가 되어야 함을 나타낸다
+
+#### 오브젝트 주소는 어디에?
 
 ## 2.2 정수 표현
 
