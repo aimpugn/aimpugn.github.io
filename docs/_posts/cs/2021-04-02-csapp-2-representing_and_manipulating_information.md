@@ -580,7 +580,7 @@ $ ll
 $ cat sum.s 
 ```
 
-```assembly
+```c
         .file   "sum.c"
         .text
         .globl  sum
