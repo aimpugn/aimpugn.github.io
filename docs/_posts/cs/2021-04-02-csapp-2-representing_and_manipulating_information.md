@@ -1,7 +1,7 @@
 ---
 title: 2 Representing and Manipulating Information
 author: aimpugn
-date: 2021-02-09 19:20:00+0900
+date: 2021-04-02 19:00:00+0900
 use_math: true
 categories: ["cs", "csapp"]
 ---
@@ -278,7 +278,7 @@ $$1,967$$
 | $\text{B(=11)} \times 16^1 + \text{D(=13)} \times 16^0 = 189$ | $2^7 + 2^5 + 2^4 + 2^3 + 2^2 + 2^0=$1011 1101 | 0xBD        |
 | $\text{F(=15)} \times 16^1 + 5 \times 16^0 = 245$             | $2^7 + 2^6 + 2^5 + 2^4 + 2^2 + 2^0=$1111 0101 | 0xF5        |
 
-> 연 문제 2.4: 숫자를 10진수 또는 2진수로 변환하지 않고 다음 산술 연산 시도.
+> 연습 문제 2.4: 숫자를 10진수 또는 2진수로 변환하지 않고 다음 산술 연산 시도.
 > *힌트: 정수 덧셈과 뺄셈에 사용하는 방법만 수정.* 어떻게??
 
 - 10진수에서 덧셈은? 합이 10을 초과하면 자리수를 올린다
@@ -300,7 +300,7 @@ $$1,967$$
   - 16 + a - c = 14 = E
   - 앞자리수를 가져왔으므로 0x60ee - 0x6050와 같다
   - ee에서 50를 빼면 9e
-  - 0x009e
+  - 0x9e
 
 ### 2.1.2 데이터 사이즈
 
@@ -360,8 +360,9 @@ gcc -m64 prog.c
   1. 오브젝트의 주소는 어디에?
   2. 메모리에 byte를 어떤 순서로 정렬?
 - 사실 모든 머신에서 multi-byte의 오브젝트는 일련의 연속된 바이트로 저장된다
-- 최상위 비트(MSB)부터 저장하는지, 아니면 최하위 비트(LSB)부터 저장하는지에 따라 big-edian 또는 little-edian이라 부른다
-- 최근 많은 마이크로프로세서 칩들이 `bi-edian`이지만, 실제로는 특정 OS가 결정되면 바이트 정렬 방식은 고정된다
+  - 최하위 비트(**L**east **S**ignificant **B**it)부터 저장? `little-edian`
+  - 최상위 비트(**M**ost **S**ignificant **B**it)부터 저장? `big-edian`
+- 최근 많은 마이크로프로세서 칩들이 `big-edian`이지만, 실제로는 특정 OS가 결정되면 바이트 정렬 방식은 고정된다
 
 #### 메모리에 byte를 정렬은 어떻게?
 
@@ -376,14 +377,14 @@ $$[x_{w-1}, x_{w-2}, \dotsb, x_1, x_0]$$
 ##### `little edian`
 
 ```python
-# int 타입 변수 x는 0x100 wnthdp 16진수 0x01234567 값 가질 경우
+# int 타입 변수 x는 0x100 주소에 16진수 0x01234567 값 가질 경우
      0x100  0x101  0x102  0x103
 ...|  67  |  45  |  23  |  01  | ...
 ```
 
 - 0x01234567에서 0x67이 하위(low order)
 - 최하위 바이트부터 정렬
-- 대부분의 인텔 호환 머신은 little edian 모드로만 작동
+- 대부분의 인텔 호환 머신은 `little-edian` 모드로만 작동
 
 ##### `big edian`
 
@@ -395,7 +396,7 @@ $$[x_{w-1}, x_{w-2}, \dotsb, x_1, x_0]$$
 
 - 0x01234567에서 0x01이 상위(high order)
 - 최상위 바이트부터 정렬
-- 대부분의 IBM과 Oracle 머신은 big-edian 모드로 작동
+- 대부분의 IBM과 Oracle 머신은 `big-edian` 모드로 작동
 
 ##### 바이트 정렬은 언제 중요할까?
 
@@ -410,10 +411,12 @@ $$[x_{w-1}, x_{w-2}, \dotsb, x_1, x_0]$$
 4004d3: 01 05 43 0b 20 00   add   %eax,0x200b43(%rip)
 ```
 
-- 일련의 16진수 바이트 `01 05 43 0b 20 00`는
-  - 현재 *program counter*의 값에 0x200b43을 더하여 얻은 주소 위치에 저장된 값에
-  - 데이터(a word of data)를 더하라는 명령을 나타내는 머신 레벨 코드
-- 마지막 4 byte `43 0b 20 00`에 대하여
+- 머신 레벨 코드
+- 일련의 16진수 바이트 `01 05 43 0b 20 00`:
+  - 현재 *program counter*의 값에 0x200b43을 더하여 주소를 얻고
+  - 얻은 주소 위치에 저장된 값에
+  - 데이터(a word of data)를 더하라
+- 마지막 4 bytes `43 0b 20 00`에 대하여
   - 역순으로 적으면 `00 20 0b 43`이 되고
   - 앞의 0을 제거하면 `20 0b 43`이 되어 우측 쓰여 있는 `0x200b43`이란 값을 얻을 수 있다
 
@@ -424,6 +427,7 @@ $$[x_{w-1}, x_{w-2}, \dotsb, x_1, x_0]$$
 ```c
 #include <stdio.h>
 
+// typedef: 데이터 타입에 이름 부여 > 가독성 향상
 typedef unsigned char *byte_pointer;
 
 void show_bytes(byte_pointer start, size_t len) {
@@ -454,10 +458,237 @@ int main(){
 }
 ```
 
-- 인자 `x`에 대한 포인터 `&x`를  `unsigned cahr *` 타입으로 캐스팅하여 전달
-- 이 `cast`는 컴파일러에게 포인터가 원래 데이터 타입의 오브젝트가 아닌 바이트 시퀀스가 되어야 함을 나타낸다
+- 인자 `x`에 대한 포인터 `&x`를  `unsigned cahr *` 타입으로 캐스팅(`(byte_pointer)`)하여 전달
+- 이 *캐스팅*은 컴파일러에게 프로그램이 해당 포인터가 원래 데이터 타입의 오브젝트가 아닌 `unsigned char`로 봐야 한다는 것을 알려준다
+- `sizeof(T)`? 타입 *T*를 저장하기 위해 필요한 bytes의 수를 반환
+  - 고정된 값이 아닌 `sizeof` 사용? 서로 다른 머신 타입에 이식 가능한 코드 작성 위한 첫 단계
+- 서로 다른 머신에서 당야한 데이터 값들의 바이트 표현
+
+| Machine | Value    | Type  | Bytes(hex)              | edian  |
+| ------- | -------- | ----- | ----------------------- | ------ |
+| Linux32 | 12,345   | int   | **39** 30 00 00         | little |
+| Wndows  | 12,345   | int   | **39** 30 00 00         | little |
+| Sun     | 12,345   | int   | 00 00 30 **39**         | big    |
+| Linux64 | 12,345   | int   | **39** 30 00 00         | little |
+|         |          |       |                         |        |
+|         |          |       |                         |        |
+| Linux32 | 12,345.0 | float | 00 e4 40 46             | little |
+| Wndows  | 12,345.0 | float | 00 e4 40 46             | little |
+| Sun     | 12,345.0 | float | 46 40 e4 00             | big    |
+| Linux64 | 12,345.0 | float | 00 e4 40 46             | little |
+|         |          |       |                         |        |
+|         |          |       |                         |        |
+| Linux32 | &ival    | int*  | e4 f9 ff bf             | little |
+| Wndows  | &ival    | int*  | b4 cc 22 00             | little |
+| Sun     | &ival    | int*  | ef ff fa 0c             | big    |
+| Linux64 | &ival    | int*  | b8 11 e5 ff ff 7f 00 00 | little |
+
+- 정수와 부동 소수점 모두 12,345 숫자를 매우 다른 패턴으로 인코딩하지만, 바이너리 패턴으로 비교했을 때 13개의 비트가 매칭되며, 이는 우연이 아니다
+
+```c
+   0    0    0    0    3    0    3    9 
+0000 0000 0000 0000 0011 0000 0011 1001
+                       | |||| |||| ||||
+            0100 0110 01 0000 0011 1001 00 0000 0000
+               4    6     4    0    E    4    0    0
+```
+
+> 연습 문제 2.5  
+> 다음과 같이 *show_bytes*를 세 번 호출한다고 했을 때, Little-edian과 Big-edian에서 출력되는 값은?
+
+```c
+int a = 0x12345678;
+byte_pointer ap = (byte_pointer) &a;
+show_bytes(ap, 1);  /* A. */
+show_bytes(ap, 2);  /* B. */
+show_bytes(ap, 3);  /* C. */
+```
+
+|     | size_t | Little   | Big |
+| --- | ------ | -------- | --- |
+| A   | 1      | 78       |     |
+| B   | 2      | 78 56    |     |
+| C   | 3      | 78 56 34 |     |
+
+> 연습 문제 2.6  
+> 정수 2,607,352는 16진수로 0x0027C8F8이며, 부동소수점 3,510,593.0은 16진수로 0x4A1F23E0이다.  
+
+- A. 두 수의 이진 표현 작성
+  - `0x0027C8F8`:
+    - 10 0111 1100 1000 1111 1000
+    - 1001111100100011111000
+  - `0x4A1F23E0`:
+    - 100 1010 0001 1111 0010 0011 1110 0000
+    - 1001010000111110010001111100000
+- B. 매치되는 비트가 최대가 되도록 두 문자열을 이동시켰을 때, 얼마나 매치되는가? 20 개의 비트
+
+```c
+          2    7    C    8    F    8
+         1001 1111 0010 0011 1110 00
+          ||| |||| |||| |||| |||| ||
+100 1010 0001 1111 0010 0011 1110 0000
+  4    A    1    F    2    3    E    0
+```
+
+- C. 문자열의 어떤 부분이 매치되지 않는가? 최상위 비트 1
 
 #### 오브젝트 주소는 어디에?
+
+### 2.1.4 문자열 표현
+
+- C에서 문자열은 `null`로 종료되는 문자들의 배열로 인코딩 된다
+- 각 문자는 ASCII 문자 코드 같은 표준으로 인코딩되어 표현된다
+- `show_bytes("12345", 6)`을 실행해 보면, `31 32 33 34 35 00`가 출력된다
+  - 십진수 $x$는 ASCII 코드에서 0x3$x$가 되고, 종료 바이트(terminating byte)는 0x00으로 표현
+- ASCII를 문자 코드로 사용하는 어떤 시스템에서든 같은 결과가 나오며, 바이트 정렬이나 워드 크기 규칙(convention)에 독립적이다
+
+> 연습 문제 2.7  
+> 다음 *show_bytes* 호출하면 뭐가 출력되는가? `a`는 0x61, `z`는 0x7A다  
+
+```c
+const char *m = "mnopqr";
+show_bytes((byte_pointer) m, strlen(m)); // 6d 6e 6f 70 71 72
+```
+
+### 2.1.5 코드 표현
+
+```c
+int sum(int x, int y) {
+  return x + y;
+}
+```
+
+- 이 코드를 sum.c로 저장하고, main 함수 없이 컴파일 하면 sum.o 파일을 얻게 된다
+
+```bash
+gcc -c sum.c -lm
+
+-rw-rw-r--. 1 aimpugn aimpugn    42  4월  2 22:56 sum.c
+-rw-rw-r--. 1 aimpugn aimpugn  1240  4월  2 22:59 sum.o
+```
+
+- sum.o 오브젝트를 얻을 수 있고, 또는 [gcc -c -save-temps <파일명>](https://www.linuxtopia.org/online_books/an_introduction_to_gcc/gccintro_36.html)을 통해 `.s`, `.o`, `.i` 파일을 얻을 수 있다
+
+```assembly
+$ gcc -c -save-temps sum.c
+$ ll
+-rw-rw-r--. 1 aimpugn aimpugn    42  4월  2 22:56 sum.c
+-rw-rw-r--. 1 aimpugn aimpugn   190  4월  2 23:03 sum.i
+-rw-rw-r--. 1 aimpugn aimpugn  1240  4월  2 23:03 sum.o
+-rw-rw-r--. 1 aimpugn aimpugn   450  4월  2 23:03 sum.s
+
+$ cat sum.s 
+
+        .file   "sum.c"
+        .text
+        .globl  sum
+        .type   sum, @function
+sum:
+.LFB0:
+        .cfi_startproc
+        pushq   %rbp
+        .cfi_def_cfa_offset 16
+        .cfi_offset 6, -16
+        movq    %rsp, %rbp
+        .cfi_def_cfa_register 6
+        movl    %edi, -4(%rbp)
+        movl    %esi, -8(%rbp)
+        movl    -4(%rbp), %edx
+        movl    -8(%rbp), %eax
+        addl    %edx, %eax
+        popq    %rbp
+        .cfi_def_cfa 7, 8
+        ret
+        .cfi_endproc
+.LFE0:
+        .size   sum, .-sum
+        .ident  "GCC: (GNU) 8.3.1 20191121 (Red Hat 8.3.1-5)"
+        .section        .note.GNU-stack,"",@progbits
+```
+
+- 이에 대해 [`od`로 16진수 byte로 출력](https://unix.stackexchange.com/a/10833)을 해보면 다음과 같다
+
+```
+od -x -t c sum.s 
+
+0000000    2e09    6966    656c    2209    7573    2e6d    2263    090a
+         \t   .   f   i   l   e  \t   "   s   u   m   .   c   "  \n  \t
+0000020    742e    7865    0a74    2e09    6c67    626f    096c    7573
+          .   t   e   x   t  \n  \t   .   g   l   o   b   l  \t   s   u
+0000040    0a6d    2e09    7974    6570    7309    6d75    202c    6640
+          m  \n  \t   .   t   y   p   e  \t   s   u   m   ,       @   f
+0000060    6e75    7463    6f69    0a6e    7573    3a6d    2e0a    464c
+          u   n   c   t   i   o   n  \n   s   u   m   :  \n   .   L   F
+0000100    3042    0a3a    2e09    6663    5f69    7473    7261    7074
+          B   0   :  \n  \t   .   c   f   i   _   s   t   a   r   t   p
+0000120    6f72    0a63    7009    7375    7168    2509    6272    0a70
+          r   o   c  \n  \t   p   u   s   h   q  \t   %   r   b   p  \n
+0000140    2e09    6663    5f69    6564    5f66    6663    5f61    666f
+         \t   .   c   f   i   _   d   e   f   _   c   f   a   _   o   f
+0000160    7366    7465    3120    0a36    2e09    6663    5f69    666f
+          f   s   e   t       1   6  \n  \t   .   c   f   i   _   o   f
+0000200    7366    7465    3620    202c    312d    0a36    6d09    766f
+          f   s   e   t       6   ,       -   1   6  \n  \t   m   o   v
+0000220    0971    7225    7073    202c    7225    7062    090a    632e
+          q  \t   %   r   s   p   ,       %   r   b   p  \n  \t   .   c
+0000240    6966    645f    6665    635f    6166    725f    6765    7369
+          f   i   _   d   e   f   _   c   f   a   _   r   e   g   i   s
+0000260    6574    2072    0a36    6d09    766f    096c    6525    6964
+          t   e   r       6  \n  \t   m   o   v   l  \t   %   e   d   i
+0000300    202c    342d    2528    6272    2970    090a    6f6d    6c76
+          ,       -   4   (   %   r   b   p   )  \n  \t   m   o   v   l
+0000320    2509    7365    2c69    2d20    2838    7225    7062    0a29
+         \t   %   e   s   i   ,       -   8   (   %   r   b   p   )  \n
+0000340    6d09    766f    096c    342d    2528    6272    2970    202c
+         \t   m   o   v   l  \t   -   4   (   %   r   b   p   )   ,    
+0000360    6525    7864    090a    6f6d    6c76    2d09    2838    7225
+          %   e   d   x  \n  \t   m   o   v   l  \t   -   8   (   %   r
+0000400    7062    2c29    2520    6165    0a78    6109    6464    096c
+          b   p   )   ,       %   e   a   x  \n  \t   a   d   d   l  \t
+0000420    6525    7864    202c    6525    7861    090a    6f70    7170
+          %   e   d   x   ,       %   e   a   x  \n  \t   p   o   p   q
+0000440    2509    6272    0a70    2e09    6663    5f69    6564    5f66
+         \t   %   r   b   p  \n  \t   .   c   f   i   _   d   e   f   _
+0000460    6663    2061    2c37    3820    090a    6572    0a74    2e09
+          c   f   a       7   ,       8  \n  \t   r   e   t  \n  \t   .
+0000500    6663    5f69    6e65    7064    6f72    0a63    4c2e    4546
+          c   f   i   _   e   n   d   p   r   o   c  \n   .   L   F   E
+0000520    3a30    090a    732e    7a69    0965    7573    2c6d    2e20
+          0   :  \n  \t   .   s   i   z   e  \t   s   u   m   ,       .
+0000540    732d    6d75    090a    692e    6564    746e    2209    4347
+          -   s   u   m  \n  \t   .   i   d   e   n   t  \t   "   G   C
+0000560    3a43    2820    4e47    2955    3820    332e    312e    3220
+          C   :       (   G   N   U   )       8   .   3   .   1       2
+0000600    3130    3139    3231    2031    5228    6465    4820    7461
+          0   1   9   1   1   2   1       (   R   e   d       H   a   t
+0000620    3820    332e    312e    352d    2229    090a    732e    6365
+              8   .   3   .   1   -   5   )   "  \n  \t   .   s   e   c
+0000640    6974    6e6f    2e09    6f6e    6574    472e    554e    732d
+          t   i   o   n  \t   .   n   o   t   e   .   G   N   U   -   s
+0000660    6174    6b63    222c    2c22    7040    6f72    6267    7469
+          t   a   c   k   ,   "   "   ,   @   p   r   o   g   b   i   t
+0000700    0a73
+          s  \n
+0000702
+```
+
+- 책에서는 OS별로 byte 표현이 다르다는 것을 보여주고 있다. 서로 다른 머신에서 서로 다르고 호환되지 않은 명령어와 인코딩을 사용하며, 같은 프로세서라도 OS가 다르면 그 시스템 자체적인 코딩 컨벤션이 있기 때문에 바이너리가 상호 호환되지 않는다.
+
+| OS      |                                                              |
+| ------- | ------------------------------------------------------------ |
+| Linux32 | 55 89 e5 8b 45 0c 03 45 08 c9 c3                             |
+| Windows | 55 89 e5 8b 45 0c 03 45 08 c9 c3                             |
+| Sun     | 81 c3 e0 08 90 02 00 09                                      |
+| Linux62 | **55** 48 **89 e5** 89 7d fc 89 75 f8 **03 45** fc **c9 c3** |
+
+- 컴퓨터 시스템의 기본 개념(fundamental concept)은, 머신의 관점에서 프로그램이란 단순히 일련의 바이트라는 것.
+  - program = a sequence of bytes
+
+### 2.1.6 [불 대수(bool algebra)](https://ko.wikipedia.org/wiki/%EB%B6%88_%EB%8C%80%EC%88%98) 소개
+
+- 불 대수(bool algebra)?
+  - 어떤 명제의 참(true)과 거짓(false)를 1과 0에 대응 시켜서
+  - 명제와 명제 간의 관계를 수학적으로 표현
 
 ## 2.2 정수 표현
 
