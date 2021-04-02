@@ -48,9 +48,9 @@ categories: ["cs", "csapp"]
   - 나타낼 수 있는 값의 범위를 이해하고
   - 서로 다른 산술 연산의 속성을 이해
 - 그렇다면 표현 가능한 값의 범위를 이해하고 서로 다른 산술 연산의 속성을 이해하는 것은 왜 중요할까?
-  - 숫자 값 전체 범위에 걸쳐서 올바르게 작동한느 프로그램 작성에 중요
-  - 다양한 머신, OS 그리고 컴파일러 조합에 이식(portable)될 수 있는 프로그램 작성에 중요
-  - 또한 이러한 컴퓨터 연산의 미묘함(subtleties) 때문에 다수의 컴퓨터 보안 취약점 발생
+  - **모든 범위의 숫자 값**에 대해 올바르게 작동하는 프로그램 작성에 중요
+  - 다양한 머신, OS 그리고 컴파일러 조합에 **이식(portable)될 수 있는** 프로그램 작성에 중요
+  - 또한 이러한 컴퓨터 연산의 미묘함(subtleties) 때문에 다수의 컴퓨터 **보안 취약점** 발생
 - 비트 단위로 표현된 숫자들을 직접 조작한 산술 연산 이해 $\to$ 산술 연산 식 평가(arithmetic expression evaluation)의 성능을 최적화하기 위해 컴파일러에 의해 생성된 **기계 레벨의 코드 이해**에 중요
 - C와 C++에서는 숫자 표현과 연산이 같지만, Java 언어에서는 숫자 표현과 연산에 대한 새로운 표준 집합 생성
 - [Java와 C 비교](https://en.wikipedia.org/wiki/Comparison_of_Java_and_C%2B%2B)
@@ -552,13 +552,13 @@ show_bytes((byte_pointer) m, strlen(m)); // 6d 6e 6f 70 71 72
 
 ### 2.1.5 코드 표현
 
+- 아래 코드를 sum.c로 저장하고, main 함수 없이 컴파일 하면 sum.o 파일을 얻게 된다
+
 ```c
 int sum(int x, int y) {
   return x + y;
 }
 ```
-
-- 이 코드를 sum.c로 저장하고, main 함수 없이 컴파일 하면 sum.o 파일을 얻게 된다
 
 ```bash
 gcc -c sum.c -lm
@@ -567,9 +567,9 @@ gcc -c sum.c -lm
 -rw-rw-r--. 1 aimpugn aimpugn  1240  4월  2 22:59 sum.o
 ```
 
-- sum.o 오브젝트를 얻을 수 있고, 또는 [gcc -c -save-temps <파일명>](https://www.linuxtopia.org/online_books/an_introduction_to_gcc/gccintro_36.html)을 통해 `.s`, `.o`, `.i` 파일을 얻을 수 있다
+- sum.o 오브젝트를 얻을 수 있고, 또는 [-save-temps 옵션](https://www.linuxtopia.org/online_books/an_introduction_to_gcc/gccintro_36.html)을 사용해서 `.s`, `.o`, `.i` 파일을 얻을 수 있다
 
-```assembly
+```bash
 $ gcc -c -save-temps sum.c
 $ ll
 -rw-rw-r--. 1 aimpugn aimpugn    42  4월  2 22:56 sum.c
@@ -578,7 +578,9 @@ $ ll
 -rw-rw-r--. 1 aimpugn aimpugn   450  4월  2 23:03 sum.s
 
 $ cat sum.s 
+```
 
+```assembly
         .file   "sum.c"
         .text
         .globl  sum
