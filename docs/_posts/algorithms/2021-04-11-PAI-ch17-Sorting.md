@@ -1,7 +1,7 @@
 ---
 title: ch17 정렬
 author: aimpugn
-date: 2021-04-11 23:00:00 +0900
+date: 2021-04-11 22:00:00+0900
 categories: [알고리즘 문제해결전략]
 tags: [algotithms]
 math: true
