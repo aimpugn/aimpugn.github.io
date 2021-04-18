@@ -1,7 +1,7 @@
 ---
 title: a bean of type '<T>' that could not be found.
 author: aimpugn
-date: 2021-03-03 20:00:00+0900
+date: 2021-04-04 20:00:00+0900
 use_math: true
 categories: [troubleshooting, java]
 ---
