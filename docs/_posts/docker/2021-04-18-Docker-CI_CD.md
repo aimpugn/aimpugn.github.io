@@ -24,12 +24,24 @@ tag: [docker, ci/cd]
       - [Docker - install on centos](#docker---install-on-centos)
     - [Kubernetes](#kubernetes)
       - [Kubernetes 개요](#kubernetes-개요)
+        - [Controller Node](#controller-node)
+        - [Worder Node](#worder-node)
       - [kubectl 설치](#kubectl-설치)
       - [kubeadm 설치](#kubeadm-설치)
+        - [swap space 제거](#swap-space-제거)
         - [iptables가 브리지된 트래픽을 보게 하기](#iptables가-브리지된-트래픽을-보게-하기)
-        - [런타임 설치](#런타임-설치)
         - [kubeadm, kubelet 및 kubectl 설치](#kubeadm-kubelet-및-kubectl-설치)
         - [컨트롤 플레인 노드에서 kubelet이 사용하는 cgroup 드라이버 구성](#컨트롤-플레인-노드에서-kubelet이-사용하는-cgroup-드라이버-구성)
+        - [`kubeadm init`](#kubeadm-init)
+        - [옵션들](#옵션들)
+          - [`--apiserver-advertise-address`](#--apiserver-advertise-address)
+          - [`--pod-network-cidr`](#--pod-network-cidr)
+          - [`--service-cidr`](#--service-cidr)
+        - [트러블 슈팅](#트러블-슈팅)
+          - [init 결과](#init-결과)
+      - [Network](#network)
+        - [Kubernetes Networking](#kubernetes-networking)
+        - [Cluster Networking](#cluster-networking)
   - [gitlab 설치(Cent OS 7)](#gitlab-설치cent-os-7)
     - [1. 필요 dependencies 설치 및 구성](#1-필요-dependencies-설치-및-구성)
     - [2. Gitlab 패키지 리파지토리 추가 및 패키지 설치](#2-gitlab-패키지-리파지토리-추가-및-패키지-설치)
@@ -164,59 +176,8 @@ IMPORTANT NOTES:
 
 #### [Docker - install on centos](https://docs.docker.com/engine/install/centos/)
 
-### Kubernetes
-
-#### Kubernetes 개요
-
-- `kubectl` $\to$ curl GET REST API $\to$ `API(objects, pod, deployment)` $\to$ `dtcd`(B+tree key-value storing sequestered database)
-- `kublet`: 포드가 사용 가능함 확인하기 위해 요청을 컨테이너 엔진으로 넘긴다
-- `kube-proxy`: 모든 노드에서 실행되며 iptables 사용하여 Kubernetes 컴포넌트에 연결하는 인터페이스 제공
-- `supervisord`: `kubelet`과 docker process들이 사용 가능한지 모니터링
-- `network agent`: `weave` 같은 소프트웨어로 정의된 네트워크 솔루션 구현
-- `logging`: CNCF 프로젝트 `Flentd` 사용. `Fluentd` 에이전트는 반드시 k8s 노드에 설치되어야 함
-
-#### [kubectl 설치](https://kubernetes.io/ko/docs/tasks/tools/install-kubectl-linux/)
-
-```bash
-curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
-
-install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
-
-version --client
-Client Version: version.Info{Major:"1", Minor:"21", GitVersion:"v1.21.0", GitCommit:"cb303e613a121a29364f75cc67d3d580833a7479", GitTreeState:"clean", BuildDate:"2021-04-08T16:31:21Z", GoVersion:"go1.16.1", Compiler:"gc", Platform:"linux/amd64"}
-```
-
-#### [kubeadm 설치](https://kubernetes.io/ko/docs/setup/production-environment/tools/kubeadm/install-kubeadm/)
-
-##### iptables가 브리지된 트래픽을 보게 하기
-
-- br_netfilter 모듈이 로드되었는지 확인
-  
-```
-lsmod | grep br_netfilter
-
-br_netfilter           24576  0
-bridge                188416  1 br_netfilter
-```
-
-- sysctl 구성에서 net.bridge.bridge-nf-call-iptables 가 1로 설정되어 있는지 확인
-
-```
-sysctl --all | grep bridge
-net.bridge.bridge-nf-call-arptables = 1
-net.bridge.bridge-nf-call-ip6tables = 1
-net.bridge.bridge-nf-call-iptables = 1
-net.bridge.bridge-nf-filter-pppoe-tagged = 0
-net.bridge.bridge-nf-filter-vlan-tagged = 0
-net.bridge.bridge-nf-pass-vlan-input-dev = 0
-```
-
-- [네트워크 플러그인 요구 사항](https://kubernetes.io/ko/docs/concepts/extend-kubernetes/compute-storage-net/network-plugins/#%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC-%ED%94%8C%EB%9F%AC%EA%B7%B8%EC%9D%B8-%EC%9A%94%EA%B5%AC-%EC%82%AC%ED%95%AD)
-  - iptables 프록시가 올바르게 작동하는지 확인
-  
-##### 런타임 설치
-
-- 쿠버네티스는 `컨테이너 런타임 인터페이스(CRI)`를 사용하여 사용자가 선택한 컨테이너 런타임과 인터페이스
+- 컨테이너 런타임으로 도커 설치
+- 쿠버네티스는 `컨테이너 런타임 인터페이스(CRI)`를 사용하여 사용자가 선택한 컨테이너 런타임과 인터페이스(대면)
   - `컨테이너 런타임 인터페이스(CRI)`? kubelet과 컨테이너 런타임을 통합시키기 위한 API
 - [컨테이너 런타임#도커](https://kubernetes.io/ko/docs/setup/production-environment/container-runtimes/#%EB%8F%84%EC%BB%A4)] 참조
 
@@ -270,6 +231,81 @@ sudo systemctl enable docker
 sudo systemctl daemon-reload
 sudo systemctl restart docker
 ```
+
+### Kubernetes
+
+#### Kubernetes 개요
+
+- `kubectl` $\to$ curl GET REST API $\to$ `API(objects, pod, deployment)` $\to$ `dtcd`(B+tree key-value storing sequestered database)
+
+##### Controller Node
+
+- `etcd`
+- `apiserver`
+- `scheduler`
+
+##### Worder Node
+
+- `kublet`: 포드가 사용 가능함 확인하기 위해 요청을 컨테이너 엔진으로 넘긴다
+- `kube-proxy`: 모든 노드에서 실행되며 iptables 사용하여 Kubernetes 컴포넌트에 연결하는 인터페이스 제공
+- `supervisord`: `kubelet`과 docker process들이 사용 가능한지 모니터링
+- `network agent`: `weave` 같은 소프트웨어로 정의된 네트워크 솔루션 구현
+- `logging`: CNCF 프로젝트 `Flentd` 사용. `Fluentd` 에이전트는 반드시 k8s 노드에 설치되어야 함
+
+#### [kubectl 설치](https://kubernetes.io/ko/docs/tasks/tools/install-kubectl-linux/)
+
+```bash
+curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+
+install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+
+version --client
+Client Version: version.Info{Major:"1", Minor:"21", GitVersion:"v1.21.0", GitCommit:"cb303e613a121a29364f75cc67d3d580833a7479", GitTreeState:"clean", BuildDate:"2021-04-08T16:31:21Z", GoVersion:"go1.16.1", Compiler:"gc", Platform:"linux/amd64"}
+```
+
+#### [kubeadm 설치](https://kubernetes.io/ko/docs/setup/production-environment/tools/kubeadm/install-kubeadm/)
+
+##### swap space 제거
+
+```bash
+vi /etc/fstab
+# swap 부분을 주석 처리
+# /dev/mapper/centos-swap ... 
+```
+
+- 왜 스왑 제거?
+  - [swap 메모리 사용하도록 노드 실행하면, 많은 isolation 속성들을 잃게 된다.](https://discuss.kubernetes.io/t/swap-off-why-is-it-necessary/6879)
+  - [Kubelet/Kubernetes should work with Swap Enabled](https://github.com/kubernetes/kubernetes/issues/53533)
+  - [Why Kubernetes Hates Linux Swap?](https://medium.com/tailwinds-navigator/kubernetes-tip-why-disable-swap-on-linux-3505f0250263)
+
+##### iptables가 브리지된 트래픽을 보게 하기
+
+- br_netfilter 모듈이 로드되었는지 확인
+  
+```
+lsmod | grep br_netfilter
+
+br_netfilter           24576  0
+bridge                188416  1 br_netfilter
+```
+
+- sysctl 구성에서 `net.bridge.bridge-nf-call-iptables` 가 1로 설정되어 있는지 확인
+  - `net.bridge.bridge-nf-call-iptables`는? [bridge로 송수신(traversing the bridge)되는 패킷을 처리하기 위해 `iptables`로 보낼 것인지 여부 제어](https://wiki.libvirt.org/page/Net.bridge.bridge-nf-call_and_sysctl.conf)
+  - CentOS에서 `net.bridge.bridge-nf-call-iptables` 기본값은 0 $\to$ bridge 네트워크 통해 송/수신되는 패킷이 iptable 설정을 우회함을 의미
+  - [bridge 컨텍스트에서, `FORWARD`는 한 브릿지 포트에서 다른 브릿지 포트로 패킷을 포워딩함을 의미](https://news.ycombinator.com/item?id=16427686)
+
+```
+sysctl --all | grep bridge
+net.bridge.bridge-nf-call-arptables = 1
+net.bridge.bridge-nf-call-ip6tables = 1
+net.bridge.bridge-nf-call-iptables = 1
+net.bridge.bridge-nf-filter-pppoe-tagged = 0
+net.bridge.bridge-nf-filter-vlan-tagged = 0
+net.bridge.bridge-nf-pass-vlan-input-dev = 0
+```
+
+- [네트워크 플러그인 요구 사항](https://kubernetes.io/ko/docs/concepts/extend-kubernetes/compute-storage-net/network-plugins/#%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC-%ED%94%8C%EB%9F%AC%EA%B7%B8%EC%9D%B8-%EC%9A%94%EA%B5%AC-%EC%82%AC%ED%95%AD)
+  - iptables 프록시가 올바르게 작동하는지 확인
 
 ##### [kubeadm, kubelet 및 kubectl 설치](https://kubernetes.io/ko/docs/setup/production-environment/tools/kubeadm/install-kubeadm/)
 
@@ -345,15 +381,18 @@ cgroupDriver: systemd
 - kubelet 등 포트 오픈 필요한 경우 [firewalld로 open](https://medium.com/platformer-blog/kubernetes-on-centos-7-with-firewalld-e7b53c1316af)
 
 ```bash
-firewall-cmd --zone=public --permanent --add-port=8080/tcp
+# 컨트롤 플레인 노드
 firewall-cmd --zone=public --permanent --add-port=6443/tcp
 firewall-cmd --zone=public --permanent --add-port=2379-2380/tcp
 firewall-cmd --zone=public --permanent --add-port=10250/tcp
 firewall-cmd --zone=public --permanent --add-port=10251/tcp
 firewall-cmd --zone=public --permanent --add-port=10252/tcp
-firewall-cmd --zone=public --permanent --add-port=10255/tcp
-firewall-cmd --zone=public --permanent --add-port=8472/udp
 
+systemctl restart firewalld
+
+# 워커 노드
+firewall-cmd --zone=public --permanent --add-port=10250/tcp
+firewall-cmd --zone=public --permanent --add-port=30000-32767/tcp
 systemctl restart firewalld
 
 # 불필요 rule이 있어서 삭제
@@ -369,17 +408,51 @@ pkill -f firewalld
 systemctl start firewalld
 ```
 
-- The connection to the server localhost:8080 was refused - did you specify the right host or port?
-  - [Quick Install of Kubernetes](https://github.com/sdnhub/kube-navi/blob/master/KUBE_INSTALL.md) 참조
+- CentOS8에서 아래처럼 `tc`가 없다고 하는 경우 `dnf install -y iproute-tc`로 설치
 
 ```bash
-# kubeadmin으로 구축한 클러스터에 접근할 때 에러 발생하는 경우
-mkdir -p $HOME/.kube
-cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
-chown $(id -u):$(id -g) $HOME/.kube/config
+[preflight] Running pre-flight checks
+        [WARNING FileExisting-tc]: tc not found in system path
 ```
 
-- TODO 네트워크 설정
+##### `kubeadm init`
+
+##### 옵션들
+
+###### `--apiserver-advertise-address`
+
+###### `--pod-network-cidr`
+
+- 왜 `cidr` 사용? 클러스터 내의 `pods` 간에 통신하기 위해 특별한 가상 네트워크를 생성하는 데 [Container Network Interface](https://github.com/containernetworking/cni) 사용
+
+###### `--service-cidr`
+
+##### 트러블 슈팅
+
+- [[kubelet-check] Initial timeout of 40s passed 발생 시](https://stackoverflow.com/a/57655546)
+- 6443 포트에 대한 연결이 계속 끊기는데 왜?
+  - `kubeadm init`이 정상적으로 마치지 않았기 때문
+  - `dnf install -y iproute-tc` 설치하고 다시 시도하니 80초 걸려서 됐는데, 정확히 이 때문인지는 모르겠다. 계속 기다려서 실패한 적도 있기 때문에, `tc` 명령어가 없어서 그랬던 게 아닌가 싶다.
+
+###### init 결과
+
+```bash
+[aimpugn@vultr ~]$ kubectl cluster-info
+Kubernetes control plane is running at https://IP_ADDRESS:6443
+CoreDNS is running at https://IP_ADDRESS:6443/api/v1/namespaces/kube-system/services/kube-dns:dns/proxy
+
+To further debug and diagnose cluster problems, use 'kubectl cluster-info dump'.
+
+[aimpugn@vultr ~]$ kubectl get nodes
+NAME          STATUS     ROLES                  AGE   VERSION
+vultr.guest   NotReady   control-plane,master   12m   v1.21.0
+```
+
+#### Network
+
+##### [Kubernetes Networking](https://github.com/coreos/coreos-kubernetes/blob/master/Documentation/kubernetes-networking.md)
+
+##### [Cluster Networking](https://kubernetes.io/docs/concepts/cluster-administration/networking/)
 
 ## gitlab 설치(Cent OS 7)
 
