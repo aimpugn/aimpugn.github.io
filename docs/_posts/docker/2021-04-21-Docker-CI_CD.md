@@ -1,7 +1,7 @@
 ---
 title: CI/CD Pipeline
 author: aimpugn
-date: 2021-04-18 15:00:00 +0900
+date: 2021-04-21 23:00:00 +0900
 categories: [docker]
 tag: [docker, ci/cd]
 ---
@@ -290,9 +290,12 @@ bridge                188416  1 br_netfilter
 ```
 
 - sysctl 구성에서 `net.bridge.bridge-nf-call-iptables` 가 1로 설정되어 있는지 확인
-  - `net.bridge.bridge-nf-call-iptables`는? [bridge로 송수신(traversing the bridge)되는 패킷을 처리하기 위해 `iptables`로 보낼 것인지 여부 제어](https://wiki.libvirt.org/page/Net.bridge.bridge-nf-call_and_sysctl.conf)
-  - CentOS에서 `net.bridge.bridge-nf-call-iptables` 기본값은 0 $\to$ bridge 네트워크 통해 송/수신되는 패킷이 iptable 설정을 우회함을 의미
-  - [bridge 컨텍스트에서, `FORWARD`는 한 브릿지 포트에서 다른 브릿지 포트로 패킷을 포워딩함을 의미](https://news.ycombinator.com/item?id=16427686)
+  - `net.bridge.bridge-nf-call-iptables`는?
+    - [bridge로 송수신(traversing the bridge)되는 패킷을 처리하기 위해 `iptables`로 보낼 것인지 여부 제어](https://wiki.libvirt.org/page/Net.bridge.bridge-nf-call_and_sysctl.conf)
+  - CentOS에서 `net.bridge.bridge-nf-call-iptables` 기본값은 0
+    - bridge 네트워크 통해 송/수신되는 패킷이 iptable 설정을 우회함을 의미
+  - `net.bridge.bridge-nf-call-iptables`를 1로 변경하는 것은, [bridge 컨텍스트에서, `FORWARD`는 한 브릿지 포트에서 다른 브릿지 포트로 패킷을 포워딩함을 의미](https://news.ycombinator.com/item?id=16427686)
+  - `firewalld`는 내부적으로 `iptables`를 사용하고, [RHEL/CentOS7에서 `iptables`를 우회해서 트래픽이 정확하게 라우팅되지 않는 이슈가 있음](https://github.com/kubernetes/website/issues/3943#issuecomment-306542260)
 
 ```
 sysctl --all | grep bridge
@@ -432,7 +435,10 @@ systemctl start firewalld
 - [[kubelet-check] Initial timeout of 40s passed 발생 시](https://stackoverflow.com/a/57655546)
 - 6443 포트에 대한 연결이 계속 끊기는데 왜?
   - `kubeadm init`이 정상적으로 마치지 않았기 때문
-  - `dnf install -y iproute-tc` 설치하고 다시 시도하니 80초 걸려서 됐는데, 정확히 이 때문인지는 모르겠다. 계속 기다려서 실패한 적도 있기 때문에, `tc` 명령어가 없어서 그랬던 게 아닌가 싶다.
+  - 이번에 수정한 건 두 가지인데
+    - `dnf install -y iproute-tc` 설치
+    - `firewalld` 비활성화(TO-DO: 이래도 되나? 더 확인해보자...)
+  - `dnf install -y iproute-tc` 설치하고 다시 시도하니 80초 걸려서 됐는데, 정확히 이 때문인지 아니면 방화벽을 비활성화해서 괜찮아진 건지 모르겠다
 
 ###### init 결과
 
