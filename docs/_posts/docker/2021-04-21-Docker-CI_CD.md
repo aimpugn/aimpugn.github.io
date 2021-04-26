@@ -6,7 +6,7 @@ categories: [docker]
 tag: [docker, ci/cd]
 ---
 
-- [Docker 사용한 CI/CD](#docker-사용한-cicd)
+- [서버 설정](#서버-설정)
   - [vultr 서버에 도메인 등록](#vultr-서버에-도메인-등록)
     - [godaddy 네임서버 설정](#godaddy-네임서버-설정)
     - [vultr DNS 도메인 설정](#vultr-dns-도메인-설정)
@@ -15,43 +15,59 @@ tag: [docker, ci/cd]
       - [확인 사항](#확인-사항)
       - [`certbot` 설치](#certbot-설치)
         - [Installing snap on CentOS](#installing-snap-on-centos)
-          - [로그아웃 후 다시 로그인 하거나 시스템 재시작하여 snap의 경로가 정확하게 업데이트 됐는지 확인](#로그아웃-후-다시-로그인-하거나-시스템-재시작하여-snap의-경로가-정확하게-업데이트-됐는지-확인)
-          - [snap 사용한 certbot 설치](#snap-사용한-certbot-설치)
-          - [권한 동의서 확인](#권한-동의서-확인)
-          - [nginx 설정 변경](#nginx-설정-변경)
-  - [Docker + Kubernetes + Helm](#docker--kubernetes--helm)
-    - [Docker](#docker)
-      - [Docker - install on centos](#docker---install-on-centos)
-    - [Kubernetes](#kubernetes)
-      - [Kubernetes 개요](#kubernetes-개요)
-        - [Controller Node](#controller-node)
-        - [Worder Node](#worder-node)
-      - [kubectl 설치](#kubectl-설치)
-      - [kubeadm 설치](#kubeadm-설치)
-        - [swap space 제거](#swap-space-제거)
-        - [iptables가 브리지된 트래픽을 보게 하기](#iptables가-브리지된-트래픽을-보게-하기)
-        - [kubeadm, kubelet 및 kubectl 설치](#kubeadm-kubelet-및-kubectl-설치)
-        - [컨트롤 플레인 노드에서 kubelet이 사용하는 cgroup 드라이버 구성](#컨트롤-플레인-노드에서-kubelet이-사용하는-cgroup-드라이버-구성)
-        - [`kubeadm init`](#kubeadm-init)
+        - [로그아웃 후 다시 로그인 하거나 시스템 재시작하여 snap의 경로가 정확하게 업데이트 됐는지 확인](#로그아웃-후-다시-로그인-하거나-시스템-재시작하여-snap의-경로가-정확하게-업데이트-됐는지-확인)
+        - [snap 사용한 certbot 설치](#snap-사용한-certbot-설치)
+        - [권한 동의서 확인](#권한-동의서-확인)
+        - [nginx 설정 변경](#nginx-설정-변경)
+- [Docker + Kubernetes + Helm](#docker--kubernetes--helm)
+  - [Docker](#docker)
+    - [Docker - install on centos](#docker---install-on-centos)
+- [Kubernetes](#kubernetes)
+  - [Kubernetes 개요](#kubernetes-개요)
+    - [Controller Node](#controller-node)
+    - [Worder Node](#worder-node)
+  - [kubeadm, kubelet 및 kubectl 설치](#kubeadm-kubelet-및-kubectl-설치)
+    - [kubectl 설치](#kubectl-설치)
+    - [kubeadm 설치](#kubeadm-설치)
+      - [swap space 제거](#swap-space-제거)
+      - [iptables가 브리지된 트래픽을 보게 하기](#iptables가-브리지된-트래픽을-보게-하기)
+      - [컨트롤 플레인 노드에서 kubelet이 사용하는 cgroup 드라이버 구성](#컨트롤-플레인-노드에서-kubelet이-사용하는-cgroup-드라이버-구성)
+      - [`kubeadm init`](#kubeadm-init)
         - [옵션들](#옵션들)
           - [`--apiserver-advertise-address`](#--apiserver-advertise-address)
           - [`--pod-network-cidr`](#--pod-network-cidr)
           - [`--service-cidr`](#--service-cidr)
         - [트러블 슈팅](#트러블-슈팅)
-          - [init 결과](#init-결과)
-      - [Network](#network)
-        - [Kubernetes Networking](#kubernetes-networking)
-        - [Cluster Networking](#cluster-networking)
-  - [gitlab 설치(Cent OS 7)](#gitlab-설치cent-os-7)
-    - [1. 필요 dependencies 설치 및 구성](#1-필요-dependencies-설치-및-구성)
-    - [2. Gitlab 패키지 리파지토리 추가 및 패키지 설치](#2-gitlab-패키지-리파지토리-추가-및-패키지-설치)
-      - [script.rpm.sh](#scriptrpmsh)
-      - [config_file.repo](#config_filerepo)
-      - [구성 설정 파일로 설치](#구성-설정-파일로-설치)
-    - [3. GitLab Docker images](#3-gitlab-docker-images)
-  - [참조](#참조)
+          - [[[kubelet-check] Initial timeout of 40s passed 발생 시](https://stackoverflow.com/a/57655546)](#kubelet-check-initial-timeout-of-40s-passed-발생-시)
+          - [The connection to the server localhost:8080 was refused - did you specify the right host or port?](#the-connection-to-the-server-localhost8080-was-refused---did-you-specify-the-right-host-or-port)
+        - [init 결과](#init-결과)
+  - [Network](#network)
+    - [Network 개요](#network-개요)
+    - [Pod 네트워크 플러그인](#pod-네트워크-플러그인)
+      - [Falnnel](#falnnel)
+      - [Weave](#weave)
+      - [Calico](#calico)
+      - [AWS VPC](#aws-vpc)
+    - [pod 네트워크 애드온 설치](#pod-네트워크-애드온-설치)
+      - [Weave - Integrating Kubernetes via the Addon](#weave---integrating-kubernetes-via-the-addon)
+      - [`kubeadm join`](#kubeadm-join)
+        - [토큰 생성 방법](#토큰-생성-방법)
+        - [`kubeadm join`으로 클러스터에 조인](#kubeadm-join으로-클러스터에-조인)
+        - [`kubeadm join` 트러블슈팅](#kubeadm-join-트러블슈팅)
+          - [ERROR FileContent--proc-sys-net-ipv4-ip_forward](#error-filecontent--proc-sys-net-ipv4-ip_forward)
+          - [The cluster-info ConfigMap does not yet contain a JWS signature for token ID "TOKEN_ID", will try again](#the-cluster-info-configmap-does-not-yet-contain-a-jws-signature-for-token-id-token_id-will-try-again)
+    - [Kubernetes Networking](#kubernetes-networking)
+    - [Cluster Networking](#cluster-networking)
+- [gitlab 설치(Cent OS 7)](#gitlab-설치cent-os-7)
+  - [1. 필요 dependencies 설치 및 구성](#1-필요-dependencies-설치-및-구성)
+  - [2. Gitlab 패키지 리파지토리 추가 및 패키지 설치](#2-gitlab-패키지-리파지토리-추가-및-패키지-설치)
+    - [script.rpm.sh](#scriptrpmsh)
+    - [config_file.repo](#config_filerepo)
+    - [구성 설정 파일로 설치](#구성-설정-파일로-설치)
+  - [3. GitLab Docker images](#3-gitlab-docker-images)
+- [참조](#참조)
 
-# Docker 사용한 CI/CD
+# 서버 설정
 
 ## vultr 서버에 도메인 등록
 
@@ -102,7 +118,7 @@ systemctl enable --now snapd.socket
 ln -s /var/lib/snapd/snap /snap
 ```
 
-###### 로그아웃 후 다시 로그인 하거나 시스템 재시작하여 snap의 경로가 정확하게 업데이트 됐는지 확인
+##### 로그아웃 후 다시 로그인 하거나 시스템 재시작하여 snap의 경로가 정확하게 업데이트 됐는지 확인
 
 ```terminal
 # snap install core;
@@ -112,7 +128,7 @@ core 16-2.49.2 from Canonical✓ installed
 snap "core" has no updates available
 ```
 
-###### snap 사용한 certbot 설치
+##### snap 사용한 certbot 설치
 
 ```terminal
 # snap install --classic certbot
@@ -120,9 +136,9 @@ certbot 1.14.0 from Certbot Project (certbot-eff✓) installed
 # ln -s /snap/bin/certbot /usr/bin/certbot
 ```
 
-###### [권한 동의서](https://letsencrypt.org/documents/LE-SA-v1.2-November-15-2017.pdf) 확인
+##### [권한 동의서](https://letsencrypt.org/documents/LE-SA-v1.2-November-15-2017.pdf) 확인
 
-###### nginx 설정 변경
+##### nginx 설정 변경
 
 - `certbot --nginx` 명령어 실행하면 자동으로 Nginx 설정을 변경하여 적용
 - 만약 직접 수정하고 싶은 경우 `certbot certonly --nginx` 사용
@@ -170,11 +186,11 @@ IMPORTANT NOTES:
 # nginx -s reload
 ```
   
-## Docker + Kubernetes + Helm
+# Docker + Kubernetes + Helm
 
-### Docker
+## Docker
 
-#### [Docker - install on centos](https://docs.docker.com/engine/install/centos/)
+### [Docker - install on centos](https://docs.docker.com/engine/install/centos/)
 
 - 컨테이너 런타임으로 도커 설치
 - 쿠버네티스는 `컨테이너 런타임 인터페이스(CRI)`를 사용하여 사용자가 선택한 컨테이너 런타임과 인터페이스(대면)
@@ -232,19 +248,21 @@ sudo systemctl daemon-reload
 sudo systemctl restart docker
 ```
 
-### Kubernetes
+# Kubernetes
 
-#### Kubernetes 개요
+## Kubernetes 개요
 
 - `kubectl` $\to$ curl GET REST API $\to$ `API(objects, pod, deployment)` $\to$ `dtcd`(B+tree key-value storing sequestered database)
+- `pod`: Kubernetes installation을 구현한 것
+- `namespace`: 직접 생성한 것과 자동으로 생성된 것을 구별하기 위해 사용
 
-##### Controller Node
+### Controller Node
 
 - `etcd`
 - `apiserver`
 - `scheduler`
 
-##### Worder Node
+### Worder Node
 
 - `kublet`: 포드가 사용 가능함 확인하기 위해 요청을 컨테이너 엔진으로 넘긴다
 - `kube-proxy`: 모든 노드에서 실행되며 iptables 사용하여 Kubernetes 컴포넌트에 연결하는 인터페이스 제공
@@ -252,7 +270,23 @@ sudo systemctl restart docker
 - `network agent`: `weave` 같은 소프트웨어로 정의된 네트워크 솔루션 구현
 - `logging`: CNCF 프로젝트 `Flentd` 사용. `Fluentd` 에이전트는 반드시 k8s 노드에 설치되어야 함
 
-#### [kubectl 설치](https://kubernetes.io/ko/docs/tasks/tools/install-kubectl-linux/)
+## [kubeadm, kubelet 및 kubectl 설치](https://kubernetes.io/ko/docs/setup/production-environment/tools/kubeadm/install-kubeadm/)
+
+| 패키지    | 설명                                                                                   |
+| --------- | -------------------------------------------------------------------------------------- |
+| `kubeadm` | 클러스터를 부트스트랩하는 명령                                                         |
+| `kubelet` | 클러스터의 모든 머신에서 실행되는 파드와 컨테이너 시작과 같은 작업을 수행하는 컴포넌트 |
+| `kubectl` | 클러스터와 통신하기 위한 커맨드 라인 유틸리티                                          |
+
+- `kubeadm`이 설치하려는 쿠버네티스 컨트롤 플레인의 버전과 `kubelet` 또는 `kubectl` 버전이 일치하는지 확인
+  - 컨트롤 플레인 버전과 `kubelet`:
+    - 하나의 마이너 버전 차이 지원
+  - `kubelet` 버전과 API 서버 버전:
+    - `kubelet` 버전은 API 서버 버전보다 높을 수 없다
+    - `kubelet` 버전 < `kube-apiserver` 버전
+- redha distribution
+
+### [kubectl 설치](https://kubernetes.io/ko/docs/tasks/tools/install-kubectl-linux/)
 
 ```bash
 curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
@@ -263,9 +297,9 @@ version --client
 Client Version: version.Info{Major:"1", Minor:"21", GitVersion:"v1.21.0", GitCommit:"cb303e613a121a29364f75cc67d3d580833a7479", GitTreeState:"clean", BuildDate:"2021-04-08T16:31:21Z", GoVersion:"go1.16.1", Compiler:"gc", Platform:"linux/amd64"}
 ```
 
-#### [kubeadm 설치](https://kubernetes.io/ko/docs/setup/production-environment/tools/kubeadm/install-kubeadm/)
+### [kubeadm 설치](https://kubernetes.io/ko/docs/setup/production-environment/tools/kubeadm/install-kubeadm/)
 
-##### swap space 제거
+#### swap space 제거
 
 ```bash
 vi /etc/fstab
@@ -278,7 +312,7 @@ vi /etc/fstab
   - [Kubelet/Kubernetes should work with Swap Enabled](https://github.com/kubernetes/kubernetes/issues/53533)
   - [Why Kubernetes Hates Linux Swap?](https://medium.com/tailwinds-navigator/kubernetes-tip-why-disable-swap-on-linux-3505f0250263)
 
-##### iptables가 브리지된 트래픽을 보게 하기
+#### iptables가 브리지된 트래픽을 보게 하기
 
 - br_netfilter 모듈이 로드되었는지 확인
   
@@ -310,22 +344,6 @@ net.bridge.bridge-nf-pass-vlan-input-dev = 0
 - [네트워크 플러그인 요구 사항](https://kubernetes.io/ko/docs/concepts/extend-kubernetes/compute-storage-net/network-plugins/#%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC-%ED%94%8C%EB%9F%AC%EA%B7%B8%EC%9D%B8-%EC%9A%94%EA%B5%AC-%EC%82%AC%ED%95%AD)
   - iptables 프록시가 올바르게 작동하는지 확인
 
-##### [kubeadm, kubelet 및 kubectl 설치](https://kubernetes.io/ko/docs/setup/production-environment/tools/kubeadm/install-kubeadm/)
-
-| 패키지    | 설명                                                                                   |
-| --------- | -------------------------------------------------------------------------------------- |
-| `kubeadm` | 클러스터를 부트스트랩하는 명령                                                         |
-| `kubelet` | 클러스터의 모든 머신에서 실행되는 파드와 컨테이너 시작과 같은 작업을 수행하는 컴포넌트 |
-| `kubectl` | 클러스터와 통신하기 위한 커맨드 라인 유틸리티                                          |
-
-- `kubeadm`이 설치하려는 쿠버네티스 컨트롤 플레인의 버전과 `kubelet` 또는 `kubectl` 버전이 일치하는지 확인
-  - 컨트롤 플레인 버전과 `kubelet`:
-    - 하나의 마이너 버전 차이 지원
-  - `kubelet` 버전과 API 서버 버전:
-    - `kubelet` 버전은 API 서버 버전보다 높을 수 없다
-    - `kubelet` 버전 < `kube-apiserver` 버전
-- redha distribution
-
 ```bash
 # repo 추가
 cat <<EOF | sudo tee /etc/yum.repos.d/kubernetes.repo
@@ -355,7 +373,7 @@ Created symlink /etc/systemd/system/multi-user.target.wants/kubelet.service → 
   - [The kubelet drop-in file for systemd](https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/kubelet-integration/#the-kubelet-drop-in-file-for-systemd)
   - [Failed to get kubelets cgroup](https://stackoverflow.com/a/57456786)
 
-##### [컨트롤 플레인 노드에서 kubelet이 사용하는 cgroup 드라이버 구성](https://kubernetes.io/ko/docs/setup/production-environment/tools/kubeadm/install-kubeadm/#%EC%BB%A8%ED%8A%B8%EB%A1%A4-%ED%94%8C%EB%A0%88%EC%9D%B8-%EB%85%B8%EB%93%9C%EC%97%90%EC%84%9C-kubelet%EC%9D%B4-%EC%82%AC%EC%9A%A9%ED%95%98%EB%8A%94-cgroup-%EB%93%9C%EB%9D%BC%EC%9D%B4%EB%B2%84-%EA%B5%AC%EC%84%B1)
+#### [컨트롤 플레인 노드에서 kubelet이 사용하는 cgroup 드라이버 구성](https://kubernetes.io/ko/docs/setup/production-environment/tools/kubeadm/install-kubeadm/#%EC%BB%A8%ED%8A%B8%EB%A1%A4-%ED%94%8C%EB%A0%88%EC%9D%B8-%EB%85%B8%EB%93%9C%EC%97%90%EC%84%9C-kubelet%EC%9D%B4-%EC%82%AC%EC%9A%A9%ED%95%98%EB%8A%94-cgroup-%EB%93%9C%EB%9D%BC%EC%9D%B4%EB%B2%84-%EA%B5%AC%EC%84%B1)
 
 - 도커 사용 시
   - kubeadm은 `kubelet 용 cgroup 드라이버`를 자동으로 감지
@@ -418,7 +436,7 @@ systemctl start firewalld
         [WARNING FileExisting-tc]: tc not found in system path
 ```
 
-##### `kubeadm init`
+#### `kubeadm init`
 
 ##### 옵션들
 
@@ -426,13 +444,14 @@ systemctl start firewalld
 
 ###### `--pod-network-cidr`
 
-- 왜 `cidr` 사용? 클러스터 내의 `pods` 간에 통신하기 위해 특별한 가상 네트워크를 생성하는 데 [Container Network Interface](https://github.com/containernetworking/cni) 사용
+왜 `cidr` 사용? 클러스터 내의 `pods` 간에 통신하기 위해 특별한 가상 네트워크를 생성하는 데 [Container Network Interface](https://github.com/containernetworking/cni) 사용
 
 ###### `--service-cidr`
 
 ##### 트러블 슈팅
 
-- [[kubelet-check] Initial timeout of 40s passed 발생 시](https://stackoverflow.com/a/57655546)
+###### [[kubelet-check] Initial timeout of 40s passed 발생 시](https://stackoverflow.com/a/57655546)
+
 - 6443 포트에 대한 연결이 계속 끊기는데 왜?
   - `kubeadm init`이 정상적으로 마치지 않았기 때문
   - 이번에 수정한 건 두 가지인데
@@ -440,7 +459,20 @@ systemctl start firewalld
     - `firewalld` 비활성화(TO-DO: 이래도 되나? 더 확인해보자...)
   - `dnf install -y iproute-tc` 설치하고 다시 시도하니 80초 걸려서 됐는데, 정확히 이 때문인지 아니면 방화벽을 비활성화해서 괜찮아진 건지 모르겠다
 
-###### init 결과
+###### The connection to the server localhost:8080 was refused - did you specify the right host or port?
+
+- `admin.conf` 설정이 안 되어 있어서 발생
+- 루트 아닌 계정으로는 `$HOME/.kube/config` 파일 생성 필요
+
+```bash
+mkdir -p $HOME/.kube
+sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+sudo chown $(id -u):$(id -g) $HOME/.kube/config
+```
+
+- 루트 계정인 경우 `export KUBECONFIG=/etc/kubernetes/admin.conf`로도 가능. 단 계정 변경해도 `KUBECONFIG`로 export된 변수가 남아 있으므로, 루트 계정 아닌 다른 계정으로 변경하면, `KUBECONFIG`를 새로 export해야 한다
+
+##### init 결과
 
 ```bash
 [aimpugn@vultr ~]$ kubectl cluster-info
@@ -454,15 +486,426 @@ NAME          STATUS     ROLES                  AGE   VERSION
 vultr.guest   NotReady   control-plane,master   12m   v1.21.0
 ```
 
-#### Network
+## Network
 
-##### [Kubernetes Networking](https://github.com/coreos/coreos-kubernetes/blob/master/Documentation/kubernetes-networking.md)
+### Network 개요
 
-##### [Cluster Networking](https://kubernetes.io/docs/concepts/cluster-administration/networking/)
+- [`CNI`](https://kubernetes.io/docs/concepts/extend-kubernetes/compute-storage-net/network-plugins/#cni) 기반 네트워크 플러그인 설치 안 되면, `Cluster DNS (CoreDNS)`가 시작되지 않는다
+- 파드 통신을 위해 네트워크 애드온이 반드시 설치되어야 한다
+- `CNI(Container Network Interface)`는 플러그인과 함께 네트워크 구현
+- 네트워크 종류
 
-## gitlab 설치(Cent OS 7)
+| 종류                           |
+| ------------------------------ |
+| container 간 네트워크          |
+| pod 간 네트워크                |
+| pod와 service 간 네트워크      |
+| external과 service 간 네트워크 |
 
-### 1. 필요 dependencies 설치 및 구성
+- `network-policy`와 `RBAC` 지원하는 애드온 찾아야 한다
+
+### [Pod 네트워크 플러그인](https://kubernetes.io/docs/concepts/cluster-administration/networking/#how-to-implement-the-kubernetes-networking-model)
+
+#### Falnnel
+
+- `VXLAN` 같은 여러 백엔드 메커니즘을 사용할 수 있는 클러스트 노드 간의 3계층 IPv4 네트워크
+
+#### Weave
+
+- `CNI` 활성화된 쿠버네티스 클러스터에서 흔히 사용되는 애드온
+
+#### Calico
+
+- IP 캡슐화 사용하는 3계층 네트워크 솔루션
+- Kubernetes, OpenStack, OpenShift, Docker 등에서 사용
+
+#### AWS VPC
+
+- AWS 환경에서 사용되는 네트워크 플러그인
+
+### [pod 네트워크 애드온 설치](https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/create-cluster-kubeadm/#pod-network)
+
+#### [Weave - Integrating Kubernetes via the Addon](https://www.weave.works/docs/net/latest/kubernetes/kube-addon/)
+
+- [TCP 6783, UDP 6783/6784](https://www.weave.works/docs/net/latest/faq/#ports) 포트가 열려 있어야 한다
+- `TCP 6781/6782` 포트는 [`metrics`](https://www.weave.works/docs/net/latest/tasks/manage/metrics#metrics-endpoint-addresses)에 사용
+- `kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n')"` 명령어 사용하면, 아래 파일을 받게 된다
+
+```bash
+https://cloud.weave.works/k8s/net?k8s-version=Q2xpZW50IFZlcnNpb246IHZlcnNpb24uSW5mb3tNYWpvcjoiMSIsIE1pbm9yOiIyMSIsIEdpdFZlcnNpb246InYxLjIxLjAiLCBHaXRDb21taXQ6ImNiMzAzZTYxM2ExMjFhMjkzNjRmNzVjYzY3ZDNkNTgwODMzYTc0NzkiLCBHaXRUcmVlU3RhdGU6ImNsZWFuIiwgQnVpbGREYXRlOiIyMDIxLTA0LTA4VDE2OjMxOjIxWiIsIEdvVmVyc2lvbjoiZ28xLjE2LjEiLCBDb21waWxlcjoiZ2MiLCBQbGF0Zm9ybToibGludXgvYW1kNjQifQo=
+```
+
+```yaml
+apiVersion: v1
+kind: List
+items:
+  - apiVersion: v1
+    kind: ServiceAccount
+    metadata:
+      name: weave-net
+      annotations:
+        cloud.weave.works/launcher-info: |-
+          {
+            "original-request": {
+              "url": "/k8s/v1.16/net.yaml?k8s-version=Q2xpZW50IFZlcnNpb246IHZlcnNpb24uSW5mb3tNYWpvcjoiMSIsIE1pbm9yOiIyMSIsIEdpdFZlcnNpb246InYxLjIxLjAiLCBHaXRDb21taXQ6ImNiMzAzZTYxM2ExMjFhMjkzNjRmNzVjYzY3ZDNkNTgwODMzYTc0NzkiLCBHaXRUcmVlU3RhdGU6ImNsZWFuIiwgQnVpbGREYXRlOiIyMDIxLTA0LTA4VDE2OjMxOjIxWiIsIEdvVmVyc2lvbjoiZ28xLjE2LjEiLCBDb21waWxlcjoiZ2MiLCBQbGF0Zm9ybToibGludXgvYW1kNjQifQo=",
+              "date": "Mon Apr 26 2021 14:45:10 GMT+0000 (UTC)"
+            },
+            "email-address": "support@weave.works"
+          }
+      labels:
+        name: weave-net
+      namespace: kube-system
+  - apiVersion: rbac.authorization.k8s.io/v1
+    kind: ClusterRole
+    metadata:
+      name: weave-net
+      annotations:
+        cloud.weave.works/launcher-info: |-
+          {
+            "original-request": {
+              "url": "/k8s/v1.16/net.yaml?k8s-version=Q2xpZW50IFZlcnNpb246IHZlcnNpb24uSW5mb3tNYWpvcjoiMSIsIE1pbm9yOiIyMSIsIEdpdFZlcnNpb246InYxLjIxLjAiLCBHaXRDb21taXQ6ImNiMzAzZTYxM2ExMjFhMjkzNjRmNzVjYzY3ZDNkNTgwODMzYTc0NzkiLCBHaXRUcmVlU3RhdGU6ImNsZWFuIiwgQnVpbGREYXRlOiIyMDIxLTA0LTA4VDE2OjMxOjIxWiIsIEdvVmVyc2lvbjoiZ28xLjE2LjEiLCBDb21waWxlcjoiZ2MiLCBQbGF0Zm9ybToibGludXgvYW1kNjQifQo=",
+              "date": "Mon Apr 26 2021 14:45:10 GMT+0000 (UTC)"
+            },
+            "email-address": "support@weave.works"
+          }
+      labels:
+        name: weave-net
+    rules:
+      - apiGroups:
+          - ''
+        resources:
+          - pods
+          - namespaces
+          - nodes
+        verbs:
+          - get
+          - list
+          - watch
+      - apiGroups:
+          - networking.k8s.io
+        resources:
+          - networkpolicies
+        verbs:
+          - get
+          - list
+          - watch
+      - apiGroups:
+          - ''
+        resources:
+          - nodes/status
+        verbs:
+          - patch
+          - update
+  - apiVersion: rbac.authorization.k8s.io/v1
+    kind: ClusterRoleBinding
+    metadata:
+      name: weave-net
+      annotations:
+        cloud.weave.works/launcher-info: |-
+          {
+            "original-request": {
+              "url": "/k8s/v1.16/net.yaml?k8s-version=Q2xpZW50IFZlcnNpb246IHZlcnNpb24uSW5mb3tNYWpvcjoiMSIsIE1pbm9yOiIyMSIsIEdpdFZlcnNpb246InYxLjIxLjAiLCBHaXRDb21taXQ6ImNiMzAzZTYxM2ExMjFhMjkzNjRmNzVjYzY3ZDNkNTgwODMzYTc0NzkiLCBHaXRUcmVlU3RhdGU6ImNsZWFuIiwgQnVpbGREYXRlOiIyMDIxLTA0LTA4VDE2OjMxOjIxWiIsIEdvVmVyc2lvbjoiZ28xLjE2LjEiLCBDb21waWxlcjoiZ2MiLCBQbGF0Zm9ybToibGludXgvYW1kNjQifQo=",
+              "date": "Mon Apr 26 2021 14:45:10 GMT+0000 (UTC)"
+            },
+            "email-address": "support@weave.works"
+          }
+      labels:
+        name: weave-net
+    roleRef:
+      kind: ClusterRole
+      name: weave-net
+      apiGroup: rbac.authorization.k8s.io
+    subjects:
+      - kind: ServiceAccount
+        name: weave-net
+        namespace: kube-system
+  - apiVersion: rbac.authorization.k8s.io/v1
+    kind: Role
+    metadata:
+      name: weave-net
+      annotations:
+        cloud.weave.works/launcher-info: |-
+          {
+            "original-request": {
+              "url": "/k8s/v1.16/net.yaml?k8s-version=Q2xpZW50IFZlcnNpb246IHZlcnNpb24uSW5mb3tNYWpvcjoiMSIsIE1pbm9yOiIyMSIsIEdpdFZlcnNpb246InYxLjIxLjAiLCBHaXRDb21taXQ6ImNiMzAzZTYxM2ExMjFhMjkzNjRmNzVjYzY3ZDNkNTgwODMzYTc0NzkiLCBHaXRUcmVlU3RhdGU6ImNsZWFuIiwgQnVpbGREYXRlOiIyMDIxLTA0LTA4VDE2OjMxOjIxWiIsIEdvVmVyc2lvbjoiZ28xLjE2LjEiLCBDb21waWxlcjoiZ2MiLCBQbGF0Zm9ybToibGludXgvYW1kNjQifQo=",
+              "date": "Mon Apr 26 2021 14:45:10 GMT+0000 (UTC)"
+            },
+            "email-address": "support@weave.works"
+          }
+      labels:
+        name: weave-net
+      namespace: kube-system
+    rules:
+      - apiGroups:
+          - ''
+        resourceNames:
+          - weave-net
+        resources:
+          - configmaps
+        verbs:
+          - get
+          - update
+      - apiGroups:
+          - ''
+        resources:
+          - configmaps
+        verbs:
+          - create
+  - apiVersion: rbac.authorization.k8s.io/v1
+    kind: RoleBinding
+    metadata:
+      name: weave-net
+      annotations:
+        cloud.weave.works/launcher-info: |-
+          {
+            "original-request": {
+              "url": "/k8s/v1.16/net.yaml?k8s-version=Q2xpZW50IFZlcnNpb246IHZlcnNpb24uSW5mb3tNYWpvcjoiMSIsIE1pbm9yOiIyMSIsIEdpdFZlcnNpb246InYxLjIxLjAiLCBHaXRDb21taXQ6ImNiMzAzZTYxM2ExMjFhMjkzNjRmNzVjYzY3ZDNkNTgwODMzYTc0NzkiLCBHaXRUcmVlU3RhdGU6ImNsZWFuIiwgQnVpbGREYXRlOiIyMDIxLTA0LTA4VDE2OjMxOjIxWiIsIEdvVmVyc2lvbjoiZ28xLjE2LjEiLCBDb21waWxlcjoiZ2MiLCBQbGF0Zm9ybToibGludXgvYW1kNjQifQo=",
+              "date": "Mon Apr 26 2021 14:45:10 GMT+0000 (UTC)"
+            },
+            "email-address": "support@weave.works"
+          }
+      labels:
+        name: weave-net
+      namespace: kube-system
+    roleRef:
+      kind: Role
+      name: weave-net
+      apiGroup: rbac.authorization.k8s.io
+    subjects:
+      - kind: ServiceAccount
+        name: weave-net
+        namespace: kube-system
+  - apiVersion: apps/v1
+    kind: DaemonSet
+    metadata:
+      name: weave-net
+      annotations:
+        cloud.weave.works/launcher-info: |-
+          {
+            "original-request": {
+              "url": "/k8s/v1.16/net.yaml?k8s-version=Q2xpZW50IFZlcnNpb246IHZlcnNpb24uSW5mb3tNYWpvcjoiMSIsIE1pbm9yOiIyMSIsIEdpdFZlcnNpb246InYxLjIxLjAiLCBHaXRDb21taXQ6ImNiMzAzZTYxM2ExMjFhMjkzNjRmNzVjYzY3ZDNkNTgwODMzYTc0NzkiLCBHaXRUcmVlU3RhdGU6ImNsZWFuIiwgQnVpbGREYXRlOiIyMDIxLTA0LTA4VDE2OjMxOjIxWiIsIEdvVmVyc2lvbjoiZ28xLjE2LjEiLCBDb21waWxlcjoiZ2MiLCBQbGF0Zm9ybToibGludXgvYW1kNjQifQo=",
+              "date": "Mon Apr 26 2021 14:45:10 GMT+0000 (UTC)"
+            },
+            "email-address": "support@weave.works"
+          }
+      labels:
+        name: weave-net
+      namespace: kube-system
+    spec:
+      minReadySeconds: 5
+      selector:
+        matchLabels:
+          name: weave-net
+      template:
+        metadata:
+          labels:
+            name: weave-net
+        spec:
+          containers:
+            - name: weave
+              command:
+                - /home/weave/launch.sh
+              env:
+                - name: HOSTNAME
+                  valueFrom:
+                    fieldRef:
+                      apiVersion: v1
+                      fieldPath: spec.nodeName
+                - name: INIT_CONTAINER
+                  value: 'true'
+              image: 'docker.io/weaveworks/weave-kube:2.8.1'
+              readinessProbe:
+                httpGet:
+                  host: 127.0.0.1
+                  path: /status
+                  port: 6784
+              resources:
+                requests:
+                  cpu: 50m
+                  memory: 100Mi
+              securityContext:
+                privileged: true
+              volumeMounts:
+                - name: weavedb
+                  mountPath: /weavedb
+                - name: dbus
+                  mountPath: /host/var/lib/dbus
+                - name: machine-id
+                  mountPath: /host/etc/machine-id
+                  readOnly: true
+                - name: xtables-lock
+                  mountPath: /run/xtables.lock
+            - name: weave-npc
+              env:
+                - name: HOSTNAME
+                  valueFrom:
+                    fieldRef:
+                      apiVersion: v1
+                      fieldPath: spec.nodeName
+              image: 'docker.io/weaveworks/weave-npc:2.8.1'
+              resources:
+                requests:
+                  cpu: 50m
+                  memory: 100Mi
+              securityContext:
+                privileged: true
+              volumeMounts:
+                - name: xtables-lock
+                  mountPath: /run/xtables.lock
+          dnsPolicy: ClusterFirstWithHostNet
+          hostNetwork: true
+          initContainers:
+            - name: weave-init
+              command:
+                - /home/weave/init.sh
+              image: 'docker.io/weaveworks/weave-kube:2.8.1'
+              securityContext:
+                privileged: true
+              volumeMounts:
+                - name: cni-bin
+                  mountPath: /host/opt
+                - name: cni-bin2
+                  mountPath: /host/home
+                - name: cni-conf
+                  mountPath: /host/etc
+                - name: lib-modules
+                  mountPath: /lib/modules
+                - name: xtables-lock
+                  mountPath: /run/xtables.lock
+          priorityClassName: system-node-critical
+          restartPolicy: Always
+          securityContext:
+            seLinuxOptions: {}
+          serviceAccountName: weave-net
+          tolerations:
+            - effect: NoSchedule
+              operator: Exists
+            - effect: NoExecute
+              operator: Exists
+          volumes:
+            - name: weavedb
+              hostPath:
+                path: /var/lib/weave
+            - name: cni-bin
+              hostPath:
+                path: /opt
+            - name: cni-bin2
+              hostPath:
+                path: /home
+            - name: cni-conf
+              hostPath:
+                path: /etc
+            - name: dbus
+              hostPath:
+                path: /var/lib/dbus
+            - name: lib-modules
+              hostPath:
+                path: /lib/modules
+            - name: machine-id
+              hostPath:
+                path: /etc/machine-id
+                type: FileOrCreate
+            - name: xtables-lock
+              hostPath:
+                path: /run/xtables.lock
+                type: FileOrCreate
+      updateStrategy:
+        type: RollingUpdate
+```
+
+```
+[root@vultr ~]# kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n')"
+serviceaccount/weave-net created
+clusterrole.rbac.authorization.k8s.io/weave-net created
+clusterrolebinding.rbac.authorization.k8s.io/weave-net created
+role.rbac.authorization.k8s.io/weave-net created
+rolebinding.rbac.authorization.k8s.io/weave-net created
+daemonset.apps/weave-net created
+```
+
+- 네임스페이스 확인
+
+```
+[root@vultr ~]# kubectl get pods --all-namespaces
+NAMESPACE     NAME                                  READY   STATUS    RESTARTS   AGE
+kube-system   coredns-558bd4d5db-9d5b5              1/1     Running   0          5d
+kube-system   coredns-558bd4d5db-kpzcd              1/1     Running   0          5d
+kube-system   etcd-vultr.guest                      1/1     Running   0          5d
+kube-system   kube-apiserver-vultr.guest            1/1     Running   0          5d
+kube-system   kube-controller-manager-vultr.guest   1/1     Running   0          5d
+kube-system   kube-proxy-tjqwq                      1/1     Running   0          5d
+kube-system   kube-scheduler-vultr.guest            1/1     Running   0          5d
+kube-system   weave-net-tld6h                       2/2     Running   1          3m19s
+```
+
+- 노드 확인하면 상태는 `Ready`이며, 이는 노드가 한 개인 클러스트가 설정 됐으며, 다른 노드 조인 가능함 의미
+
+```
+[root@vultr ~]# kubectl get nodes
+NAME          STATUS   ROLES                  AGE   VERSION
+vultr.guest   Ready    control-plane,master   5d    v1.21.0
+```
+
+#### `kubeadm join`
+
+##### [토큰 생성 방법](https://www.serverlab.ca/tutorials/containers/kubernetes/how-to-add-workers-to-kubernetes-clusters/)
+
+##### `kubeadm join`으로 클러스터에 조인
+
+- worker 노드에서 `kubeadm join` 명령어 실행
+
+```bash
+kubeadm join <IP_ADDRESS>:6443 --token <TOKEN_ID>.<TOKEN> \ 
+                               --discovery-token-ca-cert-hash <hash-type>:<hex-encoded-value>
+[preflight] Running pre-flight checks
+[preflight] Reading configuration from the cluster...
+[preflight] FYI: You can look at this config file with 'kubectl -n kube-system get cm kubeadm-config -o yaml'
+[kubelet-start] Writing kubelet configuration to file "/var/lib/kubelet/config.yaml"
+[kubelet-start] Writing kubelet environment file with flags to file "/var/lib/kubelet/kubeadm-flags.env"
+[kubelet-start] Starting the kubelet
+[kubelet-start] Waiting for the kubelet to perform the TLS Bootstrap...
+
+This node has joined the cluster:
+* Certificate signing request was sent to apiserver and a response was received.
+* The Kubelet was informed of the new secure connection details.
+
+Run 'kubectl get nodes' on the control-plane to see this node join the cluster
+```
+
+- 컨트롤 플레인에서 nodes를 조회하면 worker가 조인 되었음 확인 가능하다
+
+```
+# kubectl get nodes
+NAME             STATUS   ROLES                  AGE    VERSION
+vultr.guest      Ready    control-plane,master   5d     v1.21.0
+worker-aimpugn   Ready    <none>                 104s   v1.21.0
+```
+
+##### `kubeadm join` 트러블슈팅
+
+###### ERROR FileContent--proc-sys-net-ipv4-ip_forward
+
+> [ERROR FileContent--proc-sys-net-ipv4-ip_forward]: /proc/sys/net/ipv4/ip_forward contents are not set to 1  
+> [preflight] If you know what you are doing, you can make a check non-fatal with `--ignore-preflight-errors=...`
+
+- [`br_netfilter` 모듈이 필수](https://stackoverflow.com/a/55533372)
+- `br_netfilter` 커널 모듈 활성화 $to$ 패킷이 브릿지로 이동하여 iptables에 의해 처리된다
+- `echo '1' > /proc/sys/net/ipv4/ip_forward` 명령어로 해결
+
+###### The cluster-info ConfigMap does not yet contain a JWS signature for token ID "TOKEN_ID", will try again
+
+> I0426 15:29:47.674860  391575 token.go:221] [discovery] The cluster-info ConfigMap does not yet contain a JWS signature for token ID "TOKEN_ID", will try again
+
+- 토큰이 만료돼서 join을 하지 못하는 상황
+- `kubeadm token create --print-join-command`로 새로운 토큰 발급 받아서 조인 가능
+
+### [Kubernetes Networking](https://github.com/coreos/coreos-kubernetes/blob/master/Documentation/kubernetes-networking.md)
+
+### [Cluster Networking](https://kubernetes.io/docs/concepts/cluster-administration/networking/)
+
+# gitlab 설치(Cent OS 7)
+
+## 1. 필요 dependencies 설치 및 구성
 
 - 방화벽에 HTTP, HTTPS, SSH 접근 허용. 이미 되어 있다면 불필요.
 
@@ -483,13 +926,13 @@ sudo systemctl enable postfix
 sudo systemctl start postfix
 ```
 
-### 2. Gitlab 패키지 리파지토리 추가 및 패키지 설치
+## 2. Gitlab 패키지 리파지토리 추가 및 패키지 설치
 
 ```
 curl https://packages.gitlab.com/install/repositories/gitlab/gitlab-ee/script.rpm.sh | sudo bash
 ```
 
-#### script.rpm.sh
+### script.rpm.sh
 
 - detect_os() 함수에서 현재 os명(centos, poky, opensuse, fedora 등)과 dist 버전 판별
 - 설정 스크립트를 가져올 url 결정하여 구성 파일 가져와서 `yum_repo_path=/etc/yum.repos.d/gitlab_gitlab-ee.repo`에 저장
@@ -499,7 +942,7 @@ https://packages.gitlab.com/install/repositories/gitlab/gitlab-ee/config_file.re
 https://packages.gitlab.com/install/repositories/gitlab/gitlab-ee/config_file.repo?os=centos&dist=8&source=script
 ```
 
-#### config_file.repo
+### config_file.repo
 
 ```ini
 [gitlab_gitlab-ee]
@@ -527,7 +970,7 @@ sslcacert=/etc/pki/tls/certs/ca-bundle.crt
 metadata_expire=300
 ```
 
-#### 구성 설정 파일로 설치
+### 구성 설정 파일로 설치
 
 ```bash
 finalize_yum_repo ()
@@ -567,10 +1010,11 @@ finalize_yum_repo ()
 }
 ```
 
-### 3. [GitLab Docker images](https://docs.gitlab.com/omnibus/docker/)
+## 3. [GitLab Docker images](https://docs.gitlab.com/omnibus/docker/)
 
-## 참조
+# 참조
 
 - [Dockerizing a Spring Boot Application](https://www.baeldung.com/dockerizing-spring-boot-application)
 - [Building a private CI/CD pipeline with Java and Docker in the Cloud](https://youtu.be/sMvxauOLKLs)
 - [Containerizing microservices](https://openliberty.io/guides/containerize.html)
+- [Creating a cluster with kubeadm](https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/create-cluster-kubeadm/)
