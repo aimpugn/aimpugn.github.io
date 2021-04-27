@@ -58,6 +58,14 @@ tag: [docker, ci/cd]
           - [The cluster-info ConfigMap does not yet contain a JWS signature for token ID "TOKEN_ID", will try again](#the-cluster-info-configmap-does-not-yet-contain-a-jws-signature-for-token-id-token_id-will-try-again)
     - [Kubernetes Networking](#kubernetes-networking)
     - [Cluster Networking](#cluster-networking)
+- [Ansible](#ansible)
+  - [Ansible 개요](#ansible-개요)
+  - [Ansible 설치 on CentOS](#ansible-설치-on-centos)
+  - [Ansible command sheel completion](#ansible-command-sheel-completion)
+  - [`hosts` 설정](#hosts-설정)
+- [Helm charts](#helm-charts)
+  - [Helm charts 개요](#helm-charts-개요)
+  - [Helm charts 설치](#helm-charts-설치)
 - [gitlab 설치(Cent OS 7)](#gitlab-설치cent-os-7)
   - [1. 필요 dependencies 설치 및 구성](#1-필요-dependencies-설치-및-구성)
   - [2. Gitlab 패키지 리파지토리 추가 및 패키지 설치](#2-gitlab-패키지-리파지토리-추가-및-패키지-설치)
@@ -531,289 +539,8 @@ vultr.guest   NotReady   control-plane,master   12m   v1.21.0
 - `TCP 6781/6782` 포트는 [`metrics`](https://www.weave.works/docs/net/latest/tasks/manage/metrics#metrics-endpoint-addresses)에 사용
 - `kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n')"` 명령어 사용하면, 아래 파일을 받게 된다
 
-```bash
-https://cloud.weave.works/k8s/net?k8s-version=Q2xpZW50IFZlcnNpb246IHZlcnNpb24uSW5mb3tNYWpvcjoiMSIsIE1pbm9yOiIyMSIsIEdpdFZlcnNpb246InYxLjIxLjAiLCBHaXRDb21taXQ6ImNiMzAzZTYxM2ExMjFhMjkzNjRmNzVjYzY3ZDNkNTgwODMzYTc0NzkiLCBHaXRUcmVlU3RhdGU6ImNsZWFuIiwgQnVpbGREYXRlOiIyMDIxLTA0LTA4VDE2OjMxOjIxWiIsIEdvVmVyc2lvbjoiZ28xLjE2LjEiLCBDb21waWxlcjoiZ2MiLCBQbGF0Zm9ybToibGludXgvYW1kNjQifQo=
 ```
-
-```yaml
-apiVersion: v1
-kind: List
-items:
-  - apiVersion: v1
-    kind: ServiceAccount
-    metadata:
-      name: weave-net
-      annotations:
-        cloud.weave.works/launcher-info: |-
-          {
-            "original-request": {
-              "url": "/k8s/v1.16/net.yaml?k8s-version=Q2xpZW50IFZlcnNpb246IHZlcnNpb24uSW5mb3tNYWpvcjoiMSIsIE1pbm9yOiIyMSIsIEdpdFZlcnNpb246InYxLjIxLjAiLCBHaXRDb21taXQ6ImNiMzAzZTYxM2ExMjFhMjkzNjRmNzVjYzY3ZDNkNTgwODMzYTc0NzkiLCBHaXRUcmVlU3RhdGU6ImNsZWFuIiwgQnVpbGREYXRlOiIyMDIxLTA0LTA4VDE2OjMxOjIxWiIsIEdvVmVyc2lvbjoiZ28xLjE2LjEiLCBDb21waWxlcjoiZ2MiLCBQbGF0Zm9ybToibGludXgvYW1kNjQifQo=",
-              "date": "Mon Apr 26 2021 14:45:10 GMT+0000 (UTC)"
-            },
-            "email-address": "support@weave.works"
-          }
-      labels:
-        name: weave-net
-      namespace: kube-system
-  - apiVersion: rbac.authorization.k8s.io/v1
-    kind: ClusterRole
-    metadata:
-      name: weave-net
-      annotations:
-        cloud.weave.works/launcher-info: |-
-          {
-            "original-request": {
-              "url": "/k8s/v1.16/net.yaml?k8s-version=Q2xpZW50IFZlcnNpb246IHZlcnNpb24uSW5mb3tNYWpvcjoiMSIsIE1pbm9yOiIyMSIsIEdpdFZlcnNpb246InYxLjIxLjAiLCBHaXRDb21taXQ6ImNiMzAzZTYxM2ExMjFhMjkzNjRmNzVjYzY3ZDNkNTgwODMzYTc0NzkiLCBHaXRUcmVlU3RhdGU6ImNsZWFuIiwgQnVpbGREYXRlOiIyMDIxLTA0LTA4VDE2OjMxOjIxWiIsIEdvVmVyc2lvbjoiZ28xLjE2LjEiLCBDb21waWxlcjoiZ2MiLCBQbGF0Zm9ybToibGludXgvYW1kNjQifQo=",
-              "date": "Mon Apr 26 2021 14:45:10 GMT+0000 (UTC)"
-            },
-            "email-address": "support@weave.works"
-          }
-      labels:
-        name: weave-net
-    rules:
-      - apiGroups:
-          - ''
-        resources:
-          - pods
-          - namespaces
-          - nodes
-        verbs:
-          - get
-          - list
-          - watch
-      - apiGroups:
-          - networking.k8s.io
-        resources:
-          - networkpolicies
-        verbs:
-          - get
-          - list
-          - watch
-      - apiGroups:
-          - ''
-        resources:
-          - nodes/status
-        verbs:
-          - patch
-          - update
-  - apiVersion: rbac.authorization.k8s.io/v1
-    kind: ClusterRoleBinding
-    metadata:
-      name: weave-net
-      annotations:
-        cloud.weave.works/launcher-info: |-
-          {
-            "original-request": {
-              "url": "/k8s/v1.16/net.yaml?k8s-version=Q2xpZW50IFZlcnNpb246IHZlcnNpb24uSW5mb3tNYWpvcjoiMSIsIE1pbm9yOiIyMSIsIEdpdFZlcnNpb246InYxLjIxLjAiLCBHaXRDb21taXQ6ImNiMzAzZTYxM2ExMjFhMjkzNjRmNzVjYzY3ZDNkNTgwODMzYTc0NzkiLCBHaXRUcmVlU3RhdGU6ImNsZWFuIiwgQnVpbGREYXRlOiIyMDIxLTA0LTA4VDE2OjMxOjIxWiIsIEdvVmVyc2lvbjoiZ28xLjE2LjEiLCBDb21waWxlcjoiZ2MiLCBQbGF0Zm9ybToibGludXgvYW1kNjQifQo=",
-              "date": "Mon Apr 26 2021 14:45:10 GMT+0000 (UTC)"
-            },
-            "email-address": "support@weave.works"
-          }
-      labels:
-        name: weave-net
-    roleRef:
-      kind: ClusterRole
-      name: weave-net
-      apiGroup: rbac.authorization.k8s.io
-    subjects:
-      - kind: ServiceAccount
-        name: weave-net
-        namespace: kube-system
-  - apiVersion: rbac.authorization.k8s.io/v1
-    kind: Role
-    metadata:
-      name: weave-net
-      annotations:
-        cloud.weave.works/launcher-info: |-
-          {
-            "original-request": {
-              "url": "/k8s/v1.16/net.yaml?k8s-version=Q2xpZW50IFZlcnNpb246IHZlcnNpb24uSW5mb3tNYWpvcjoiMSIsIE1pbm9yOiIyMSIsIEdpdFZlcnNpb246InYxLjIxLjAiLCBHaXRDb21taXQ6ImNiMzAzZTYxM2ExMjFhMjkzNjRmNzVjYzY3ZDNkNTgwODMzYTc0NzkiLCBHaXRUcmVlU3RhdGU6ImNsZWFuIiwgQnVpbGREYXRlOiIyMDIxLTA0LTA4VDE2OjMxOjIxWiIsIEdvVmVyc2lvbjoiZ28xLjE2LjEiLCBDb21waWxlcjoiZ2MiLCBQbGF0Zm9ybToibGludXgvYW1kNjQifQo=",
-              "date": "Mon Apr 26 2021 14:45:10 GMT+0000 (UTC)"
-            },
-            "email-address": "support@weave.works"
-          }
-      labels:
-        name: weave-net
-      namespace: kube-system
-    rules:
-      - apiGroups:
-          - ''
-        resourceNames:
-          - weave-net
-        resources:
-          - configmaps
-        verbs:
-          - get
-          - update
-      - apiGroups:
-          - ''
-        resources:
-          - configmaps
-        verbs:
-          - create
-  - apiVersion: rbac.authorization.k8s.io/v1
-    kind: RoleBinding
-    metadata:
-      name: weave-net
-      annotations:
-        cloud.weave.works/launcher-info: |-
-          {
-            "original-request": {
-              "url": "/k8s/v1.16/net.yaml?k8s-version=Q2xpZW50IFZlcnNpb246IHZlcnNpb24uSW5mb3tNYWpvcjoiMSIsIE1pbm9yOiIyMSIsIEdpdFZlcnNpb246InYxLjIxLjAiLCBHaXRDb21taXQ6ImNiMzAzZTYxM2ExMjFhMjkzNjRmNzVjYzY3ZDNkNTgwODMzYTc0NzkiLCBHaXRUcmVlU3RhdGU6ImNsZWFuIiwgQnVpbGREYXRlOiIyMDIxLTA0LTA4VDE2OjMxOjIxWiIsIEdvVmVyc2lvbjoiZ28xLjE2LjEiLCBDb21waWxlcjoiZ2MiLCBQbGF0Zm9ybToibGludXgvYW1kNjQifQo=",
-              "date": "Mon Apr 26 2021 14:45:10 GMT+0000 (UTC)"
-            },
-            "email-address": "support@weave.works"
-          }
-      labels:
-        name: weave-net
-      namespace: kube-system
-    roleRef:
-      kind: Role
-      name: weave-net
-      apiGroup: rbac.authorization.k8s.io
-    subjects:
-      - kind: ServiceAccount
-        name: weave-net
-        namespace: kube-system
-  - apiVersion: apps/v1
-    kind: DaemonSet
-    metadata:
-      name: weave-net
-      annotations:
-        cloud.weave.works/launcher-info: |-
-          {
-            "original-request": {
-              "url": "/k8s/v1.16/net.yaml?k8s-version=Q2xpZW50IFZlcnNpb246IHZlcnNpb24uSW5mb3tNYWpvcjoiMSIsIE1pbm9yOiIyMSIsIEdpdFZlcnNpb246InYxLjIxLjAiLCBHaXRDb21taXQ6ImNiMzAzZTYxM2ExMjFhMjkzNjRmNzVjYzY3ZDNkNTgwODMzYTc0NzkiLCBHaXRUcmVlU3RhdGU6ImNsZWFuIiwgQnVpbGREYXRlOiIyMDIxLTA0LTA4VDE2OjMxOjIxWiIsIEdvVmVyc2lvbjoiZ28xLjE2LjEiLCBDb21waWxlcjoiZ2MiLCBQbGF0Zm9ybToibGludXgvYW1kNjQifQo=",
-              "date": "Mon Apr 26 2021 14:45:10 GMT+0000 (UTC)"
-            },
-            "email-address": "support@weave.works"
-          }
-      labels:
-        name: weave-net
-      namespace: kube-system
-    spec:
-      minReadySeconds: 5
-      selector:
-        matchLabels:
-          name: weave-net
-      template:
-        metadata:
-          labels:
-            name: weave-net
-        spec:
-          containers:
-            - name: weave
-              command:
-                - /home/weave/launch.sh
-              env:
-                - name: HOSTNAME
-                  valueFrom:
-                    fieldRef:
-                      apiVersion: v1
-                      fieldPath: spec.nodeName
-                - name: INIT_CONTAINER
-                  value: 'true'
-              image: 'docker.io/weaveworks/weave-kube:2.8.1'
-              readinessProbe:
-                httpGet:
-                  host: 127.0.0.1
-                  path: /status
-                  port: 6784
-              resources:
-                requests:
-                  cpu: 50m
-                  memory: 100Mi
-              securityContext:
-                privileged: true
-              volumeMounts:
-                - name: weavedb
-                  mountPath: /weavedb
-                - name: dbus
-                  mountPath: /host/var/lib/dbus
-                - name: machine-id
-                  mountPath: /host/etc/machine-id
-                  readOnly: true
-                - name: xtables-lock
-                  mountPath: /run/xtables.lock
-            - name: weave-npc
-              env:
-                - name: HOSTNAME
-                  valueFrom:
-                    fieldRef:
-                      apiVersion: v1
-                      fieldPath: spec.nodeName
-              image: 'docker.io/weaveworks/weave-npc:2.8.1'
-              resources:
-                requests:
-                  cpu: 50m
-                  memory: 100Mi
-              securityContext:
-                privileged: true
-              volumeMounts:
-                - name: xtables-lock
-                  mountPath: /run/xtables.lock
-          dnsPolicy: ClusterFirstWithHostNet
-          hostNetwork: true
-          initContainers:
-            - name: weave-init
-              command:
-                - /home/weave/init.sh
-              image: 'docker.io/weaveworks/weave-kube:2.8.1'
-              securityContext:
-                privileged: true
-              volumeMounts:
-                - name: cni-bin
-                  mountPath: /host/opt
-                - name: cni-bin2
-                  mountPath: /host/home
-                - name: cni-conf
-                  mountPath: /host/etc
-                - name: lib-modules
-                  mountPath: /lib/modules
-                - name: xtables-lock
-                  mountPath: /run/xtables.lock
-          priorityClassName: system-node-critical
-          restartPolicy: Always
-          securityContext:
-            seLinuxOptions: {}
-          serviceAccountName: weave-net
-          tolerations:
-            - effect: NoSchedule
-              operator: Exists
-            - effect: NoExecute
-              operator: Exists
-          volumes:
-            - name: weavedb
-              hostPath:
-                path: /var/lib/weave
-            - name: cni-bin
-              hostPath:
-                path: /opt
-            - name: cni-bin2
-              hostPath:
-                path: /home
-            - name: cni-conf
-              hostPath:
-                path: /etc
-            - name: dbus
-              hostPath:
-                path: /var/lib/dbus
-            - name: lib-modules
-              hostPath:
-                path: /lib/modules
-            - name: machine-id
-              hostPath:
-                path: /etc/machine-id
-                type: FileOrCreate
-            - name: xtables-lock
-              hostPath:
-                path: /run/xtables.lock
-                type: FileOrCreate
-      updateStrategy:
-        type: RollingUpdate
-```
-
-```
+# https://cloud.weave.works/k8s/net?k8s-version=Q2xpZW50IFZlcnNpb246IHZlcnNpb24uSW5mb3tNYWpvcjoiMSIsIE1pbm9yOiIyMSIsIEdpdFZlcnNpb246InYxLjIxLjAiLCBHaXRDb21taXQ6ImNiMzAzZTYxM2ExMjFhMjkzNjRmNzVjYzY3ZDNkNTgwODMzYTc0NzkiLCBHaXRUcmVlU3RhdGU6ImNsZWFuIiwgQnVpbGREYXRlOiIyMDIxLTA0LTA4VDE2OjMxOjIxWiIsIEdvVmVyc2lvbjoiZ28xLjE2LjEiLCBDb21waWxlcjoiZ2MiLCBQbGF0Zm9ybToibGludXgvYW1kNjQifQo=
 [root@vultr ~]# kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n')"
 serviceaccount/weave-net created
 clusterrole.rbac.authorization.k8s.io/weave-net created
@@ -902,6 +629,148 @@ worker-aimpugn   Ready    <none>                 104s   v1.21.0
 ### [Kubernetes Networking](https://github.com/coreos/coreos-kubernetes/blob/master/Documentation/kubernetes-networking.md)
 
 ### [Cluster Networking](https://kubernetes.io/docs/concepts/cluster-administration/networking/)
+
+# [Ansible](https://www.ansible.com/)
+
+## Ansible 개요
+
+- 자동화 엔진
+  - [클라우드 프로비저닝](https://www.ansible.com/provisioning?hsLang=en-us)
+    - [프로비저닝이란?](https://www.redhat.com/ko/topics/automation/what-is-provisioning)
+  - [구성 관리](https://www.ansible.com/use-cases/configuration-managements)
+  - [애플리케이션 배포](https://www.ansible.com/application-deployment?hsLang=en-us)
+  - [인트라 서비스 오케스트레이션](https://www.ansible.com/orchestration?hsLang=en-us)
+- agent 사용하지 않으며, 추가적인 custom security infrastructure 불필요
+- [`Ansible Playbooks`에서 `YAML` 사용](https://docs.ansible.com/)
+- 효과적인 아키텍처
+  - 노드에 연결하여 `Ansible modules`라 불리는 작은 프로그램을 push하는 방식으로 작동
+  - `Ansible modules`는 원하는 상태의 시스템의 리소스 모델이 되도록 작성
+  - 모듈의 라이브러리는 어떤 머신에든 있을 수 있고, 서버, 데몬, 데이터베이스가 필요 없다
+- 인벤토리를 간단한 텍스트 파일로 관리
+  - 그룹으로 관리되는 머신들의 정보를 갖는 ini 파일을 사용
+
+## [Ansible 설치 on CentOS](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html#installing-ansible-on-rhel-centos-or-fedora)
+
+```
+# yum install ansible
+
+# ansible --version
+ansible 2.9.20
+  config file = /etc/ansible/ansible.cfg
+  configured module search path = ['/root/.ansible/plugins/modules', '/usr/share/ansible/plugins/modules']
+  ansible python module location = /usr/lib/python3.6/site-packages/ansible
+  executable location = /usr/bin/ansible
+  python version = 3.6.8 (default, Aug 24 2020, 17:57:11) [GCC 8.3.1 20191121 (Red Hat 8.3.1-5)]
+```
+
+## [Ansible command sheel completion](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html#adding-ansible-command-shell-completion)
+
+```
+yum install python3-argcomplete
+```
+
+## [`hosts` 설정](https://docs.ansible.com/ansible/latest/user_guide/intro_inventory.html#inventory-basics-formats-hosts-and-groups)
+
+```ini
+# /etc/ansible/hosts
+# - 빈 라인은 무시된다
+# - 호스트 그룹은 `[header]` 엘리먼트로 구별된다
+# - `hostname` 또는 `ip` 입력 가능
+# - `hostname` 또는 `ip`는 여러 그룹의 멤버가 될 수 있다
+
+# 그룹 없는 호스트들은 그룹 헤더 앞에 위치
+## green.example.com
+## blue.example.com
+## 192.168.100.1
+## 192.168.100.10
+
+## [webservers] # `webservers` 그룹에 속한 호스트
+## alpha.example.org http_port=80 maxRequestsPerChild=808
+## beta.example.org
+## 192.168.1.100
+## 192.168.1.110
+
+## www[001:006].example.com 패턴 있는 여러 호스트의 경우
+
+## [dbservers] `dbservers` 그룹에 속한 데이터베이스 서버들
+## db01.intranet.mydomain.net
+## db02.intranet.mydomain.net
+## 10.25.1.56
+## db-[99:101]-node.example.com
+master.com
+
+[webservers]
+worker.domain.com
+```
+
+- ini 설정은 아래와 같이 yaml 설정으로 바꿔 쓸 수 있다
+
+```yaml
+all:
+  hosts:
+    green.example.com:
+    blue.example.com:
+    192.168.100.1:
+    192.168.100.10:
+  children:
+    webservers:
+      hosts:
+        alpha.example.org:
+          http_port: 80
+          maxRequestsPerChild: 808
+        beta.example.org:
+        192.168.1.100:
+        192.168.1.110:
+    dbservers:
+      hosts:
+        db01.intranet.mydomain.net:
+        db02.intranet.mydomain.net:
+        10.25.1.56:
+        db-[99:101]-node.example.com:
+```
+
+# Helm charts
+
+## Helm charts 개요
+
+- 쿠버네티스 위한 패키지 매니저이며, `chart`라는 패키징 포맷 사용
+  - [`chart`](https://helm.sh/docs/topics/charts/)? 관련된 쿠버네티스 리소스 집합을 기술하는 파일의 모음
+- 쉽게 애플리케이션을 패키징, 구성 및 배포할 수 있도록 개발자와 SRE를 돕는다
+
+## [Helm charts 설치](https://helm.sh/docs/intro/install/)
+
+- 설치 스크립트 사용
+
+```
+# curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3
+# chmod 700 get_helm.sh
+# ./get_helm.sh
+Downloading https://get.helm.sh/helm-v3.5.4-linux-amd64.tar.gz
+Verifying checksum... Done.
+Preparing to install helm into /usr/local/bin
+helm installed into /usr/local/bin/helm
+```
+
+- Helm Chart Repository 추가
+
+```
+# helm repo add stable https://charts.helm.sh/stable
+"stable" has been added to your repositories
+```
+
+- [QuickStart Guide](https://helm.sh/docs/intro/quickstart/) 있지만, [RBAC](https://kubernetes.io/docs/reference/access-authn-authz/rbac/) 인증 기반일 경우 `ServiceAccount` 역할 사용
+  - [역할 기반 접근 제어 설정](https://kubernetes.io/docs/reference/access-authn-authz/rbac/#service-account-permissions) 참조
+  - 검색해보면 `helm2`에서는 `Tiller`가 있지만, `helm3`에서는 없는데, [쿠버네티스 1.6부터 `RBAC`가 기본 활성화 되므로, 더이상 필요 없게 됐다](https://itnext.io/helm2-vs-helm3-part-1-c76c29106e99)
+- `RBAC`가 기본 활성화되는데...
+  - [역할 기반 접근 제어로 활성화](https://gardener.cloud/documentation/guides/client_tools/helm/)
+  - [Helm Tutorial: How To Install and Configure Helm](https://devopscube.com/install-configure-helm-kubernetes/)
+- [`Ingress-nginx`](https://github.com/kubernetes/ingress-nginx) [설치](https://github.com/kubernetes/ingress-nginx/tree/master/charts/ingress-nginx)
+  - [Installation Guide](https://kubernetes.github.io/ingress-nginx/deploy/)
+
+```
+helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+helm repo update
+```
 
 # gitlab 설치(Cent OS 7)
 
