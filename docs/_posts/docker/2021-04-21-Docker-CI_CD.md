@@ -66,13 +66,17 @@ tag: [docker, ci/cd]
 - [Helm charts](#helm-charts)
   - [Helm charts 개요](#helm-charts-개요)
   - [Helm charts 설치](#helm-charts-설치)
-- [gitlab 설치(Cent OS 7)](#gitlab-설치cent-os-7)
-  - [1. 필요 dependencies 설치 및 구성](#1-필요-dependencies-설치-및-구성)
-  - [2. Gitlab 패키지 리파지토리 추가 및 패키지 설치](#2-gitlab-패키지-리파지토리-추가-및-패키지-설치)
-    - [script.rpm.sh](#scriptrpmsh)
-    - [config_file.repo](#config_filerepo)
-    - [구성 설정 파일로 설치](#구성-설정-파일로-설치)
-  - [3. GitLab Docker images](#3-gitlab-docker-images)
+- [GitLab](#gitlab)
+  - [GitLab 개요](#gitlab-개요)
+  - [Helm Chart 사용하여 설치](#helm-chart-사용하여-설치)
+    - [Helm Chart 사용하여 설치 - 준비](#helm-chart-사용하여-설치---준비)
+    - [Helm Chart 사용하여 설치 - 배포](#helm-chart-사용하여-설치---배포)
+      - [Secrets](#secrets)
+      - [Networking and DNS](#networking-and-dns)
+        - [Dynamic IPs with external-dns](#dynamic-ips-with-external-dns)
+        - [Static IP](#static-ip)
+      - [TLS certificates](#tls-certificates)
+      - [PostgreSQL](#postgresql)
 - [참조](#참조)
 
 # 서버 설정
@@ -766,120 +770,139 @@ helm installed into /usr/local/bin/helm
   - [Helm Tutorial: How To Install and Configure Helm](https://devopscube.com/install-configure-helm-kubernetes/)
 - [`Ingress-nginx`](https://github.com/kubernetes/ingress-nginx) [설치](https://github.com/kubernetes/ingress-nginx/tree/master/charts/ingress-nginx)
   - [Installation Guide](https://kubernetes.github.io/ingress-nginx/deploy/)
+  - [Install Chart](https://github.com/kubernetes/ingress-nginx/tree/master/charts/ingress-nginx)
 
 ```
-helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
-helm repo update
+# helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+# helm repo update
+# helm install ingress-nginx ingress-nginx/ingress-nginx
+NAME: ingress-nginx
+LAST DEPLOYED: Wed Apr 28 23:55:09 2021
+NAMESPACE: default
+STATUS: deployed
+REVISION: 1
+TEST SUITE: None
+NOTES:
+The ingress-nginx controller has been installed.
+It may take a few minutes for the LoadBalancer IP to be available.
+You can watch the status by running 'kubectl --namespace default get services -o wide -w ingress-nginx-controller'
+
+An example Ingress that makes use of the controller:
+
+  apiVersion: networking.k8s.io/v1beta1
+  kind: Ingress
+  metadata:
+    annotations:
+      kubernetes.io/ingress.class: nginx
+    name: example
+    namespace: foo
+  spec:
+    rules:
+      - host: www.example.com
+        http:
+          paths:
+            - backend:
+                serviceName: exampleService
+                servicePort: 80
+              path: /
+    # This section is only required if TLS is to be enabled for the Ingress
+    tls:
+        - hosts:
+            - www.example.com
+          secretName: example-tls
+
+If TLS is enabled for the Ingress, a Secret containing the certificate and key must also be provided:
+
+  apiVersion: v1
+  kind: Secret
+  metadata:
+    name: example-tls
+    namespace: foo
+  data:
+    tls.crt: <base64 encoded cert>
+    tls.key: <base64 encoded key>
+  type: kubernetes.io/tls
 ```
 
-# gitlab 설치(Cent OS 7)
-
-## 1. 필요 dependencies 설치 및 구성
-
-- 방화벽에 HTTP, HTTPS, SSH 접근 허용. 이미 되어 있다면 불필요.
-
-```bash
-sudo yum install -y curl policycoreutils-python openssh-server perl
-sudo systemctl enable sshd
-sudo systemctl start sshd
-sudo firewall-cmd --permanent --add-service=http
-sudo firewall-cmd --permanent --add-service=https
-sudo systemctl reload firewalld
-```
-
-- 알림 이메일 전송 위한 Postfix 설치. 이메일 전송에 다른 솔루션 사용하고 싶다면 스킵하고 외부 SMTP 서버 설정.
-
-```bash
-sudo yum install postfix
-sudo systemctl enable postfix
-sudo systemctl start postfix
-```
-
-## 2. Gitlab 패키지 리파지토리 추가 및 패키지 설치
+- 실행 상태 확인
 
 ```
-curl https://packages.gitlab.com/install/repositories/gitlab/gitlab-ee/script.rpm.sh | sudo bash
+# kubectl --namespace default get services -o wide -w ingress-nginx-controller
+NAME                       TYPE           CLUSTER-IP      EXTERNAL-IP   PORT(S)                      AGE   SELECTOR
+ingress-nginx-controller   LoadBalancer   10.110.64.189   <pending>     80:30687/TCP,443:32008/TCP   45s   app.kubernetes.io/component=controller,app.kubernetes.io/instance=ingress-nginx,app.kubernetes.io/name=ingress-nginx
 ```
 
-### script.rpm.sh
+# GitLab
 
-- detect_os() 함수에서 현재 os명(centos, poky, opensuse, fedora 등)과 dist 버전 판별
-- 설정 스크립트를 가져올 url 결정하여 구성 파일 가져와서 `yum_repo_path=/etc/yum.repos.d/gitlab_gitlab-ee.repo`에 저장
+## GitLab 개요
 
-```bash
-https://packages.gitlab.com/install/repositories/gitlab/gitlab-ee/config_file.repo?os={$os}&dist={$dist}&source=script
-https://packages.gitlab.com/install/repositories/gitlab/gitlab-ee/config_file.repo?os=centos&dist=8&source=script
+- 오픈소스 DevOps 플랫폼
+- [CI/CD pipelines](https://docs.gitlab.com/ee/ci/pipelines/)?
+  - [지속적인 통합, 제공(delivery), 배포(deployment)](https://www.redhat.com/ko/topics/devops/what-is-ci-cd)
+    - `통합`: 애플리케이션에 대한 새로운 코드 변경 사항이 정기적으로 빌드 및 테스트되어 공유 리포지토리에 통합
+    - `제공`: 애플리케이션에 적용한 변경 사항이 버그 테스트를 거쳐 리포지토리에 자동으로 업로드되는 것
+    - `배포`: 개발자의 변경 사항을 리포지토리에서 고객이 사용 가능한 프로덕션 환경까지 자동으로 릴리스하는 것
+  - [Mastering continuous software development](https://about.gitlab.com/webcast/mastering-ci-cd/)
+
+## [Helm Chart 사용하여 설치](https://docs.gitlab.com/charts/)
+
+- [Architecture of Cloud native GitLab Helm charts](https://docs.gitlab.com/charts/architecture/index.html)
+- [GitLab Kubernetes Integration](https://docs.gitlab.com/ee/user/project/clusters/) 사용하기 위해 GitLab이 Kubernetes에 설치될 필요는 없다
+- *non-production*(실서비스)가 아닌, PoC(Proof of Concept) 위한 [Quick Start Guide](https://docs.gitlab.com/charts/quickstart/index.html) 제공하지만, 프로덕션 레벨의 지속적인 부하 하에서 이 chart를 배포하려면, [Installation guide](https://docs.gitlab.com/charts/#installation) 절차를 따라야 한다
+
+### [Helm Chart 사용하여 설치 - 준비](https://docs.gitlab.com/charts/installation/index.html)
+
+- 필수
+  - `kubectl` 1.13 또는 그 이상
+  - `helm` 3.2.0 또는 그 이상
+  - 8vCPU와 30GB RAM 추천(흠...)
+- 환경 설정
+  - Tools: `helm`과 `kubectl`
+
+### [Helm Chart 사용하여 설치 - 배포](https://docs.gitlab.com/charts/installation/deployment.html)
+
+#### Secrets
+
+- 기본적으로 자동 생성된다
+- 직접 설정하고 싶다면 [secrets guide](https://docs.gitlab.com/charts/installation/secrets.html) 참조
+
+#### Networking and DNS
+
+- 기본적으로 이 차트는 `type: LoadBalancer`의 쿠버네티스 `Service` 오브젝트에 의존
+- `Ingress` 오브젝트로 설정된 이름 기반(name-based) 가상 서버를 사용하여 GitLab 서비스를 노출(expose) 시킨다
+- `gitlab`, `registry`, `minio`(활성화 됐다면)를 적절한 IP로 resolve하기 위해 레코드를 포함할 도메인 지정 필요
+
+```
+--set global.hosts.domain=aimpugn.me
 ```
 
-### config_file.repo
+##### Dynamic IPs with external-dns
 
-```ini
-[gitlab_gitlab-ee]
-name=gitlab_gitlab-ee
-baseurl=https://packages.gitlab.com/gitlab/gitlab-ee/el/8/$basearch
-repo_gpgcheck=1
-gpgcheck=1
-enabled=1
-gpgkey=https://packages.gitlab.com/gitlab/gitlab-ee/gpgkey
-       https://packages.gitlab.com/gitlab/gitlab-ee/gpgkey/gitlab-gitlab-ee-3D645A26AB9FBD22.pub.gpg
-sslverify=1
-sslcacert=/etc/pki/tls/certs/ca-bundle.crt
-metadata_expire=300
+- [external-dns](https://github.com/kubernetes-sigs/external-dns) 같은 자동 DNS 등록 서비스 사용할 예정인 경우, GitLab에 추가적인 설정은 필요 없지만, 클러스터에 배포할 필요는 있다
 
-[gitlab_gitlab-ee-source]
-name=gitlab_gitlab-ee-source
-baseurl=https://packages.gitlab.com/gitlab/gitlab-ee/el/8/SRPMS
-repo_gpgcheck=1
-gpgcheck=1
-enabled=1
-gpgkey=https://packages.gitlab.com/gitlab/gitlab-ee/gpgkey
-       https://packages.gitlab.com/gitlab/gitlab-ee/gpgkey/gitlab-gitlab-ee-3D645A26AB9FBD22.pub.gpg
-sslverify=1
-sslcacert=/etc/pki/tls/certs/ca-bundle.crt
-metadata_expire=300
+##### Static IP
+
+- 정적인 IP를 바라보게 할 경우
+
+#### TLS certificates
+
+- 기본적으로 [`cert-manager`](https://github.com/jetstack/cert-manager) 설치하고 설정
+- 와일드카드 인증서 갖고 있거나, 이미 cert-manager가 설치되어 있거나, 또는 다른 방식으로 TLS 인증성을 얻었다면, [TLS options](https://docs.gitlab.com/charts/installation/tls.html) 확인
+
+```
+--set certmanager-issuer.email=aimpugn@gmail.com
 ```
 
-### 구성 설정 파일로 설치
+#### PostgreSQL
 
-```bash
-finalize_yum_repo ()
-{
-  if [ "$_skip_pygpgme" = 0 ]; then
-    echo "Installing pygpgme to verify GPG signatures..."
-    yum install -y pygpgme --disablerepo='gitlab_gitlab-ee'
-    pypgpme_check=`rpm -qa | grep -qw pygpgme`
-    if [ "$?" != "0" ]; then
-      echo
-      echo "WARNING: "
-      echo "The pygpgme package could not be installed. This means GPG verification is not possible for any RPM installed on your system. "
-      echo "To fix this, add a repository with pygpgme. Usualy, the EPEL repository for your system will have this. "
-      echo "More information: https://fedoraproject.org/wiki/EPEL#How_can_I_use_these_extra_packages.3F"
-      echo
+- 기본적으로 in-cluster PostgreSQL 제공하지만, 테스트 목적일 뿐이다
+- [helm으로 설치](https://artifacthub.io/packages/helm/bitnami/postgresql)
 
-      # set the repo_gpgcheck option to 0
-      sed -i'' 's/repo_gpgcheck=1/repo_gpgcheck=0/' /etc/yum.repos.d/gitlab_gitlab-ee.repo
-    fi
-  fi
-
-  echo "Installing yum-utils..."
-  yum install -y yum-utils --disablerepo='gitlab_gitlab-ee'
-  yum_utils_check=`rpm -qa | grep -qw yum-utils`
-  if [ "$?" != "0" ]; then
-    echo
-    echo "WARNING: "
-    echo "The yum-utils package could not be installed. This means you may not be able to install source RPMs or use other yum features."
-    echo
-  fi
-
-  echo "Generating yum cache for gitlab_gitlab-ee..."
-  yum -q makecache -y --disablerepo='*' --enablerepo='gitlab_gitlab-ee'
-
-  echo "Generating yum cache for gitlab_gitlab-ee-source..."
-  yum -q makecache -y --disablerepo='*' --enablerepo='gitlab_gitlab-ee-source'
-}
 ```
+# helm repo add bitnami https://charts.bitnami.com/bitnami
+# helm install postgres bitnami/postgresql
 
-## 3. [GitLab Docker images](https://docs.gitlab.com/omnibus/docker/)
+```
 
 # 참조
 
