@@ -77,6 +77,7 @@ tag: [docker, ci/cd]
         - [Static IP](#static-ip)
       - [TLS certificates](#tls-certificates)
       - [PostgreSQL](#postgresql)
+        - [옵션 확인](#옵션-확인)
 - [참조](#참조)
 
 # 서버 설정
@@ -900,8 +901,15 @@ ingress-nginx-controller   LoadBalancer   10.110.64.189   <pending>     80:30687
 
 ```
 # helm repo add bitnami https://charts.bitnami.com/bitnami
-# helm install postgres bitnami/postgresql
+```
 
+##### 옵션 확인
+
+```
+helm install my-release \
+  --set postgresqlPassword=<PASSWORD> \
+        postgresqlDatabase=gitlabhq_production \
+    bitnami/postgresql
 ```
 
 # 참조
