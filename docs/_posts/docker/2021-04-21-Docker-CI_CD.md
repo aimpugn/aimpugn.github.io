@@ -68,16 +68,10 @@ tag: [docker, ci/cd]
   - [Helm charts 설치](#helm-charts-설치)
 - [GitLab](#gitlab)
   - [GitLab 개요](#gitlab-개요)
-  - [Helm Chart 사용하여 설치](#helm-chart-사용하여-설치)
-    - [Helm Chart 사용하여 설치 - 준비](#helm-chart-사용하여-설치---준비)
-    - [Helm Chart 사용하여 설치 - 배포](#helm-chart-사용하여-설치---배포)
-      - [Secrets](#secrets)
-      - [Networking and DNS](#networking-and-dns)
-        - [Dynamic IPs with external-dns](#dynamic-ips-with-external-dns)
-        - [Static IP](#static-ip)
-      - [TLS certificates](#tls-certificates)
-      - [PostgreSQL](#postgresql)
-        - [옵션 확인](#옵션-확인)
+  - [GitLab 리눅스 패키지로 설치](#gitlab-리눅스-패키지로-설치)
+    - [GitLab 리눅스 패키지로 설치 시 요구 사항](#gitlab-리눅스-패키지로-설치-시-요구-사항)
+      - [OS](#os)
+      - [소프트웨어 - Ruby](#소프트웨어---ruby)
 - [참조](#참조)
 
 # 서버 설정
@@ -845,72 +839,41 @@ ingress-nginx-controller   LoadBalancer   10.110.64.189   <pending>     80:30687
     - `배포`: 개발자의 변경 사항을 리포지토리에서 고객이 사용 가능한 프로덕션 환경까지 자동으로 릴리스하는 것
   - [Mastering continuous software development](https://about.gitlab.com/webcast/mastering-ci-cd/)
 
-## [Helm Chart 사용하여 설치](https://docs.gitlab.com/charts/)
+## [GitLab 리눅스 패키지로 설치](https://docs.gitlab.com/omnibus/installation/)
 
-- [Architecture of Cloud native GitLab Helm charts](https://docs.gitlab.com/charts/architecture/index.html)
-- [GitLab Kubernetes Integration](https://docs.gitlab.com/ee/user/project/clusters/) 사용하기 위해 GitLab이 Kubernetes에 설치될 필요는 없다
-- *non-production*(실서비스)가 아닌, PoC(Proof of Concept) 위한 [Quick Start Guide](https://docs.gitlab.com/charts/quickstart/index.html) 제공하지만, 프로덕션 레벨의 지속적인 부하 하에서 이 chart를 배포하려면, [Installation guide](https://docs.gitlab.com/charts/#installation) 절차를 따라야 한다
+- [helm 차트로 설치 시 트레이드 오프](https://docs.gitlab.com/ee/install/#choose-the-installation-method)를 고려하여 패키지 설치로 변경
 
-### [Helm Chart 사용하여 설치 - 준비](https://docs.gitlab.com/charts/installation/index.html)
+### [GitLab 리눅스 패키지로 설치 시 요구 사항](https://docs.gitlab.com/ee/install/requirements.html)
 
-- 필수
-  - `kubectl` 1.13 또는 그 이상
-  - `helm` 3.2.0 또는 그 이상
-  - 8vCPU와 30GB RAM 추천(흠...)
-- 환경 설정
-  - Tools: `helm`과 `kubectl`
+#### OS
 
-### [Helm Chart 사용하여 설치 - 배포](https://docs.gitlab.com/charts/installation/deployment.html)
+- CentOS8
 
-#### Secrets
+#### [소프트웨어 - Ruby](https://www.tecmint.com/install-ruby-on-centos-rhel-8/)
 
-- 기본적으로 자동 생성된다
-- 직접 설정하고 싶다면 [secrets guide](https://docs.gitlab.com/charts/installation/secrets.html) 참조
+- Ruby 2.7 이상
 
-#### Networking and DNS
+```bash
+dnf install gnupg2 curl tar
+dnf install @ruby
 
-- 기본적으로 이 차트는 `type: LoadBalancer`의 쿠버네티스 `Service` 오브젝트에 의존
-- `Ingress` 오브젝트로 설정된 이름 기반(name-based) 가상 서버를 사용하여 GitLab 서비스를 노출(expose) 시킨다
-- `gitlab`, `registry`, `minio`(활성화 됐다면)를 적절한 IP로 resolve하기 위해 레코드를 포함할 도메인 지정 필요
+curl -sSL https://get.rvm.io | bash
 
-```
---set global.hosts.domain=aimpugn.me
-```
+usermod -aG rvm aimpugn # rvm 그룹에 사용자 추가
 
-##### Dynamic IPs with external-dns
+source /etc/profile.d/rvm.sh # 시스템 환경 변수 업데이트
 
-- [external-dns](https://github.com/kubernetes-sigs/external-dns) 같은 자동 DNS 등록 서비스 사용할 예정인 경우, GitLab에 추가적인 설정은 필요 없지만, 클러스터에 배포할 필요는 있다
+rvm reload
 
-##### Static IP
+rvm requirements # 패키지 요구 사항 설치
 
-- 정적인 IP를 바라보게 할 경우
+rvm list known # 설치 끝나면 설치 가능한 Ruby 버전들 확인 가능
 
-#### TLS certificates
-
-- 기본적으로 [`cert-manager`](https://github.com/jetstack/cert-manager) 설치하고 설정
-- 와일드카드 인증서 갖고 있거나, 이미 cert-manager가 설치되어 있거나, 또는 다른 방식으로 TLS 인증성을 얻었다면, [TLS options](https://docs.gitlab.com/charts/installation/tls.html) 확인
-
-```
---set certmanager-issuer.email=aimpugn@gmail.com
+rvm install ruby 2.7.3 # 3.0.1도 있지만, 최신 버전이라 호환이 안 될 수도 있으니 2.7.3 설치
 ```
 
-#### PostgreSQL
-
-- 기본적으로 in-cluster PostgreSQL 제공하지만, 테스트 목적일 뿐이다
-- [helm으로 설치](https://artifacthub.io/packages/helm/bitnami/postgresql)
-
-```
-# helm repo add bitnami https://charts.bitnami.com/bitnami
-```
-
-##### 옵션 확인
-
-```
-helm install my-release \
-  --set postgresqlPassword=<PASSWORD> \
-        postgresqlDatabase=gitlabhq_production \
-    bitnami/postgresql
-```
+- 설치하다 실패. 서버 CPU 사용량이 95%까지 오르더니 멈췄다.
+  - 2 cpu + 4GB mem $\to$ 4 cpu + 8GM mem 으로... 업그레이드...
 
 # 참조
 
