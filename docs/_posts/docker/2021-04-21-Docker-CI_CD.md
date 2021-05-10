@@ -71,7 +71,15 @@ tag: [docker, ci/cd]
   - [GitLab 리눅스 패키지로 설치](#gitlab-리눅스-패키지로-설치)
     - [GitLab 리눅스 패키지로 설치 시 요구 사항](#gitlab-리눅스-패키지로-설치-시-요구-사항)
       - [OS](#os)
+      - [소프트웨어 - Git](#소프트웨어---git)
+      - [소프트웨어 - GraphicsMagick](#소프트웨어---graphicsmagick)
+      - [소프트웨어 - Mail server](#소프트웨어---mail-server)
+      - [소프트웨어 - Exiftool](#소프트웨어---exiftool)
       - [소프트웨어 - Ruby](#소프트웨어---ruby)
+      - [소프트웨어 - Go](#소프트웨어---go)
+      - [소프트웨어 - Node](#소프트웨어---node)
+      - [System users](#system-users)
+      - [postgresql](#postgresql)
 - [참조](#참조)
 
 # 서버 설정
@@ -849,6 +857,46 @@ ingress-nginx-controller   LoadBalancer   10.110.64.189   <pending>     80:30687
 
 - CentOS8
 
+#### [소프트웨어 - Git](https://www.programmersought.com/article/33738258266/)
+
+- [.28 이상 추천](https://gitlab.com/gitlab-org/gitaly/-/issues/2959)
+- [`gitaly` 설치](https://gitlab.com/gitlab-org/gitaly)
+- 버전은 stable 버전에서 최신 버전 선택
+
+```bash
+git clone https://gitlab.com/gitlab-org/gitaly.git -b 13-11-stable /tmp/gitaly
+cd /tmp/gitaly
+make git GIT_PREFIX=/usr/local
+
+git --version # git version 2.31.1
+```
+
+#### [소프트웨어 - GraphicsMagick](https://docs.gitlab.com/ee/install/installation.html#graphicsmagick)
+
+- [CentOS8에 설치하기](https://serverfault.com/a/1004155)
+
+```bash
+dnf install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm -y
+dnf install GraphicsMagick
+```
+
+#### [소프트웨어 - Mail server](https://docs.gitlab.com/ee/install/installation.html#mail-server)
+
+```
+dnf install postfix
+```
+
+#### [소프트웨어 - Exiftool](https://docs.gitlab.com/ee/install/installation.html#exiftool)
+
+- [GitLab Workhorse](https://gitlab.com/gitlab-org/gitlab/tree/master/workhorse)에서 업로드된 이미지에서 EXIF 데이터 제거하기 위해서 `exiftool` 필요
+- `Workhorse`는?
+  - GitLab 위한 리버스 프록시
+  - 파일 다운로드, 업로드 Git push/pull 그리고 Git archive 같은 큰(large) HTTP 요청을 핸들링
+
+```bash
+dnf install perl-Image-ExifTool
+```
+
 #### [소프트웨어 - Ruby](https://www.tecmint.com/install-ruby-on-centos-rhel-8/)
 
 - Ruby 2.7 이상
@@ -874,6 +922,158 @@ rvm install ruby 2.7.3 # 3.0.1도 있지만, 최신 버전이라 호환이 안 �
 
 - 설치하다 실패. 서버 CPU 사용량이 95%까지 오르더니 멈췄다.
   - 2 cpu + 4GB mem $\to$ 4 cpu + 8GM mem 으로... 업그레이드...
+
+#### [소프트웨어 - Go](https://docs.gitlab.com/ee/install/installation.html#3-go)
+
+- Go는 설치된 상태라 스킵
+
+```bash
+go version
+go version go1.15.5 linux/amd64
+```
+
+#### [소프트웨어 - Node](https://docs.gitlab.com/ee/install/installation.html#4-node)
+
+- 데비안이면 `deb.nodesource.com`, 페도라/CentOS면 `rpm.nodesource.com`
+
+```bash
+curl -sL "https://rpm.nodesource.com/setup_16.x" | bash - # 리파지토리 추가
+
+yum install nodejs # 설치 완료 후 실행
+
+## Run `sudo yum install -y nodejs` to install Node.js 16.x and npm.
+## You may also need development tools to build native addons:
+sudo yum install gcc-c++ make
+## To install the Yarn package manager, run:
+curl -sL https://dl.yarnpkg.com/rpm/yarn.repo | sudo tee /etc/yum.repos.d/yarn.repo
+sudo yum install yarn
+
+node --version # v16.1.0
+```
+
+#### [System users](https://docs.gitlab.com/ee/install/installation.html#5-system-users)
+
+- `adduser --disabled-login --gecos 'GitLab' git`인데, CentOS의 `adduser`에는 `--disabled-login` 옵션이 없다
+- CentOS/Fedora에서 기본적으로 useradd를 사용하면, password 설정 전까지 계정이 disabled 된다. [따라서 password 설정하지 않으면 `--disabled-login`과 같다.](https://serverfault.com/a/514619)
+- `adduser -M --system -c 'GitLab' git`
+  - `-M`: 홈 디렉토리 생성하지 않음
+  - `-c`: `GECOS` 필드 셋업(코멘트)
+  - `--system`: 시스템 계정
+
+```bash
+adduser -M --system -c 'GitLab' git
+```
+
+#### [postgresql](https://docs.gitlab.com/ee/install/installation.html#6-database)
+
+- PostgreSQL 11+ 필요하다
+- [CentOS8에 PostgreSQL 12 설치하기](https://computingforgeeks.com/how-to-install-postgresql-12-on-centos-7/) 참조
+
+```bash
+yum install https://download.postgresql.org/pub/repos/yum/reporpms/EL-8-x86_64/pgdg-redhat-repo-latest.noarch.rpm
+```
+
+- 설치된 패키지 정보 확인
+
+```bash
+rpm -qi pgdg-redhat-repo
+
+Name        : pgdg-redhat-repo
+Version     : 42.0
+Release     : 17
+Architecture: noarch
+Install Date: 2021년 05월 10일 (월) 오후 09시 56분 50초
+Group       : Unspecified
+Size        : 11735
+License     : PostgreSQL
+Signature   : DSA/SHA1, 2021년 05월 05일 (수) 오후 08시 52분 04초, Key ID 1f16d2e1442df0f8
+Source RPM  : pgdg-redhat-repo-42.0-17.src.rpm
+Build Date  : 2021년 05월 05일 (수) 오후 08시 51분 18초
+Build Host  : koji-rhel8-x86-64-pgbuild
+Relocations : (not relocatable)
+Vendor      : PostgreSQL Global Development Group
+URL         : https://yum.postgresql.org
+Summary     : PostgreSQL PGDG RPMs- Yum Repository Configuration for Red Hat / CentOS
+Description :
+This package contains yum configuration for Red Hat Enterprise Linux, CentOS,
+and also the GPG key for PGDG RPMs.
+```
+
+- 내장 PostgreSQL 모듈 비활성화
+
+```bash
+dnf search postgresql12
+dnf -qy module disable postgresql
+```
+
+- postgresql12 설치
+
+```bash
+install postgresql12 postgresql12-server
+```
+
+- db 초기화(메인 구성 파일은 `/var/lib/pgsql/12/data/postgresql.conf`에 위치)
+
+```bash
+/usr/pgsql-12/bin/postgresql-12-setup initdb
+```
+
+- db 서버 시작 및 활성화
+
+```bash
+systemctl enable --now postgresql-12
+```
+
+- postgres 어드민 유저 설정
+
+```bash
+psql -c "ALTER USER postgres WITH PASSWORD '<PASSWORD>'"
+```
+
+- GitLab 위한 데이터베이스 유저 생성
+
+```bash
+sudo -u postgres psql -d template1 -c "CREATE USER git CREATEDB;"
+```
+
+- `pg_trgm` 확장 설치.
+
+```bash
+sudo -u postgres psql -d template1 -c "CREATE EXTENSION IF NOT EXISTS pg_trgm;"
+```
+
+- [`ERROR: could not open extension control file ".../extension/pg_trgm.control": No such file or directory"` 에러 발생 시 `postgresql12-contrib` 설치](https://dba.stackexchange.com/a/165301)
+
+```bash
+dnf install postgresql12-contrib
+```
+
+- `btree-gist` 확장 설치
+
+```bash
+sudo -u postgres psql -d template1 -c "CREATE EXTENSION IF NOT EXISTS btree_gist;"
+```
+
+- GitLab 프로덕션 데이터베이스 생성 및 데이터베이스의 모든 권한을 `git` 사용자에 부여
+
+```bash
+sudo -u postgres psql -d template1 -c "CREATE DATABASE gitlabhq_production OWNER git;"
+```
+
+- `pg_trgm`과 `btree_gist` 확장이 활성화 되어 있는지 확인
+
+```sql
+SELECT name, true AS enabled
+FROM pg_available_extensions
+WHERE name IN ('pg_trgm', 'btree_gist')
+AND installed_version IS NOT NULL;
+
+    name    | enabled
+------------+---------
+ pg_trgm    | t
+ btree_gist | t
+(2 rows)
+```
 
 # 참조
 
