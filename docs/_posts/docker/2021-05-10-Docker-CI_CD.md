@@ -1,7 +1,7 @@
 ---
 title: CI/CD Pipeline
 author: aimpugn
-date: 2021-04-21 23:00:00 +0900
+date: 2021-05-10 20:00:00 +0900
 categories: [docker]
 tag: [docker, ci/cd]
 ---
