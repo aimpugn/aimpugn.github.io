@@ -71,15 +71,18 @@ tag: [docker, ci/cd]
   - [GitLab 리눅스 패키지로 설치](#gitlab-리눅스-패키지로-설치)
     - [GitLab 리눅스 패키지로 설치 시 요구 사항](#gitlab-리눅스-패키지로-설치-시-요구-사항)
       - [OS](#os)
-      - [소프트웨어 - Git](#소프트웨어---git)
-      - [소프트웨어 - GraphicsMagick](#소프트웨어---graphicsmagick)
-      - [소프트웨어 - Mail server](#소프트웨어---mail-server)
-      - [소프트웨어 - Exiftool](#소프트웨어---exiftool)
-      - [소프트웨어 - Ruby](#소프트웨어---ruby)
-      - [소프트웨어 - Go](#소프트웨어---go)
-      - [소프트웨어 - Node](#소프트웨어---node)
+      - [Git](#git)
+      - [GraphicsMagick](#graphicsmagick)
+      - [Mail server](#mail-server)
+      - [Exiftool](#exiftool)
+      - [Ruby](#ruby)
+      - [Go](#go)
+      - [Node](#node)
       - [System users](#system-users)
       - [postgresql](#postgresql)
+        - [설치된 패키지 정보 확인](#설치된-패키지-정보-확인)
+        - [내장 PostgreSQL 모듈 비활성화](#내장-postgresql-모듈-비활성화)
+        - [postgresql12 설치](#postgresql12-설치)
 - [참조](#참조)
 
 # 서버 설정
@@ -857,7 +860,7 @@ ingress-nginx-controller   LoadBalancer   10.110.64.189   <pending>     80:30687
 
 - CentOS8
 
-#### [소프트웨어 - Git](https://www.programmersought.com/article/33738258266/)
+#### [Git](https://www.programmersought.com/article/33738258266/)
 
 - [.28 이상 추천](https://gitlab.com/gitlab-org/gitaly/-/issues/2959)
 - [`gitaly` 설치](https://gitlab.com/gitlab-org/gitaly)
@@ -871,7 +874,7 @@ make git GIT_PREFIX=/usr/local
 git --version # git version 2.31.1
 ```
 
-#### [소프트웨어 - GraphicsMagick](https://docs.gitlab.com/ee/install/installation.html#graphicsmagick)
+#### [GraphicsMagick](https://docs.gitlab.com/ee/install/installation.html#graphicsmagick)
 
 - [CentOS8에 설치하기](https://serverfault.com/a/1004155)
 
@@ -880,13 +883,13 @@ dnf install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.r
 dnf install GraphicsMagick
 ```
 
-#### [소프트웨어 - Mail server](https://docs.gitlab.com/ee/install/installation.html#mail-server)
+#### [Mail server](https://docs.gitlab.com/ee/install/installation.html#mail-server)
 
 ```
 dnf install postfix
 ```
 
-#### [소프트웨어 - Exiftool](https://docs.gitlab.com/ee/install/installation.html#exiftool)
+#### [Exiftool](https://docs.gitlab.com/ee/install/installation.html#exiftool)
 
 - [GitLab Workhorse](https://gitlab.com/gitlab-org/gitlab/tree/master/workhorse)에서 업로드된 이미지에서 EXIF 데이터 제거하기 위해서 `exiftool` 필요
 - `Workhorse`는?
@@ -897,7 +900,7 @@ dnf install postfix
 dnf install perl-Image-ExifTool
 ```
 
-#### [소프트웨어 - Ruby](https://www.tecmint.com/install-ruby-on-centos-rhel-8/)
+#### [Ruby](https://www.tecmint.com/install-ruby-on-centos-rhel-8/)
 
 - Ruby 2.7 이상
 
@@ -923,7 +926,7 @@ rvm install ruby 2.7.3 # 3.0.1도 있지만, 최신 버전이라 호환이 안 �
 - 설치하다 실패. 서버 CPU 사용량이 95%까지 오르더니 멈췄다.
   - 2 cpu + 4GB mem $\to$ 4 cpu + 8GM mem 으로... 업그레이드...
 
-#### [소프트웨어 - Go](https://docs.gitlab.com/ee/install/installation.html#3-go)
+#### [Go](https://docs.gitlab.com/ee/install/installation.html#3-go)
 
 - Go는 설치된 상태라 스킵
 
@@ -932,7 +935,7 @@ go version
 go version go1.15.5 linux/amd64
 ```
 
-#### [소프트웨어 - Node](https://docs.gitlab.com/ee/install/installation.html#4-node)
+#### [Node](https://docs.gitlab.com/ee/install/installation.html#4-node)
 
 - 데비안이면 `deb.nodesource.com`, 페도라/CentOS면 `rpm.nodesource.com`
 
@@ -968,12 +971,13 @@ adduser -M --system -c 'GitLab' git
 
 - PostgreSQL 11+ 필요하다
 - [CentOS8에 PostgreSQL 12 설치하기](https://computingforgeeks.com/how-to-install-postgresql-12-on-centos-7/) 참조
+- 13버전은 [How To Install PostgreSQL 13 on CentOS 7](https://computingforgeeks.com/how-to-install-postgresql-13-on-centos-7/) 참조
 
 ```bash
 yum install https://download.postgresql.org/pub/repos/yum/reporpms/EL-8-x86_64/pgdg-redhat-repo-latest.noarch.rpm
 ```
 
-- 설치된 패키지 정보 확인
+##### 설치된 패키지 정보 확인
 
 ```bash
 rpm -qi pgdg-redhat-repo
@@ -999,23 +1003,28 @@ This package contains yum configuration for Red Hat Enterprise Linux, CentOS,
 and also the GPG key for PGDG RPMs.
 ```
 
-- 내장 PostgreSQL 모듈 비활성화
+##### 내장 PostgreSQL 모듈 비활성화
 
 ```bash
 dnf search postgresql12
 dnf -qy module disable postgresql
 ```
 
-- postgresql12 설치
+##### postgresql12 설치
 
 ```bash
-install postgresql12 postgresql12-server
+install postgresql13 postgresql12-server
 ```
 
 - db 초기화(메인 구성 파일은 `/var/lib/pgsql/12/data/postgresql.conf`에 위치)
 
 ```bash
-/usr/pgsql-12/bin/postgresql-12-setup initdb
+# PGDATA 경로 확인
+[root@vultr ~]# systemctl show -p Environment postgresql-12.service
+Environment=PGDATA=/var/lib/pgsql/12/data/ PG_OOM_ADJUST_FILE=/proc/self/oom_score_adj PG_OOM_ADJUST_VALUE=0
+
+[root@vultr downloads]# /usr/pgsql-13/bin/postgresql-13-setup initdb
+Initializing database ... OK
 ```
 
 - db 서버 시작 및 활성화
@@ -1058,6 +1067,19 @@ sudo -u postgres psql -d template1 -c "CREATE EXTENSION IF NOT EXISTS btree_gist
 
 ```bash
 sudo -u postgres psql -d template1 -c "CREATE DATABASE gitlabhq_production OWNER git;"
+```
+
+- [`pg_hba.conf` 파일에서 접근 인증 방식을 `peer`에서 `md5`로 변경](https://gist.github.com/AtulKsol/4470d377b448e56468baef85af7fd614)하고 재시작
+- [스택오버플로 링크](https://stackoverflow.com/a/21889759)
+
+```shell
+$ vi /var/lib/pgsql/12/data/pg_hba.conf
+
+# TYPE DATABASE USER ADDRESS METHOD
+local  all      all          md5
+
+
+$ systemctl restart postgresql-12
 ```
 
 - `pg_trgm`과 `btree_gist` 확장이 활성화 되어 있는지 확인
