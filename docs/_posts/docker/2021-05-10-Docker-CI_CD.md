@@ -1020,7 +1020,7 @@ install postgresql13 postgresql12-server
 
 ```bash
 # PGDATA 경로 확인
-[root@vultr ~]# systemctl show -p Environment postgresql-12.service
+[root@vultr ~]# systemctl show -p Environment postgresql-13.service
 Environment=PGDATA=/var/lib/pgsql/12/data/ PG_OOM_ADJUST_FILE=/proc/self/oom_score_adj PG_OOM_ADJUST_VALUE=0
 
 [root@vultr downloads]# /usr/pgsql-13/bin/postgresql-13-setup initdb
