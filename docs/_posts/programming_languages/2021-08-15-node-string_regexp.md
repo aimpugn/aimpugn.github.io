@@ -18,6 +18,8 @@ categories: [node, string, api]
           - [while문 내에서 RegExp 계속 생성하는 경우](#while문-내에서-regexp-계속-생성하는-경우)
           - [정규표현식 문자열을 while문에 넣으면 무한 루프를 돈다](#정규표현식-문자열을-while문에-넣으면-무한-루프를-돈다)
           - [빈(zero-length) 문자열 매치하는 경우](#빈zero-length-문자열-매치하는-경우)
+  - [기타](#기타)
+    - [참고 링크](#참고-링크)
 
 # 개요
 
@@ -335,3 +337,13 @@ while (matched = regExp2.exec(html)) {
 } 
 */
 ```
+
+## 기타
+
+### 참고 링크
+
+- [RegExp](https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Global_Objects/RegExp)
+- [RegExp: lastIndex](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp/lastIndex)
+- [Regular Expression: Anchors](https://www.javascripttutorial.net/regular-expression-anchors/)
+- <https://stackoverflow.com/a/432503>
+- [Pattern Semantics](https://tc39.es/ecma262/#sec-pattern-semantics)
