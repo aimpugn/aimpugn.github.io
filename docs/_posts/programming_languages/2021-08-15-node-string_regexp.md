@@ -14,6 +14,10 @@ categories: [node, string, api]
       - [단건 가져오기](#단건-가져오기)
       - [여러 건 가져오기](#여러-건-가져오기)
         - [무한 루프 케이스](#무한-루프-케이스)
+          - [`g` 플래그 없는 경우](#g-플래그-없는-경우)
+          - [while문 내에서 RegExp 계속 생성하는 경우](#while문-내에서-regexp-계속-생성하는-경우)
+          - [정규표현식 문자열을 while문에 넣으면 무한 루프를 돈다](#정규표현식-문자열을-while문에-넣으면-무한-루프를-돈다)
+          - [빈(zero-length) 문자열 매치하는 경우](#빈zero-length-문자열-매치하는-경우)
 
 # 개요
 
@@ -290,7 +294,7 @@ hidden 21639
 
 ##### 무한 루프 케이스
 
-1. `g` 플래그 없는 경우
+###### `g` 플래그 없는 경우
 
 ```js
 // const regExp1 = new RegExp(/<input type=['"]([\w\d\s_+-]+)['"].*/);
@@ -301,7 +305,7 @@ while (matched = regExp1.exec(html)) {
 */
 ```
 
-2. while문 내에서 RegExp 계속 생성하는 경우
+###### while문 내에서 RegExp 계속 생성하는 경우
 
 ```js
 /*
@@ -311,7 +315,7 @@ while (matched = new RegExp(pattern).exec(html)) {
 */
 ```
 
-3. 정규표현식 문자열을 while문에 넣으면 무한 루프를 돈다
+###### 정규표현식 문자열을 while문에 넣으면 무한 루프를 돈다
 
 ```js
 //  while (matched = /<input type=['"]([\w\d\s_+-]+)['"].*/g.exec(html)) {
@@ -319,7 +323,7 @@ while (matched = new RegExp(pattern).exec(html)) {
 // }
 ```
 
-4. 빈(zero-length) 문자열 매치하는 경우
+###### 빈(zero-length) 문자열 매치하는 경우
 
 - `regExp2.lastIndex += 1;`처럼 `lastIndex`를 직접 증가시켜줘야 한다
 
