@@ -79,35 +79,35 @@ The script uses approximately 6.2 MB
 ```
 dummyData {
   data: 'da33dccd1a4f8d0395beb264f11aa996d1cc874bdf80b133e7e1373c43119550',
-  time: 1628953960258,
+  time: 1628960510952,
   id: '63640264849a87c90356129d99ea165e37aa5fabc1fea46906df1a7ca50db492'
 }
 oauthtoken {
   access_token: 'YWNjZXNzX3Rva2Vu',
   refresh_token: 'cmVmcmVzaF90b2tlbg==',
-  expires_at: '2021-08-14T15:12:40.258Z',
-  issued_at: '2021-08-14T15:12:40.258Z',
+  expires_at: '2021-08-14T17:01:50.952Z',
+  issued_at: '2021-08-14T17:01:50.952Z',
   scopes: [ 'read', 'write', 'update', 'etc' ]
 }
-set at 197 into lruCache
-set at 197 into nodeCache
-                                                                          compare cache 10000000
-┌─────────────────────────────────────────────────────────────────────────────────┬───────────────────────────────────────────────────────────────────────────┬──────────┐
-│                                                                       test name │                                                                 nodeCache │ lruCache │
-├─────────────────────────────────────────────────────────────────────────────────┼───────────────────────────────────────────────────────────────────────────┼──────────┤
-│       checkHas da33dccd1a4f8d0395beb264f11aa996d1cc874bdf80b133e7e1373c43119550 │                                                                  1.17427s │ 1.17595s │
-│       checkGet da33dccd1a4f8d0395beb264f11aa996d1cc874bdf80b133e7e1373c43119550 │                                                                  1.58265s │ 2.00813s │
-│ checkHasAndGet da33dccd1a4f8d0395beb264f11aa996d1cc874bdf80b133e7e1373c43119550 │                                                                  2.68041s │ 3.27058s │
-│                                                             checkHas oauthtoken │                                                                  1.13869s │ 1.20256s │
-│                                                             checkGet oauthtoken │                                                                  1.35612s │ 2.04521s │
-│                                                       checkHasAndGet oauthtoken │                                                                  2.38696s │ 3.25056s │
-│                                                               checkHas notexist │                                                                  0.19533s │ 0.13683s │
-│                                                               checkGet notexist │                                                                  0.31592s │ 0.16072s │
-│                                                         checkHasAndGet notexist │                                                                  0.43426s │ 0.22215s │
-│                                                                          sizeof │                                                                     82350 │   111294 │
-│                                                                           stats │ {"hits":40000000,"misses":20000000,"keys":402,"ksize":2764,"vsize":96464} │      402 │
-└─────────────────────────────────────────────────────────────────────────────────┴───────────────────────────────────────────────────────────────────────────┴──────────┘
-The script uses approximately 6.17 MB
+set at 266 into lruCache
+set at 266 into nodeCache
+                                                     compare cache 10000000
+┌────────────────────────────────────────┬───────────────────────────────────────────────────────────────────────────┬──────────┐
+│                              test name │                                                                 nodeCache │ lruCache │
+├────────────────────────────────────────┼───────────────────────────────────────────────────────────────────────────┼──────────┤
+│ checkHas da33dccd1a4f8d0395beb264f1... │                                                                  1.14591s │ 1.23227s │
+│ checkGet da33dccd1a4f8d0395beb264f1... │                                                                  1.39207s │ 2.15293s │
+│ checkHasAndGet da33dccd1a4f8d0395be... │                                                                  2.47623s │ 3.46533s │
+│                    checkHas oauthtoken │                                                                  1.11005s │ 1.33348s │
+│                    checkGet oauthtoken │                                                                  1.32944s │ 2.14873s │
+│              checkHasAndGet oauthtoken │                                                                  2.40224s │ 3.43984s │
+│                      checkHas notexist │                                                                  0.17814s │ 0.11457s │
+│                      checkGet notexist │                                                                  0.27896s │ 0.11713s │
+│                checkHasAndGet notexist │                                                                  0.42442s │ 0.22103s │
+│                                 sizeof │                                                                     82350 │   111294 │
+│                                  stats │ {"hits":40000000,"misses":20000000,"keys":402,"ksize":2764,"vsize":96464} │      402 │
+└────────────────────────────────────────┴───────────────────────────────────────────────────────────────────────────┴──────────┘
+The script uses approximately 6.12 MB
 ```
 
 ## 테스트 코드
@@ -194,68 +194,63 @@ const testCases = [
 
 const firstColumnName = 'test name';
 const columns = [{ name: firstColumnName }];
-const contentsToPrint = {};
-const rows = [];
-
+const rowsObject = {};
+const truncateLength = 35;
 let start;
-const tests = {};
 Object.keys(caches).forEach((cacheName) => {
   columns.push({ name: cacheName });
-  contentsToPrint[cacheName] = {
-    tests: [],
-  };
   const cache = caches[cacheName];
 
   testCases.forEach((testCase) => {
     let label = `checkHas ${testCase}`;
-    if (!tests[label]) {
-      tests[label] = {};
+    if (!rowsObject[label]) {
+      rowsObject[label] = {};
     }
     start = performance.now();
     for (let i = 0; i < testLoopCnt; i++) {
       cache.has(testCase);
     }
-    tests[label][firstColumnName] = label;
-    tests[label][cacheName] = getElapsedTime(start);
+    rowsObject[label][firstColumnName] = truncateString(label, truncateLength);
+    rowsObject[label][cacheName] = getElapsedTime(start);
 
     label = `checkGet ${testCase}`;
-    if (!tests[label]) {
-      tests[label] = {};
+    if (!rowsObject[label]) {
+      rowsObject[label] = {};
     }
     start = performance.now();
     for (let i = 0; i < testLoopCnt; i++) {
       cache.get(testCase);
     }
 
-    tests[label][firstColumnName] = label;
-    tests[label][cacheName] = getElapsedTime(start);
+    rowsObject[label][firstColumnName] = truncateString(label, truncateLength);
+    rowsObject[label][cacheName] = getElapsedTime(start);
 
     label = `checkHasAndGet ${testCase}`;
-    if (!tests[label]) {
-      tests[label] = {};
+    if (!rowsObject[label]) {
+      rowsObject[label] = {};
     }
     start = performance.now();
     for (let i = 0; i < testLoopCnt; i++) {
       cache.has(testCase);
       cache.get(testCase);
     }
-    tests[label][firstColumnName] = label;
-    tests[label][cacheName] = getElapsedTime(start);
+    rowsObject[label][firstColumnName] = truncateString(label, truncateLength);
+    rowsObject[label][cacheName] = getElapsedTime(start);
   });
 
-  if (!tests.sizeof) {
-    tests.sizeof = {};
-    tests.sizeof[firstColumnName] = ['sizeof'];
+  if (!rowsObject.sizeof) {
+    rowsObject.sizeof = {};
+    rowsObject.sizeof[firstColumnName] = ['sizeof'];
   }
-  if (!tests.stats) {
-    tests.stats = {};
-    tests.stats[firstColumnName] = ['stats'];
+  if (!rowsObject.stats) {
+    rowsObject.stats = {};
+    rowsObject.stats[firstColumnName] = ['stats'];
   }
-  tests.sizeof[cacheName] = sizeof(cache);
+  rowsObject.sizeof[cacheName] = sizeof(cache);
   if (cacheName === 'lruCache') {
-    tests.stats[cacheName] = lruCache.itemCount;
+    rowsObject.stats[cacheName] = lruCache.itemCount;
   } else if (cacheName === 'nodeCache') {
-    tests.stats[cacheName] = JSON.stringify(nodeCache.getStats());
+    rowsObject.stats[cacheName] = JSON.stringify(nodeCache.getStats());
   }
 });
 
@@ -263,7 +258,7 @@ const table = new Table({
   title: `compare cache ${testLoopCnt}`,
   columns,
 });
-table.addRows(Object.values(tests));
+table.addRows(Object.values(rowsObject));
 table.printTable();
 
 const used = process.memoryUsage().heapUsed / 1024 / 1024;
@@ -271,5 +266,12 @@ console.log(`The script uses approximately ${Math.round(used * 100) / 100} MB`);
 
 function getElapsedTime(start) {
   return `${((performance.now() - start) / 1000).toFixed(5)}s`;
+}
+
+function truncateString(str, len) {
+  if (str.length > len) {
+    return `${str.substring(0, len)}...`;
+  }
+  return str;
 }
 ```
