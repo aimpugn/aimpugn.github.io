@@ -6,6 +6,11 @@ use_math: true
 categories: [bash]
 ---
 
+- [커맨드라인 파싱](#커맨드라인-파싱)
+- [Command Substitution](#command-substitution)
+- [Shell Functions](#shell-functions)
+- [문자열 치환](#문자열-치환)
+
 서버는 대부분 리눅스를 사용하고, 리눅스를 쓰다 보면 반복적으로 타이핑하는 걸 자동으로 하고 싶고, 그러다 보면 찾게 되는 게 bash script다.  
 그런데 막상 스크립트 작성하려면 문법을 자꾸 까먹어서 종종 검색하던 걸 정리해 봐야겠다.  
 
