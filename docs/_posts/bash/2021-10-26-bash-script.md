@@ -1,7 +1,7 @@
 ---
 title: bash script
 author: aimpugn
-date: 2021-10-26 21:00:00+0900
+date: 2021-10-27 21:00:00+0900
 use_math: true
 categories: [bash]
 ---
@@ -10,6 +10,7 @@ categories: [bash]
 - [Command Substitution](#command-substitution)
 - [Shell Functions](#shell-functions)
 - [문자열 치환](#문자열-치환)
+  - [`sed`](#sed)
 
 서버는 대부분 리눅스를 사용하고, 리눅스를 쓰다 보면 반복적으로 타이핑하는 걸 자동으로 하고 싶고, 그러다 보면 찾게 되는 게 bash script다.  
 그런데 막상 스크립트 작성하려면 문법을 자꾸 까먹어서 종종 검색하던 걸 정리해 봐야겠다.  
@@ -53,7 +54,7 @@ $-: hB, 현재 유효한 옵션 플래그
 
 ### Command Substitution
 
-- 명령어 치환
+- 명령어 대체
 - 명령어의 결과를 변수에 저장하는 것
 
 ```bash
@@ -141,3 +142,34 @@ uinfo() #@ USAGE: uinfo [file]
 
 - `sed`, `awk`, `perl` 등을 사용
 - [Bash Shell: Replace a String With Another String In All Files Using sed and Perl -pie Options](https://www.cyberciti.biz/faq/unix-linux-replace-string-words-in-many-files/) 참조
+
+#### `sed`
+
+- [How `sed` Works](https://www.gnu.org/software/sed/manual/sed.html#Execution-Cycle)
+
+```bash
+#!/bin/bash
+
+FILE=./tmp.txt
+
+# `p` 명령어: 
+# - 출력을 suppress 하고 특정 라인만 출력
+sed -n '3p' $FILE 
+# - 첫줄과 마지막 줄 출력
+sed -n '1p ; $p' $FILE 
+
+# `s` 명령어
+# - https://www.gnu.org/software/sed/manual/sed.html#The-_0022s_0022-Command
+sed 's/second/2nd/' $FILE
+
+# `-i` 옵션
+# - in-place로 치환한다
+# - `-i<SUFFIX>`로 백업을 만들 수 있다
+sed -i.bak.$(date "+%Y%m%d") 's/second/2nd/' $FILE # tmp.txt.bak.20211027 백업 파일이 생성된다
+
+# 여러 명령어 사용하기:
+# - https://www.gnu.org/software/sed/manual/sed.html#Multiple-commands-syntax
+
+# Commands for `sed` gurus
+# - https://www.gnu.org/software/sed/manual/sed.html#Programming-Commands
+```
