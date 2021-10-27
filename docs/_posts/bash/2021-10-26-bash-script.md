@@ -11,6 +11,7 @@ categories: [bash]
 - [Shell Functions](#shell-functions)
 - [문자열 치환](#문자열-치환)
   - [`sed`](#sed)
+- [heredoc](#heredoc)
 
 서버는 대부분 리눅스를 사용하고, 리눅스를 쓰다 보면 반복적으로 타이핑하는 걸 자동으로 하고 싶고, 그러다 보면 찾게 되는 게 bash script다.  
 그런데 막상 스크립트 작성하려면 문법을 자꾸 까먹어서 종종 검색하던 걸 정리해 봐야겠다.  
@@ -173,3 +174,11 @@ sed -i.bak.$(date "+%Y%m%d") 's/second/2nd/' $FILE # tmp.txt.bak.20211027 백업
 # Commands for `sed` gurus
 # - https://www.gnu.org/software/sed/manual/sed.html#Programming-Commands
 ```
+
+### heredoc
+
+- <https://stackoverflow.com/questions/2953081/how-can-i-write-a-heredoc-to-a-file-in-bash-script>
+  - <https://stackoverflow.com/a/2954835/8562273>
+- <https://www.gnu.org/software/gettext/manual/html_node/envsubst-Invocation.html>
+- <https://stackoverflow.com/questions/2914220/bash-templating-how-to-build-configuration-files-from-templates-with-bash/11050943#11050943>
+- <https://tldp.org/LDP/abs/html/here-docs.html>
