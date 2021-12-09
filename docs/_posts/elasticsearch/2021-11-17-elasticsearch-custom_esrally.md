@@ -14,6 +14,8 @@ categories: [elasticsearch, esrally]
       - [jdk](#jdk)
       - [`pbzip2` 설치](#pbzip2-설치)
     - [`pip` 통한 `esrally` 설치](#pip-통한-esrally-설치)
+  - [`esrally` 실행](#esrally-실행)
+  - [Custom parameter sources](#custom-parameter-sources)
 
 # 개요
 
@@ -39,7 +41,9 @@ categories: [elasticsearch, esrally]
 
 - python3.8 이상
 - git 1.9 이상
-- elasticsearch 실행하는 jdk
+- Elasticsearch 실행하는 jdk
+  - 요즘 Elasticsearch에는 `{ES_HOME}/jdk/bin/java`에 번들 jdk가 포함되어 있다
+  - 또한 참고로 `jvm.options`에서 `-Xms`, `-Xmx`를 코멘트 처리하면, jdk가 최신 버전일 경우 서버 메모리를 체크하여 적당한 힙 메모리를 할당한다
 
 #### python3.9 설치
 
@@ -189,3 +193,7 @@ yum install pbzip2
 (.venv) [aimpugn@vultr ~]$ esrally --version
 esrally 2.3.0
 ```
+
+## `esrally` 실행
+
+## [Custom parameter sources](https://esrally.readthedocs.io/en/stable/adding_tracks.html#custom-parameter-sources)

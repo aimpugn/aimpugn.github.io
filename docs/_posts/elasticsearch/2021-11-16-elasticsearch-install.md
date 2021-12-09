@@ -12,6 +12,7 @@ categories: [elasticsearch, esrally]
   - [RPM 통해 설치 후 구조](#rpm-통해-설치-후-구조)
     - [system service](#system-service)
     - [데이터 경로](#데이터-경로)
+  - [`systemctl elasticsearch start`](#systemctl-elasticsearch-start)
   - [Troubleshooting](#troubleshooting)
     - [at least one of of [discovery.seed_hosts, discovery.seed_providers, cluster.initial_master_nodes] must be configured](#at-least-one-of-of-discoveryseed_hosts-discoveryseed_providers-clusterinitial_master_nodes-must-be-configured)
       - [문제](#문제)
@@ -162,6 +163,59 @@ path.data: /var/lib/elasticsearch
 # Path to log files:
 #
 path.logs: /var/log/elasticsearch
+```
+
+## `systemctl elasticsearch start`
+
+- `-Xms`, `-Xmx`는 java 최신 버전의 경우 서버 리소스에 맞게 자동 할당. java `1.8` 버전인 경우에는 정상적으로 작동하지 않았다.
+
+```shell
+[root@vultr ~]# /usr/share/elasticsearch/jdk/bin/java --version
+openjdk 17.0.1 2021-10-19
+OpenJDK Runtime Environment Temurin-17.0.1+12 (build 17.0.1+12)
+OpenJDK 64-Bit Server VM Temurin-17.0.1+12 (build 17.0.1+12, mixed mode, sharing)
+
+[root@vultr ~]# systemctl start elasticsearch
+[root@vultr ~]# ps -ef | grep elasticsearch
+
+/usr/share/elasticsearch/jdk/bin/java \
+  -Xshare:auto \
+  -Des.networkaddress.cache.ttl=60 \
+  -Des.networkaddress.cache.negative.ttl=10 \
+  -XX:+AlwaysPreTouch \
+  -Xss1m \
+  -Djava.awt.headless=true \
+  -Dfile.encoding=UTF-8 \
+  -Djna.nosys=true \
+  -XX:-OmitStackTraceInFastThrow \
+  -XX:+ShowCodeDetailsInExceptionMessages \
+  -Dio.netty.noUnsafe=true \
+  -Dio.netty.noKeySetOptimization=true \
+  -Dio.netty.recycler.maxCapacityPerThread=0 \
+  -Dio.netty.allocator.numDirectArenas=0 \
+  -Dlog4j.shutdownHookEnabled=false \
+  -Dlog4j2.disable.jmx=true \
+  -Djava.locale.providers=SPI,COMPAT \
+  --add-opens=java.base/java.io=ALL-UNNAMED \
+  -XX:+UseG1GC \
+  -Djava.io.tmpdir=/tmp/elasticsearch-9517931333804689362 \
+  -XX:+HeapDumpOnOutOfMemoryError \
+  -XX:HeapDumpPath=/var/lib/elasticsearch \
+  -XX:ErrorFile=/var/log/elasticsearch/hs_err_pid%p.log \
+  -Xlog:gc*,gc+age=trace,safepoint:file=/var/log/elasticsearch/gc.log:utctime,pid,tags:filecount=32,filesize=64m \
+  -Xms3884m \
+  -Xmx3884m \
+  -XX:MaxDirectMemorySize=2036334592 \
+  -XX:G1HeapRegionSize=4m \
+  -XX:InitiatingHeapOccupancyPercent=30 \
+  -XX:G1ReservePercent=15 \
+  -Des.path.home=/usr/share/elasticsearch \
+  -Des.path.conf=/etc/elasticsearch \
+  -Des.distribution.flavor=default \
+  -Des.distribution.type=rpm \
+  -Des.bundled_jdk=true \
+  -cp /usr/share/elasticsearch/lib/* org.elasticsearch.bootstrap.Elasticsearch \
+  -p /var/run/elasticsearch/elasticsearch.pid --quiet
 ```
 
 ## Troubleshooting
