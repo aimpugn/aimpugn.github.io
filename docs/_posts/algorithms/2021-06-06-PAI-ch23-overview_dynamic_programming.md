@@ -1,7 +1,7 @@
 ---
 title: 0verview 다이나믹 프로그래밍
 author: aimpugn
-date: 2021-05-20 21:00:00+0900
+date: 2021-06-06 13:00:00+0900
 use_math: true
 categories: [PAI, algorithms]
 ---
