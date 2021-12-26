@@ -3,7 +3,7 @@ title: Plus Minus
 author: aimpugn
 date: 2021-12-26 21:00:00+0900
 use_math: true
-categories: [hackerrank], algorithms]
+categories: [hackerrank, algorithms]
 ---
 
 - [Plus Minus](#plus-minus)
