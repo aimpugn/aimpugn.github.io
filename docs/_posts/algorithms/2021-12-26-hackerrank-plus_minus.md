@@ -130,6 +130,7 @@ console.log(div(10, 0)); // Infinity
 console.log(div(10, -1)); // -10.000000
 console.log(div(10, -11)); // -0.909091, 반올림한 상태
 console.log(div(999999999999, 10000000)); // 100000.000000
+console.log(div(999999999999, 10000000, { rounds: false })); // 99999.999999
 console.log(div(1000, 4)); // 250.000000
 ```
 
