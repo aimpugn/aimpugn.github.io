@@ -8,8 +8,8 @@ author: aimpugn
 - [개요](#개요)
 - [JIT 컴파일러란?](#jit-컴파일러란)
 - [`JIT 컴파일러`에 대해 더 상세하기 보기](#jit-컴파일러에-대해-더-상세하기-보기)
-  - [`C1`](#c1)
-  - [`C2`](#c2)
+    - [`C1`](#c1)
+    - [`C2`](#c2)
   - [계층화된 컴파일](#계층화된-컴파일)
   - [서버 컴파일러](#서버-컴파일러)
 - [프로젝트 `GraalVM`](#프로젝트-graalvm)
@@ -20,7 +20,7 @@ author: aimpugn
 
 # 출처
 
-- https://www.baeldung.com/graal-java-jit-compiler
+- <https://www.baeldung.com/graal-java-jit-compiler>
 - 위 내용을 번역
 
 # 개요
@@ -116,7 +116,7 @@ interface JVMCICompiler {
 }
 ```
 
-- 실제 시나리오에서, 보통 로컬 변수의 개수, 스택 사이즈, 해석기의 프로파일링에서(from profiling in the interpreter) 수집된 정보 등이 필요하고, 이를 통해 실제로 코드가 어떻게 실행되는지 알 수 있따
+- 실제 시나리오에서, 보통 로컬 변수의 개수, 스택 사이즈, 해석기의 프로파일링에서(from profiling in the interpreter) 수집된 정보 등이 필요하고, 이를 통해 실제로 코드가 어떻게 실행되는지 알 수 있다
 - 본질적으로, [JVMCICompiler](https://github.com/md-5/OpenJDK/blob/master/src/jdk.internal.vm.ci/share/classes/jdk.vm.ci.runtime/src/jdk/vm/ci/runtime/JVMCICompiler.java)의 `compileMethod()` 메서드 호출 시, `CompilationRequest` 오브젝트를 전달해야 한다
 - 그러면 컴파일하려는 Java 메서드를 반환하고, 그 메서드에서 우리가 원하는 정보를 찾을 수 있다
 
@@ -164,5 +164,5 @@ java -XX:+UnlockExperimentalVMOptions -XX:+EnableJVMCI -XX:+UseJVMCICompiler
 
 # 기타
 
-- https://metebalci.com/blog/demystifying-the-jvm-jvm-variants-cppinterpreter-and-templateinterpreter/
-- https://github.com/oracle/graal
+- <https://metebalci.com/blog/demystifying-the-jvm-jvm-variants-cppinterpreter-and-templateinterpreter/>
+- <https://github.com/oracle/graal>
