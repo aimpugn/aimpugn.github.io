@@ -22,7 +22,7 @@ categories: [spring, clickhouse, jpa]
       - [`package-info.java`](#package-infojava)
       - [`TestTableEntity`](#testtableentity)
       - [`TestTableRepository`](#testtablerepository)
-    - [테스트1](#테스트1)
+      - [테스트1](#테스트1)
     - [`@MappedSuperclass` 통한 상속 구조](#mappedsuperclass-통한-상속-구조)
       - [`TestTableParentEntity`](#testtableparententity)
       - [`TestTableChildEntity`](#testtablechildentity)
@@ -511,7 +511,7 @@ public interface TestTableRepository extends JpaRepository<TestTableEntity, Shor
 }
 ```
 
-### 테스트1
+#### 테스트1
 
 ```java
 package com.learn.spring.learnspring.repository.clickhouse;
