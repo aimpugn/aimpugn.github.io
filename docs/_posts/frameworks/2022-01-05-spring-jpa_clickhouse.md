@@ -28,6 +28,8 @@ categories: [spring, clickhouse, jpa]
       - [`TestTableChildEntity`](#testtablechildentity)
       - [`TestTableSubRepository`](#testtablesubrepository)
       - [테스트2](#테스트2)
+  - [기타](#기타)
+    - [참고 링크](#참고-링크)
 
 # ClickHouse와 Spring Data JPA
 
@@ -718,3 +720,31 @@ void TestTableSubEntity_Returns_TestTableSubEntity() {
 2022-01-06 00:44:01.825  INFO  --- [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : clickhouseDataSourcePool - Shutdown initiated...
 2022-01-06 00:44:01.830  INFO  --- [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : clickhouseDataSourcePool - Shutdown completed.
 ```
+
+## 기타
+
+### 참고 링크
+
+- <https://clickhouse.com/docs/en/sql-reference/data-types/>
+- <https://github.com/ClickHouse/clickhouse-jdbc>
+- <https://www.baeldung.com/spring-value-annotation>
+- <https://books.google.com.gh/books?id=dIvgDwAAQBAJ&pg=PA569&lpg=PA569&dq=EntityManagerFactoryBuilder+HikariDataSource&source=bl&ots=ouJpYN4cE2&sig=ACfU3U3gubuBbHtTYHOQTHFkxwj00BDH3A&hl=ko&sa=X&ved=2ahUKEwiM7oyNsJj1AhVBM94KHSukCJ0Q6AF6BAgVEAM#v=onepage&q=EntityManagerFactoryBuilder%20HikariDataSource&f=false>
+- <https://github.com/ClickHouse/clickhouse-jdbc/blob/master/clickhouse-jdbc/src/test/java/com/clickhouse/jdbc/ClickHouseResultSetTest.java>
+- <https://github.com/ryan2049/spring-boot-samples/blob/master/spring-boot-sample-custom-datasource/src/main/java/life/rnl/multiple/config/MultipleDataSources.java>
+- <https://www.baeldung.com/the-persistence-layer-with-spring-and-jpa>
+- <https://www.baeldung.com/the-persistence-layer-with-spring-and-jpa>
+- <https://www.javatpoint.com/dialects-in-hibernate>
+- <https://ordina-jworks.github.io/java/2020/01/02/Spring-Data-Jdbc.html#spring-jdbc-vs-spring-data-jdbc-vs-spring-data-jpa>
+- <https://stackoverflow.com/questions/65890980/jpa-hibernate-how-to-create-a-table-from-an-array-of-strings-string>
+- <https://github.com/vladmihalcea/hibernate-types>
+  - <https://vladmihalcea.com/how-to-map-json-objects-using-generic-hibernate-types/>
+  - <https://vladmihalcea.com/how-to-fix-wrong-column-type-encountered-schema-validation-errors-with-jpa-and-hibernate/>
+  - <https://vladmihalcea.com/postgresql-array-java-list/>
+- <https://bibichuan.github.io/posts/ac37a5da.html>
+- <https://gitanswer.com/postgres-enum-array-wrong-column-type-encountered-in-column-hibernate-types-java-808092069>
+- <https://thorben-janssen.com/mapping-blobs-and-clobs-with-hibernate-and-jpa/>
+- <https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#jpa.java-config>
+- <https://www.baeldung.com/transaction-configuration-with-jpa-and-spring>
+- <https://stackoverflow.com/questions/29123115/what-is-meant-by-demarcate-transactions>
+- <https://www.baeldung.com/hibernate-5-multitenancy>
+- <https://docs.jboss.org/hibernate/orm/5.0/userguide/html_single/chapters/multitenancy/MultiTenancy.html>
