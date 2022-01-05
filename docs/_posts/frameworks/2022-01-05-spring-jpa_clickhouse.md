@@ -33,12 +33,14 @@ categories: [spring, clickhouse, jpa]
 
 ## 개요
 
+- [git 소스코드](https://github.com/aimpugn/learnspring)
+
 ### [ClickHouse?](https://clickhouse.com/docs/en/)
 
 - [컬럼지향(column-oriented)](https://ko.wikipedia.org/wiki/%EC%BB%AC%EB%9F%BC_%EC%A7%80%ED%96%A5_DBMS) 오픈소스 [OLAP](https://ko.wikipedia.org/wiki/%EC%98%A8%EB%9D%BC%EC%9D%B8_%EB%B6%84%EC%84%9D_%EC%B2%98%EB%A6%AC)
 - 쿼리 처리에서 대부분 최소 [100배 이상 더 빠르다](https://clickhouse.com/docs/en/#why-column-oriented-databases-work-better-in-the-olap-scenario)고 한다
   - 하지만 업데이트에 쥐약이다. 쥐약 정도가 아니라 [지원하지를 않는다.](https://stackoverflow.com/a/37914684/8562273)
-  - 공식 문서를 봐도 `ALTER TABLE` 하위에나 `UPDATE`, `DELETE`가 있지, 레코드를 수정/삭제하는 SQL은 없다 
+  - 공식 문서를 봐도 `ALTER TABLE` 하위에나 `UPDATE`, `DELETE`가 있지, 레코드를 수정/삭제하는 SQL은 없다
 
 ### [Spring Data JPA?](https://spring.io/projects/spring-data-jpa)
 
